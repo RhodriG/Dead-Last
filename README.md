@@ -5,6 +5,6 @@
 
 Dead Last
 
-Testing contributions from cmd line
+Testing contributions from cmd line.
 
-Testing From IDE
+Testing From IDE.
