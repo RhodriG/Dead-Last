@@ -17,7 +17,7 @@ public class MainMenuScreen extends DefaultScreen {
 	public MainMenuScreen(MainGame game) {
 		super(game);
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, 800, 600);
 	}
 	
 	@Override
