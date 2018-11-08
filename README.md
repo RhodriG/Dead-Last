@@ -1,10 +1,6 @@
-# Dont Read Me!!
+# DEAD LAST
 
-
-
-
-Dead Last
-
-Testing contributions from cmd line.
-
-Testing From IDE.
+Contributing:
+- Clone the directory to local
+- Open IDE (e.g. Eclipse)
+- File > Import > Gradle > Existing Gradle Project
