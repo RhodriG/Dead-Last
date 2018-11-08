@@ -1,11 +1,18 @@
 package com.deadlast.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.deadlast.game.MainGame;
 
 public class MainMenuScreen extends DefaultScreen {
 	
 	OrthographicCamera camera;
+	TextureRegion title;
+	SpriteBatch batch;
 	
 	public MainMenuScreen(MainGame game) {
 		super(game);
@@ -15,14 +22,17 @@ public class MainMenuScreen extends DefaultScreen {
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		title = new TextureRegion(new Texture(Gdx.files.internal("title.jpg")), 0, 0, 800, 600);
+		batch = new SpriteBatch();
+		batch.getProjectionMatrix().setToOrtho2D(0, 0, 800, 600);
 	}
 
 	@Override
 	public void render(float delta) {
-		// TODO Auto-generated method stub
-		
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(title, 0, 0);
+		batch.end();
 	}
 
 	@Override
@@ -44,17 +54,16 @@ public class MainMenuScreen extends DefaultScreen {
 	}
 
 	@Override
+	public void dispose() {
+		Gdx.app.debug("DeadLast", "dispose main menu");
+		batch.dispose();
+		title.getTexture().dispose();
+	}
+
+	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 
 }
