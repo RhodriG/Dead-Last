@@ -1,6 +1,6 @@
 package com.deadlast.entities;
 
-public class Player extends Entity {
+public class Player extends Entity implements Moveable {
 
 	private int healthStat;
 	private int speedStat;
@@ -36,12 +36,6 @@ public class Player extends Entity {
 
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void move() {
 		// TODO Auto-generated method stub
 		
 	}

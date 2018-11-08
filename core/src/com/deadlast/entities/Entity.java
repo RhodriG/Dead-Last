@@ -13,7 +13,5 @@ public abstract class Entity {
 	
 	public abstract void delete();
 	
-	public abstract void move();
-	
 
 }
