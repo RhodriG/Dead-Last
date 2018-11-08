@@ -5,3 +5,4 @@ Contributing:
 - Open IDE (e.g. Eclipse)
 - File > Import > Gradle > Existing Gradle Project
 - Select project root directory
+- Don't push directly to master
