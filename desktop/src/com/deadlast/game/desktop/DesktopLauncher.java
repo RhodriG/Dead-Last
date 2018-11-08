@@ -1,8 +1,8 @@
-package org.xytl.deadlast.desktop;
+package com.deadlast.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import org.xytl.deadlast.MainGame;
+import com.deadlast.game.MainGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

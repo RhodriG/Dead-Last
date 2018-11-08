@@ -1,4 +1,4 @@
-package org.xytl.deadlast;
+package com.deadlast.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
