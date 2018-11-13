@@ -2,51 +2,53 @@ package com.deadlast.screens;
 
 import com.deadlast.game.MainGame;
 
-public class LoadingScreen extends DefaultScreen {
+public class ScoreboardScreen extends DefaultScreen {
 
-	public LoadingScreen(MainGame game) {
+	public ScoreboardScreen(MainGame game) {
 		super(game);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void render(float delta) {
-		game.changeScreen(MainGame.MENU);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
