@@ -1,24 +1,26 @@
 package com.deadlast.world;
 
-import com.badlogic.gdx.InputProcessor;
+import java.util.Arrays;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.controller.KeyboardController;
 
 public class B2dModel {
 
 	public World world;
-	private Body player;
+	public Body player;
 	
 	private KeyboardController controller;
+	private OrthographicCamera camera;
 	
-	public B2dModel(KeyboardController controller) {
+	public B2dModel(KeyboardController controller, OrthographicCamera camera) {
 		this.controller = controller;
+		this.camera = camera;
 		world = new World(new Vector2(0, 0), true);
 		world.setContactListener(new B2dContactListener(this));
 		
@@ -29,7 +31,6 @@ public class B2dModel {
 	}
 	
 	public void logicStep(float delta) {
-		
 		if (controller.left) {
 			player.applyForceToCenter(-10, 0, true);
 		}
@@ -42,7 +43,21 @@ public class B2dModel {
 		if (controller.down) {
 			player.applyForceToCenter(0, -10, true);
 		}
+		
+		if (controller.isMouse1Down && pointIntersectsBody(player, controller.mouseLocation)) {
+			System.out.println("Player was clicked");
+		}
+		
 		world.step(delta, 3, 3);
+	}
+	
+	public boolean pointIntersectsBody(Body body, Vector2 mouseLocation) {
+		Vector3 mousePos = new Vector3(mouseLocation, 0);
+		camera.unproject(mousePos);
+		if(body.getFixtureList().first().testPoint(mousePos.x, mousePos.y)) {
+			return true;
+		}
+		return false;
 	}
 	
 }

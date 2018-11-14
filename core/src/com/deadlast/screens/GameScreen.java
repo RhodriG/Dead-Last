@@ -3,6 +3,8 @@ package com.deadlast.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.deadlast.controller.KeyboardController;
 import com.deadlast.game.MainGame;
@@ -11,16 +13,26 @@ import com.deadlast.world.B2dModel;
 public class GameScreen extends DefaultScreen {
 	
 	B2dModel model;
-	private OrthographicCamera cam;
+	private OrthographicCamera camera;
 	private Box2DDebugRenderer debugRenderer;
 	private KeyboardController controller;
+	
+	private Texture playerTex;
+	private Texture enemyTex;
+	private SpriteBatch batch;
 
 	public GameScreen(MainGame game) {
 		super(game);
-		cam = new OrthographicCamera(32, 24);
+		System.out.println("Loaded GameScreen");
+		camera = new OrthographicCamera(32, 24);
 		controller = new KeyboardController();
-		model = new B2dModel(controller);
+		model = new B2dModel(controller, camera);
 		debugRenderer = new Box2DDebugRenderer();
+		
+		playerTex = game.resources.manager.get(game.resources.playerImage);
+		enemyTex = game.resources.manager.get(game.resources.enemyImage);
+		batch = new SpriteBatch();
+		batch.setProjectionMatrix(camera.combined);
 	}
 
 	@Override
@@ -33,7 +45,10 @@ public class GameScreen extends DefaultScreen {
 		model.logicStep(delta);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		debugRenderer.render(model.world, cam.combined);
+		debugRenderer.render(model.world, camera.combined);
+		batch.begin();
+		batch.draw(playerTex, model.player.getPosition().x - 1, model.player.getPosition().y - 1, 2, 2);
+		batch.end();
 	}
 
 	@Override

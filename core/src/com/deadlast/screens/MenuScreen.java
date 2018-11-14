@@ -17,7 +17,7 @@ public class MenuScreen extends DefaultScreen {
 
 	public MenuScreen(MainGame game) {
 		super(game);
-		
+		System.out.println("Loaded MenuScreen");
 		// Create a new stage, and set it as the input processor
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
@@ -25,6 +25,7 @@ public class MenuScreen extends DefaultScreen {
 	
 	@Override
 	public void show() {
+		System.out.println("Showing...");
 		Table mainTable = new Table();
 		mainTable.setFillParent(true);
 		mainTable.top();
