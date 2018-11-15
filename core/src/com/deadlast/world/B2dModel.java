@@ -1,7 +1,5 @@
 package com.deadlast.world;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -26,7 +24,7 @@ public class B2dModel {
 		
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		
-		player = bodyFactory.makeCirclePolyBody(1, 1, 2, BodyFactory.RUBBER, BodyType.DynamicBody, false);
+		player = bodyFactory.makeCirclePolyBody(1, 1, 2, BodyFactory.RUBBER, BodyType.DynamicBody);
 		bodyFactory.makeCirclePolyBody(4, 4, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 	}
 	
