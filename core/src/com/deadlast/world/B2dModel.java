@@ -31,17 +31,22 @@ public class B2dModel {
 	}
 	
 	public void logicStep(float delta) {
+		player.setLinearDamping(5.0f);
 		if (controller.left) {
-			player.applyForceToCenter(-10, 0, true);
+			//player.applyForceToCenter(-10, 0, true);
+			player.setLinearVelocity(-1 * 5.0f, player.getLinearVelocity().y);
 		}
 		if (controller.right) {
-			player.applyForceToCenter(10, 0, true);
+			//player.applyForceToCenter(10, 0, true);
+			player.setLinearVelocity(5.0f, player.getLinearVelocity().y);
 		}
 		if (controller.up) {
-			player.applyForceToCenter(0, 10, true);
+			//player.applyForceToCenter(0, 10, true);
+			player.setLinearVelocity(player.getLinearVelocity().x, 5.0f);
 		}
 		if (controller.down) {
-			player.applyForceToCenter(0, -10, true);
+			//player.applyForceToCenter(0, -10, true);
+			player.setLinearVelocity(player.getLinearVelocity().x, -1 * 5.0f);
 		}
 		
 		if (controller.isMouse1Down && pointIntersectsBody(player, controller.mouseLocation)) {
