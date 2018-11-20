@@ -5,10 +5,13 @@ import java.io.StringWriter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deadlast.assets.Scoreboard;
@@ -29,6 +32,14 @@ public class ScoreboardScreen extends DefaultScreen {
 	public void show() {
 		// TODO: Replace with an asset manager
 		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		
+		TextButton backButton = new TextButton("Back", skin);
+		backButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.changeScreen(MainGame.MENU);
+			}
+		});
 		
 		Table scoreTable = new Table();
 		scoreTable.setFillParent(true);
@@ -65,6 +76,7 @@ public class ScoreboardScreen extends DefaultScreen {
 		}
 		
 		stage.addActor(scoreTable);
+		stage.addActor(backButton);
 		
 	}
 
@@ -102,8 +114,7 @@ public class ScoreboardScreen extends DefaultScreen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		stage.dispose();
 	}
 
 }
