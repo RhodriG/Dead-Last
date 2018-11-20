@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.deadlast.controller.KeyboardController;
-import com.deadlast.game.MainGame;
+import com.deadlast.game.DeadLast;
 import com.deadlast.world.B2dModel;
 
 public class GameScreen extends DefaultScreen {
@@ -21,7 +21,7 @@ public class GameScreen extends DefaultScreen {
 	private Texture enemyTex;
 	private SpriteBatch batch;
 
-	public GameScreen(MainGame game) {
+	public GameScreen(DeadLast game) {
 		super(game);
 		System.out.println("Loaded GameScreen");
 		camera = new OrthographicCamera(32, 24);

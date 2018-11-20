@@ -15,14 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deadlast.assets.Scoreboard;
-import com.deadlast.game.MainGame;
+import com.deadlast.game.DeadLast;
 import com.deadlast.util.Util;
 
 public class ScoreboardScreen extends DefaultScreen {
 	
 	protected Stage stage;
 
-	public ScoreboardScreen(MainGame game) {
+	public ScoreboardScreen(DeadLast game) {
 		super(game);
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
@@ -37,7 +37,7 @@ public class ScoreboardScreen extends DefaultScreen {
 		backButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.changeScreen(MainGame.MENU);
+				game.changeScreen(DeadLast.MENU);
 			}
 		});
 		

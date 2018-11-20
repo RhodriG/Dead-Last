@@ -1,11 +1,11 @@
 package com.deadlast.screens;
 
 import com.deadlast.screens.DefaultScreen;
-import com.deadlast.game.MainGame;
+import com.deadlast.game.DeadLast;
 
 public class HelpScreen extends DefaultScreen {
 
-	public HelpScreen(MainGame game) {
+	public HelpScreen(DeadLast game) {
 		super(game);
 	}
 

@@ -26,7 +26,7 @@ public class B2dModel {
 		
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		
-		player = bodyFactory.makeCirclePolyBody(1, 1, 2, BodyFactory.RUBBER, BodyType.DynamicBody, false);
+		player = bodyFactory.makeCirclePolyBody(1, 1, 2, BodyFactory.STONE, BodyType.DynamicBody, false);
 		bodyFactory.makeCirclePolyBody(4, 4, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 	}
 	

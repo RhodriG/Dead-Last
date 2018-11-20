@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.deadlast.assets.Resources;
 import com.deadlast.screens.*;
 
-public class MainGame extends Game {
+public class DeadLast extends Game {
 	
 	public Resources resources = new Resources();
 	

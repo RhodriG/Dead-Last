@@ -1,10 +1,10 @@
 package com.deadlast.screens;
 
-import com.deadlast.game.MainGame;
+import com.deadlast.game.DeadLast;
 
 public class LoadingScreen extends DefaultScreen {
 
-	public LoadingScreen(MainGame game) {
+	public LoadingScreen(DeadLast game) {
 		super(game);
 		System.out.println("Loaded LoadingScreen");
 		game.resources.loadImages();
@@ -19,7 +19,7 @@ public class LoadingScreen extends DefaultScreen {
 
 	@Override
 	public void render(float delta) {
-		game.changeScreen(MainGame.MENU);
+		game.changeScreen(DeadLast.MENU);
 	}
 
 	@Override

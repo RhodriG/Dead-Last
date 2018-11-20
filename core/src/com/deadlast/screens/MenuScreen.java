@@ -9,23 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.deadlast.game.MainGame;
+import com.deadlast.game.DeadLast;
 
 public class MenuScreen extends DefaultScreen {
 
 	protected Stage stage;
 
-	public MenuScreen(MainGame game) {
+	public MenuScreen(DeadLast game) {
 		super(game);
 		System.out.println("Loaded MenuScreen");
 		// Create a new stage, and set it as the input processor
 		stage = new Stage(new ScreenViewport());
-		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void show() {
-		System.out.println("Showing...");
+		Gdx.input.setInputProcessor(stage);
 		Table mainTable = new Table();
 		mainTable.setFillParent(true);
 		mainTable.top();
@@ -37,7 +36,7 @@ public class MenuScreen extends DefaultScreen {
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.changeScreen(MainGame.GAME);
+				game.changeScreen(DeadLast.GAME);
 			}
 		});
 		
@@ -45,7 +44,7 @@ public class MenuScreen extends DefaultScreen {
 		scoreButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.changeScreen(MainGame.SCOREBOARD);
+				game.changeScreen(DeadLast.SCOREBOARD);
 			}
 		});
 		
@@ -53,7 +52,7 @@ public class MenuScreen extends DefaultScreen {
 		helpButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.changeScreen(MainGame.HELP);
+				game.changeScreen(DeadLast.HELP);
 			}
 		});
 		
