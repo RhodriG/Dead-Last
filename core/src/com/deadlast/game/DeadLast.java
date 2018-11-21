@@ -14,10 +14,16 @@ public class DeadLast extends Game {
 	private GameScreen gameScreen;
 	private HelpScreen helpScreen;
 	
-	public final static int MENU = 0;
-	public final static int SCOREBOARD = 1;
-	public final static int HELP = 2;
-	public final static int GAME = 3;
+	// Pixels-per-metre
+	public static final int PPM = 50;
+	// The viewport dimensions
+	public static final int V_WIDTH = 800;
+	public static final int V_HEIGHT = 600;
+	
+	public static final int MENU = 0;
+	public static final int SCOREBOARD = 1;
+	public static final int HELP = 2;
+	public static final int GAME = 3;
 	
 	@Override
 	public void create() {
