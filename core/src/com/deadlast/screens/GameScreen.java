@@ -60,6 +60,7 @@ public class GameScreen extends DefaultScreen {
 		//batch.setProjectionMatrix(camera.combined);
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
+		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		player = new Player(world, game, 0, 10, 2, 10);
 	}
