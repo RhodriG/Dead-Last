@@ -19,6 +19,7 @@ public class Resources {
 	
 	public final String playerImage = "entities/player.png";
 	public final String enemyImage = "entities/enemy.png";
+	public final String entityImage = "entities/entity.png";
 	
 	public void loadSkin() {
 		SkinParameter params = new SkinParameter("uiskin.atlas");
@@ -28,6 +29,7 @@ public class Resources {
 	public void loadImages() {
 		manager.load(playerImage, Texture.class);
 		manager.load(enemyImage, Texture.class);
+		manager.load(entityImage, Texture.class);
 	}
 	
 	public void loadFonts() {};
