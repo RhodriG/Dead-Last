@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Holds a list of {@link Entry} corresponding to high scores.
+ * Holds a list of {@link Entry}'s corresponding to high scores.
  * @author Xzytl
  *
  */

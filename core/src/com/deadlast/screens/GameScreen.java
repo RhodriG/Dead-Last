@@ -24,7 +24,7 @@ import com.deadlast.world.B2dModel;
 import com.deadlast.world.BodyFactory;
 
 /**
- * 
+ * The screen responsible for rendering and displaying the game.
  * @author Xzytl
  *
  */

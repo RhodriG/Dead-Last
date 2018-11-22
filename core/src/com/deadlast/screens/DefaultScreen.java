@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.deadlast.game.DeadLast;
 
 /**
- * 
+ * The default screen for game views.
  * @author Xzytl
  *
  */
