@@ -6,6 +6,11 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class B2dContactListener implements ContactListener {
 
 	private B2dModel parent;

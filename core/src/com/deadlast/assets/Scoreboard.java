@@ -4,26 +4,60 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Holds a list of {@link Entry} corresponding to high scores.
+ * @author Xzytl
+ *
+ */
 public class Scoreboard {
 	
+	/**
+	 * The list of scoreboard entries.
+	 */
 	List<Entry> entries;
 	
 	public Scoreboard() {
 		this.entries = new ArrayList<>();
 	}
 	
+	/**
+	 * A scoreboard entry. Holds the name, score, and datetime of the entry.
+	 * @author Xzytl
+	 *
+	 */
 	public class Entry implements Comparable<Entry> {
 		
+		/**
+		 * The name of the player.
+		 */
 		String name;
+		/**
+		 * The integer score the player achieved.
+		 */
 		int score;
+		/**
+		 * The date the game was won by the player.
+		 */
 		String dateTime;
 		
+		/**
+		 * Default class constructor.
+		 * @param name		the name of the player
+		 * @param score		the score achieved
+		 * @param dateTime	the time the score was achieved
+		 */
 		public Entry(String name, int score, String dateTime) {
 			this.name = name;
 			this.score = score;
 			this.dateTime = dateTime;
 		}
 		
+		/**
+		 * Class constructor which parses line from CSV file.
+		 * @param line		CSV line with <code>name</code>, <code>score</code> 
+		 * 					and <code>dateTime</code>
+		 * @throws IllegalArgumentException	invalid CSV format
+		 */
 		public Entry(String line) throws IllegalArgumentException {
 			String[] vars = line.split(",");
 			if (vars.length != 3) {
@@ -48,6 +82,10 @@ public class Scoreboard {
 			return score;
 		}
 		
+		/**
+		 * Return score as a <code>String</code>.
+		 * @return	a string representation of the integer score
+		 */
 		public String getScoreString() {
 			return Integer.toString(score);
 		}
@@ -72,7 +110,11 @@ public class Scoreboard {
 		entries.add(entry);
 	}
 	
-	public List<Entry> getEntries() {
+	/**
+	 * Returns the contained entries, sorted by score.
+	 * @return	<code>List&lt;Entry&gt;</code> a sorted list of all entries
+	 */
+	public List<Entry> getSortedEntries() {
 		Collections.sort(entries);
 		return entries;
 	}

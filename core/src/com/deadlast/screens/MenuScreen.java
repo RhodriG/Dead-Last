@@ -11,6 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deadlast.game.DeadLast;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class MenuScreen extends DefaultScreen {
 
 	protected Stage stage;

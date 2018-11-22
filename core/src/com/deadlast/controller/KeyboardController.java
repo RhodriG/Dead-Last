@@ -4,12 +4,32 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Interprets input events from a keyboard and mouse/touch screen.
+ * @author Xzytl
+ *
+ */
 public class KeyboardController implements InputProcessor {
 	
+	/** 
+	 * Boolean representing whether or not the respective key is held down
+	 */
 	public boolean left, right, up, down;
+	/**
+	 * Boolean representing whether or not the respective mouse button is held down
+	 */
 	public boolean isMouse1Down, isMouse2Down, isMouse3Down;
+	/**
+	 * Boolean representing whether or not the mouse is being dragged (moved while button is held)
+	 */
 	public boolean isDragged;
+	/**
+	 * Boolean representing whether or not the left shift key is held down
+	 */
 	public boolean isShiftDown;
+	/**
+	 * {@link Vector2} representing the mouse pointer's current location on the screen
+	 */
 	public Vector2 mouseLocation = new Vector2();
 
 	@Override

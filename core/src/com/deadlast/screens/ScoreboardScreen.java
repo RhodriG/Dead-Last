@@ -18,6 +18,11 @@ import com.deadlast.assets.Scoreboard;
 import com.deadlast.game.DeadLast;
 import com.deadlast.util.Util;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class ScoreboardScreen extends DefaultScreen {
 	
 	protected Stage stage;
@@ -62,7 +67,7 @@ public class ScoreboardScreen extends DefaultScreen {
 		
 		try {
 			Scoreboard scores = Util.parseScoreFile();
-			scores.getEntries().forEach(entry -> {
+			scores.getSortedEntries().forEach(entry -> {
 				scoreTable.add(entry.getName());
 				scoreTable.add(entry.getScoreString());
 				scoreTable.add(entry.getDate());

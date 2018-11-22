@@ -9,6 +9,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.deadlast.assets.Scoreboard;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public final class Util {
 	
 	public static Scoreboard parseScoreFile() throws IOException, IllegalArgumentException {

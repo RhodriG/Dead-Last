@@ -2,6 +2,11 @@ package com.deadlast.screens;
 
 import com.deadlast.game.DeadLast;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class LoadingScreen extends DefaultScreen {
 
 	public LoadingScreen(DeadLast game) {

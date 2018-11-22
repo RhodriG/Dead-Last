@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -15,12 +16,18 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.deadlast.controller.KeyboardController;
 import com.deadlast.entities.Entity;
+import com.deadlast.entities.Mob;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
 import com.deadlast.world.B2dContactListener;
 import com.deadlast.world.B2dModel;
 import com.deadlast.world.BodyFactory;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class GameScreen extends DefaultScreen {
 	
 	// B2dModel model;
@@ -34,8 +41,17 @@ public class GameScreen extends DefaultScreen {
 	private Texture enemyTex;
 	private SpriteBatch batch;
 	
-	private Player player;
+	/**
+	 * The controllable player character
+	 */
+	private Mob player;
+	/**
+	 * The enemies on the current level
+	 */
 	private ArrayList<Entity> enemies;
+	/**
+	 * The pickups/powerups on the current level
+	 */
 	private ArrayList<Entity> pickups;
 
 	public GameScreen(DeadLast game) {
@@ -51,18 +67,14 @@ public class GameScreen extends DefaultScreen {
 		world = new World(new Vector2(0,0), true);
 		// world.setContactListener(new B2dContactListener());
 		
-		// model = new B2dModel(controller, camera);
 		debugRenderer = new Box2DDebugRenderer();
 		
-		//playerTex = game.resources.manager.get(game.resources.playerImage);
-		//enemyTex = game.resources.manager.get(game.resources.enemyImage);
 		batch = new SpriteBatch();
-		//batch.setProjectionMatrix(camera.combined);
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
-		player = new Player(world, game, 0, 10, 2, 10);
+		player = new Player(world, game, 0, 1f, 1f, 10, 4, 10, 10);
 	}
 
 	@Override
@@ -77,15 +89,15 @@ public class GameScreen extends DefaultScreen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		debugRenderer.render(world, camera.combined);
-		//batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		//batch.draw(playerTex, model.player.getPosition().x - 1, model.player.getPosition().y - 1, 2, 2);
-		player.draw(batch);
+		//player.draw(batch);
+		((Player) player).render(batch);
 		batch.end();
 	}
 	
 	public void update(float delta) {
-		player.update(delta);
+		//player.update(delta);
 		world.step(1 / 60f, 6, 2);
 		camera.position.x = player.getBody().getPosition().x;
 		camera.position.y = player.getBody().getPosition().y;
@@ -96,7 +108,7 @@ public class GameScreen extends DefaultScreen {
 		float speed;
 		
 		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 2;
+			speed = player.getSpeed() * 1.5f;
 		} else {
 			speed = player.getSpeed();
 		}
@@ -118,18 +130,18 @@ public class GameScreen extends DefaultScreen {
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
 		}
 		
-		if (!controller.up && !controller.down) {
+		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
 		}
-		if (!controller.left && !controller.right) {
+		if ((!controller.left && !controller.right) || (controller.left && controller.right )) {
 			player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
 		}
+		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
+		gamePort.update(width, height);
 	}
 
 	@Override
@@ -154,6 +166,8 @@ public class GameScreen extends DefaultScreen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		batch.dispose();
+		debugRenderer.dispose();
+		world.dispose();
 	}
 
 }

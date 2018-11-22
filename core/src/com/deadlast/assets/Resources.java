@@ -1,5 +1,11 @@
 package com.deadlast.assets;
 
+/**
+ * Resource manager class.
+ * @author Xzytl
+ * 
+ */
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader.SkinParameter;
 import com.badlogic.gdx.graphics.Texture;

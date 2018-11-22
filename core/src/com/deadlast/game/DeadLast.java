@@ -4,8 +4,13 @@ import com.badlogic.gdx.Game;
 import com.deadlast.assets.Resources;
 import com.deadlast.screens.*;
 
+/**
+ * Main game class that orchestrates 
+ * @author Xzytl
+ *
+ */
 public class DeadLast extends Game {
-	
+
 	public Resources resources = new Resources();
 	
 	private LoadingScreen loadingScreen;
@@ -14,10 +19,17 @@ public class DeadLast extends Game {
 	private GameScreen gameScreen;
 	private HelpScreen helpScreen;
 	
-	// Pixels-per-metre
+	/**
+	 * The number of pixels that represents one metre in the game
+	 */
 	public static final int PPM = 50;
-	// The viewport dimensions
+	/**
+	 * The width of the viewport the game is displayed in.
+	 */
 	public static final int V_WIDTH = 800;
+	/**
+	 * The height of the viewport the game is displayed in.
+	 */
 	public static final int V_HEIGHT = 600;
 	
 	public static final int MENU = 0;
@@ -31,6 +43,10 @@ public class DeadLast extends Game {
 		setScreen(loadingScreen);
 	}
 	
+	/**
+	 * Changes the active screen that is being displayed to the user.
+	 * @param screen	an integer representing the screen to change to
+	 */
 	public void changeScreen(int screen) {
 		switch(screen) {
 		case MENU:

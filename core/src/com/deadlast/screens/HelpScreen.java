@@ -3,6 +3,11 @@ package com.deadlast.screens;
 import com.deadlast.screens.DefaultScreen;
 import com.deadlast.game.DeadLast;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class HelpScreen extends DefaultScreen {
 
 	public HelpScreen(DeadLast game) {
