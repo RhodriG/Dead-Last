@@ -24,7 +24,7 @@ import com.deadlast.world.B2dModel;
 import com.deadlast.world.BodyFactory;
 
 /**
- * The screen responsible for rendering and displaying the game.
+ * The screen responsible for displaying
  * @author Xzytl
  *
  */
@@ -36,9 +36,7 @@ public class GameScreen extends DefaultScreen {
 	private Box2DDebugRenderer debugRenderer;
 	private KeyboardController controller;
 	private World world;
-	
-	private Texture playerTex;
-	private Texture enemyTex;
+
 	private SpriteBatch batch;
 	
 	/**
