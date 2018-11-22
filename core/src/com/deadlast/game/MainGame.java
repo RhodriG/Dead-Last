@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-// main game class
+// Main game class
 public class MainGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
