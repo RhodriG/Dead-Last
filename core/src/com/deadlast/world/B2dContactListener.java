@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 /**
- * 
+ * Handles contact interactions with world bodies.
  * @author Xzytl
  *
  */
