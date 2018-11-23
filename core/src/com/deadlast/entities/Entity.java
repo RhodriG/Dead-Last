@@ -3,6 +3,7 @@ package com.deadlast.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -108,5 +109,13 @@ public abstract class Entity {
 	 */
 	protected abstract void defineBody(Vector2 position);
 	
+	public void render(SpriteBatch batch) {
+		float posX = b2body.getPosition().x - 0.5f;
+		float posY = b2body.getPosition().y - 0.5f;
+		float rotation = (float) Math.toDegrees(b2body.getAngle());
+		sprite.setPosition(posX, posY);
+		sprite.setRotation(rotation);
+		sprite.draw(batch);
+	}
 
 }
