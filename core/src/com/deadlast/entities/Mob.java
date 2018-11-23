@@ -1,5 +1,7 @@
 package com.deadlast.entities;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -39,8 +41,11 @@ public class Mob extends Entity {
 	 */
 	private float currentStrength;
 	
-	public Mob(World world, DeadLast game, int scoreValue, float x, float y, int healthStat, int speedStat, int strengthStat) {
-		super(world, game, scoreValue, x, y);
+	public Mob(
+			World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius,
+			Vector2 initialPos, int healthStat, int speedStat, int strengthStat
+	) {
+		super(world, game, scoreValue, sprite, bRadius, initialPos);
 		this.maxHealth = healthStat;
 		this.maxSpeed = speedStat;
 		this.maxStrength = strengthStat;
@@ -87,21 +92,20 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	protected void defineBody() {
+	protected void defineBody(Vector2 position) {
 		BodyDef bDef = new BodyDef();
 		bDef.type = BodyDef.BodyType.DynamicBody;
-		bDef.position.set(0, 0);
+		bDef.position.set(position);
 		
 		CircleShape shape = new CircleShape();
-		shape.setRadius(0.5f);
+		shape.setRadius(this.bRadius);
 		
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = shape;
 		
 		b2body = world.createBody(bDef);
 		b2body.createFixture(fDef).setUserData(this);
-		//b2body.setLinearDamping(3.0f);
-		
+
 		shape.dispose();
 	}
 

@@ -14,7 +14,7 @@ import com.deadlast.game.DeadLast;
  * @author Xzytl
  *
  */
-public abstract class Entity extends Sprite {
+public abstract class Entity {
 	
 	/**
 	 * The {@link World} this entity exists in.
@@ -23,24 +23,55 @@ public abstract class Entity extends Sprite {
 	/**
 	 * The instance of {@link DeadLast} this entity belongs to.
 	 */
-	private DeadLast game;
+	protected DeadLast game;
+	/**
+	 * The radius of this entity's body.
+	 */
+	protected float bRadius;
 	/**
 	 * The score modifier when this entity is killed or otherwise interacted with.
 	 */
-	int scoreValue;
+	protected int scoreValue;
 	/**
 	 * The {@link Body} that represents this entity in the {@link World}.
 	 */
 	protected Body b2body;
+	/**
+	 * The sprite that represents this entity in the world
+	 */
+	protected Sprite sprite;
 	
-	public Entity(World world, DeadLast game, int scoreValue, float x, float y) {
-		// TODO: potentially load default texture
-		super(new Texture(Gdx.files.internal("entities/enemy.png")));
+	
+	/**
+	 * Creates an entity using the default score value and texture and places it at the origin.
+	 * @param world		the {@link World} the entity exists in
+	 * @param game		the instance of the game the entity belongs to
+	 */
+	public Entity(World world, DeadLast game) {
+		this(world, game, 0, game.resources.manager.get(game.resources.entityImage), 0.5f, new Vector2(0,0));
+	}
+	
+	public Entity(World world, DeadLast game, int scoreValue) {
+		this(world, game, scoreValue, game.resources.manager.get(game.resources.entityImage), 0.5f, new Vector2(0,0));
+	}
+	
+	/**
+	 * Creates an entity with a score value and a specific sprite.
+	 * @param world			the {@link World} the entity exists in
+	 * @param game			the instance of the game the entity belongs to
+	 * @param scoreValue	the score value given when this entity is interacted with
+	 * @param sprite		the {@link Sprite} that represents this entity in the world
+	 * @param bRadius		the radius of the circular body that represents this entity
+	 * @param initialPos	the position the entity should spawn in the world
+	 */
+	public Entity(World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos) {
 		this.world = world;
 		this.game = game;
 		this.scoreValue = scoreValue;
-		setPosition(x, y);
-		defineBody();
+		this.sprite = sprite;
+		this.bRadius = bRadius;
+		sprite.setSize(bRadius * 2, bRadius * 2);
+		defineBody(initialPos);
 	}
 	
 	/**
@@ -51,29 +82,31 @@ public abstract class Entity extends Sprite {
 		return b2body;
 	}
 	
+	/**
+	 * Teleports the entity to the specified location. Be aware that it may cause issues with physics
+	 * objects.
+	 * @param x		The x coordinate of the destination
+	 * @param y		The y coordinate of the destination
+	 */
 	public void moveTo(float x, float y) {
 		b2body.setTransform(x, y, b2body.getAngle());
 	}
 	
+	/**
+	 * Rotates the entity by a specific number of degrees.
+	 * @param angle		the number of degrees to rotate the body by
+	 */
 	public void rotateBody(float angle) {
 		float radAngle = (float) (angle * Math.PI / 180);
 		b2body.setTransform(b2body.getPosition(), radAngle);
 	}
-	
-//	public void setPosition(Vector2 vector) {
-//		setPosition(vector.x, vector.y);
-//	}
-//	
-//	public void setPosition(Vector3 vector) {
-//		setPosition(vector.x, vector.y);
-//	}
 	
 	public abstract void delete();
 	
 	/**
 	 * Defines this entity's body that exists in the world.
 	 */
-	protected abstract void defineBody();
+	protected abstract void defineBody(Vector2 position);
 	
 
 }
