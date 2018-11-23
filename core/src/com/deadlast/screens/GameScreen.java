@@ -6,21 +6,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.deadlast.controller.KeyboardController;
 import com.deadlast.entities.Entity;
-import com.deadlast.entities.Mob;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
-import com.deadlast.world.B2dContactListener;
-import com.deadlast.world.B2dModel;
 import com.deadlast.world.BodyFactory;
 
 /**
@@ -32,7 +29,7 @@ public class GameScreen extends DefaultScreen {
 	
 	// B2dModel model;
 	private OrthographicCamera camera;
-	private FitViewport gamePort;
+	private ExtendViewport gamePort;
 	private Box2DDebugRenderer debugRenderer;
 	private KeyboardController controller;
 	private World world;
@@ -42,7 +39,7 @@ public class GameScreen extends DefaultScreen {
 	/**
 	 * The controllable player character
 	 */
-	private Mob player;
+	private Player player;
 	/**
 	 * The enemies on the current level
 	 */
@@ -57,7 +54,7 @@ public class GameScreen extends DefaultScreen {
 		System.out.println("Loaded GameScreen");
 		
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / DeadLast.PPM, Gdx.graphics.getHeight() / DeadLast.PPM);
-		gamePort = new FitViewport(DeadLast.V_WIDTH, DeadLast.V_HEIGHT, camera);
+		gamePort = new ExtendViewport(DeadLast.V_WIDTH / DeadLast.PPM, DeadLast.V_HEIGHT / DeadLast.PPM, camera);
 		
 		camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 		
@@ -72,7 +69,7 @@ public class GameScreen extends DefaultScreen {
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
-		player = new Player(world, game, 0, 1f, 1f, 10, 4, 10, 10);
+		player = new Player(world, game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
 	}
 
 	@Override
@@ -90,7 +87,7 @@ public class GameScreen extends DefaultScreen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		//player.draw(batch);
-		((Player) player).render(batch);
+		player.render(batch);
 		batch.end();
 	}
 	
