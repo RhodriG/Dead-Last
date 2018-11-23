@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.deadlast.controller.KeyboardController;
+import com.deadlast.entities.Enemy;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
@@ -42,7 +43,7 @@ public class GameScreen extends DefaultScreen {
 	/**
 	 * The enemies on the current level
 	 */
-	private ArrayList<Entity> enemies;
+	private ArrayList<Enemy> enemies;
 	/**
 	 * The pickups/powerups on the current level
 	 */
@@ -64,11 +65,28 @@ public class GameScreen extends DefaultScreen {
 		debugRenderer = new Box2DDebugRenderer();
 		
 		batch = new SpriteBatch();
+		
+		enemies = new ArrayList<>();
+		pickups = new ArrayList<>();
+		
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		player = new Player(world, game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
+		Enemy enemy = new Enemy.Builder()
+				.setWorld(world)
+				.setGame(game)
+				.setScoreValue(10)
+				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/enemy.png"))))
+				.setBodyRadius(0.5f)
+				.setInitialPosition(new Vector2(-4, -4))
+				.setHealthStat(5)
+				.setSpeedStat(5)
+				.setStrengthStat(5)
+				.setDetectionStat(5)
+				.build();
+		enemies.add(enemy);
 	}
 
 	@Override
@@ -87,6 +105,7 @@ public class GameScreen extends DefaultScreen {
 		batch.begin();
 		//player.draw(batch);
 		player.render(batch);
+		enemies.forEach(enemy -> enemy.render(batch));
 		batch.end();
 	}
 	
