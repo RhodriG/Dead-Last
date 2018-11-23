@@ -34,8 +34,8 @@ public class Player extends Mob {
 	}
 	
 	public void render(SpriteBatch batch) {
-		float posX = b2body.getPosition().x;
-		float posY = b2body.getPosition().y;
+		float posX = b2body.getPosition().x - 0.5f;
+		float posY = b2body.getPosition().y - 0.5f;
 		float rotation = (float) Math.toDegrees(b2body.getAngle());
 		sprite.setPosition(posX, posY);
 		sprite.setRotation(rotation);
