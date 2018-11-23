@@ -11,7 +11,7 @@ import com.deadlast.controller.KeyboardController;
 /**
  * 
  * @author Xzytl
- *
+ * @deprecated
  */
 public class B2dModel {
 
@@ -25,7 +25,7 @@ public class B2dModel {
 		this.controller = controller;
 		this.camera = camera;
 		world = new World(new Vector2(0, 0), true);
-		world.setContactListener(new B2dContactListener(this));
+		world.setContactListener(new WorldContactListener(this));
 		
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		
