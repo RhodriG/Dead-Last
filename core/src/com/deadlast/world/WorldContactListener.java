@@ -11,11 +11,11 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  * @author Xzytl
  *
  */
-public class B2dContactListener implements ContactListener {
+public class WorldContactListener implements ContactListener {
 
 	private B2dModel parent;
 	
-	public B2dContactListener(B2dModel parent) {
+	public WorldContactListener(B2dModel parent) {
 		this.parent = parent;
 	}
 	
