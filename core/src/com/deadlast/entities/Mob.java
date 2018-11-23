@@ -16,17 +16,17 @@ import com.deadlast.game.DeadLast;
 public class Mob extends Entity {
 
 	/**
-	 * Maximum health of this mob.
+	 * Normal maximum health of this mob.
 	 */
-	private float maxHealth;
+	private float healthStat;
 	/**
-	 * Maximum speed of this mob.
+	 * Normal maximum speed of this mob.
 	 */
-	private float maxSpeed;
+	private float speedStat;
 	/**
-	 * Maximum strength of this mob.
+	 * Normal maximum strength of this mob.
 	 */
-	private float maxStrength;
+	private float strengthStat;
 	
 	/**
 	 * Current health of this mob.
@@ -46,20 +46,32 @@ public class Mob extends Entity {
 			Vector2 initialPos, int healthStat, int speedStat, int strengthStat
 	) {
 		super(world, game, scoreValue, sprite, bRadius, initialPos);
-		this.maxHealth = healthStat;
-		this.maxSpeed = speedStat;
-		this.maxStrength = strengthStat;
+		this.healthStat = healthStat;
+		this.speedStat = speedStat;
+		this.strengthStat = strengthStat;
 		resetStats();
 	}
 	
+	/**
+	 * Sets the health of the mob.
+	 * @param currentHealth		the health to which the mob should be set
+	 */
 	public void setCurrentHealth(float currentHealth) {
 		this.currentHealth = currentHealth;
 	}
 	
+	/**
+	 * Set the speed of the mob.
+	 * @param currentSpeed		the speed to which the mob should be set
+	 */
 	public void setCurrentSpeed(float currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 	
+	/**
+	 * Set the strength of the mob.
+	 * @param currentStrength	the strength to which the mob should be set
+	 */
 	public void setCurrentStrength(float currentStrength) {
 		this.currentStrength = currentStrength;
 	}
@@ -80,9 +92,9 @@ public class Mob extends Entity {
 	 * Resets all mob stats to their default max values.
 	 */
 	public void resetStats() {
-		this.currentHealth = maxHealth;
-		this.currentSpeed = maxSpeed;
-		this.currentStrength = maxStrength;
+		this.currentHealth = healthStat;
+		this.currentSpeed = speedStat;
+		this.currentStrength = strengthStat;
 	}
 
 	@Override
