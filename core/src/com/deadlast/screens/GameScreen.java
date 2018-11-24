@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.deadlast.controller.KeyboardController;
 import com.deadlast.entities.Enemy;
+import com.deadlast.entities.EnemyFactory;
+import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
@@ -27,14 +29,28 @@ import com.deadlast.world.BodyFactory;
  */
 public class GameScreen extends DefaultScreen {
 	
-	// B2dModel model;
+	/**
+	 * The camera that the world is shown through
+	 */
 	private OrthographicCamera camera;
 	private ExtendViewport gamePort;
+	/**
+	 * The debug renderer that shows bodies without sprites
+	 */
 	private Box2DDebugRenderer debugRenderer;
+	/**
+	 * The controller adapter that handles inputs from keyboard/mouse
+	 */
 	private KeyboardController controller;
 	private World world;
-
+	/**
+	 * The SpriteBatch which renders game sprites
+	 */
 	private SpriteBatch batch;
+	/**
+	 * The number of points the player has earned
+	 */
+	public int score;
 	
 	/**
 	 * The controllable player character
@@ -48,6 +64,8 @@ public class GameScreen extends DefaultScreen {
 	 * The pickups/powerups on the current level
 	 */
 	private ArrayList<Entity> pickups;
+	
+	private EnemyFactory enemyFactory;
 
 	public GameScreen(DeadLast game) {
 		super(game);
@@ -69,12 +87,13 @@ public class GameScreen extends DefaultScreen {
 		enemies = new ArrayList<>();
 		pickups = new ArrayList<>();
 		
+		EnemyFactory enemyFactory = EnemyFactory.getInstance(world, game);
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		player = new Player(world, game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
-		Enemy enemy = new Enemy.Builder()
+		Enemy enemy1 = new Enemy.Builder()
 				.setWorld(world)
 				.setGame(game)
 				.setScoreValue(10)
@@ -86,7 +105,17 @@ public class GameScreen extends DefaultScreen {
 				.setStrengthStat(5)
 				.setDetectionStat(5)
 				.build();
-		enemies.add(enemy);
+		enemies.add(enemy1);
+		Enemy enemy2 = enemyFactory.get(EnemyType.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
+		enemies.add(enemy2);
+	}
+	
+	/**
+	 * Changes the score the player has achieved.
+	 * @param points	the number of points to increase/decrease the score by
+	 */
+	public void addScore(int points) {
+		this.score += points;
 	}
 
 	@Override
