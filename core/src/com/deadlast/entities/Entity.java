@@ -103,6 +103,9 @@ public abstract class Entity {
 		setAngle((float)angle);
 	}
 	
+	// TODO: This should NOT be called during world.step, as it will cause errors.
+	// Implement a flag so that it can be deleted after physics simulation has been
+	// completed for that render cycle.
 	public void delete() {
 		world.destroyBody(this.b2body);
 		b2body.setUserData(null);
