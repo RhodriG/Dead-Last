@@ -24,7 +24,7 @@ import com.deadlast.world.BodyFactory;
 import com.deadlast.world.WorldContactListener;
 
 /**
- * The screen responsible for displaying
+ * The screen responsible for displaying the game world and relevant elements
  * @author Xzytl
  *
  */
