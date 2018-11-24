@@ -1,7 +1,6 @@
 package com.deadlast.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
@@ -26,9 +25,6 @@ public class Player extends Mob {
 		super(world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
-//		sprite.setSize(1.0f, 1.0f);
-//		sprite.setOrigin(0.5f, 0.5f);
-//		moveTo(0,0);
 	}
 	
 	public int getStealthStat() {
