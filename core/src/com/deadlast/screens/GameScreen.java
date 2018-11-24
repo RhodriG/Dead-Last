@@ -133,15 +133,14 @@ public class GameScreen extends DefaultScreen {
 		debugRenderer.render(world, camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		//player.draw(batch);
-		player.render(batch);
+		player.render(batch,camera);
 		enemies.forEach(enemy -> enemy.render(batch));
 		batch.end();
 	}
 	
 	public void update(float delta) {
 		//player.update(delta);
-		world.step(1 / 60f, 6, 2);
+		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 		camera.position.x = player.getBody().getPosition().x;
 		camera.position.y = player.getBody().getPosition().y;
 		camera.update();

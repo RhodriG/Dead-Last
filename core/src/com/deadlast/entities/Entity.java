@@ -69,6 +69,7 @@ public abstract class Entity {
 		this.sprite = sprite;
 		this.bRadius = bRadius;
 		sprite.setSize(bRadius * 2, bRadius * 2);
+		sprite.setOrigin(bRadius, bRadius);
 		defineBody(initialPos);
 	}
 	
@@ -94,9 +95,12 @@ public abstract class Entity {
 	 * Rotates the entity by a specific number of degrees.
 	 * @param angle		the number of degrees to rotate the body by
 	 */
-	public void rotateBody(float angle) {
-		float radAngle = (float) (angle * Math.PI / 180);
-		b2body.setTransform(b2body.getPosition(), radAngle);
+	public void setAngle(float angle) {
+		b2body.setTransform(b2body.getPosition(), (float)Math.toRadians(angle));
+	}
+	
+	public void setAngle(double angle) {
+		setAngle((float)angle);
 	}
 	
 	public void delete() {
