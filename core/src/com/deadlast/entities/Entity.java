@@ -110,6 +110,10 @@ public abstract class Entity {
 	 */
 	protected abstract void defineBody(Vector2 position);
 	
+	/**
+	 * Draws this entity's sprite in the correct place every render cycle.
+	 * @param batch	the {@link SpriteBatch} used to draw the sprite
+	 */
 	public void render(SpriteBatch batch) {
 		float posX = b2body.getPosition().x - bRadius;
 		float posY = b2body.getPosition().y - bRadius;
