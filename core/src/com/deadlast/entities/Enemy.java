@@ -1,10 +1,17 @@
 package com.deadlast.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
 
+/**
+ * A hostile mob that will attempt to damage the player.
+ * @author Xzytl
+ *
+ */
 public class Enemy extends Mob {
 	
 	private int detectionStat;
@@ -19,6 +26,23 @@ public class Enemy extends Mob {
 		return this.detectionStat;
 	}
 	
+	public void destroy() {
+		world.destroyBody(this.b2body);
+		b2body.setUserData(null);
+		b2body = null;
+	}
+	
+	@Override
+	public void defineBody(Vector2 initialPos) {
+		super.defineBody(initialPos);
+		b2body.setLinearDamping(5.0f);
+	}
+	
+	/**
+	 * Utility for building Enemy instances.
+	 * @author Xzytl
+	 *
+	 */
 	public static class Builder {
 		
 		private World world;
@@ -82,7 +106,29 @@ public class Enemy extends Mob {
 			return this;
 		}
 		
+		/**
+		 * Converts builder object into instance of Enemy
+		 * @return an instance of Enemy with the provided parameters
+		 * @throws IllegalArgumentException if required parameters are not provided
+		 */
 		public Enemy build() {
+			// Ensure variables are not undefined
+			// Note that primitive's are initialised as zero by default
+			if (world == null) {
+				throw new IllegalArgumentException("Invalid 'world' parameter");
+			}
+			if (game == null) {
+				throw new IllegalArgumentException("Invalid 'game' parameter");
+			}
+			if (sprite == null) {
+				sprite = new Sprite(new Texture(Gdx.files.internal("entities/enemy.png")));
+			}
+			if (bRadius == 0) {
+				bRadius = 0.5f;
+			}
+			if (initialPos == null) {
+				throw new IllegalArgumentException("Invalid 'initialPos' parameter");
+			}
 			return new Enemy(
 					world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat,
 					strengthStat, detectionStat
