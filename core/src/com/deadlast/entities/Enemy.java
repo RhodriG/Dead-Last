@@ -26,12 +26,6 @@ public class Enemy extends Mob {
 		return this.detectionStat;
 	}
 	
-	public void destroy() {
-		world.destroyBody(this.b2body);
-		b2body.setUserData(null);
-		b2body = null;
-	}
-	
 	@Override
 	public void defineBody(Vector2 initialPos) {
 		super.defineBody(initialPos);

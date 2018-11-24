@@ -98,12 +98,6 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected void defineBody(Vector2 position) {
 		BodyDef bDef = new BodyDef();
 		bDef.type = BodyDef.BodyType.DynamicBody;
@@ -116,7 +110,8 @@ public class Mob extends Entity {
 		fDef.shape = shape;
 		
 		b2body = world.createBody(bDef);
-		b2body.createFixture(fDef).setUserData(this);
+		b2body.createFixture(fDef);
+		b2body.setUserData(this);
 
 		shape.dispose();
 	}

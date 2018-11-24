@@ -1,11 +1,8 @@
 package com.deadlast.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
@@ -102,7 +99,11 @@ public abstract class Entity {
 		b2body.setTransform(b2body.getPosition(), radAngle);
 	}
 	
-	public abstract void delete();
+	public void delete() {
+		world.destroyBody(this.b2body);
+		b2body.setUserData(null);
+		b2body = null;
+	}
 	
 	/**
 	 * Defines this entity's body that exists in the world.
