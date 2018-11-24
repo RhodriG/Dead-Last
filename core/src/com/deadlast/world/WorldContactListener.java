@@ -12,12 +12,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
  *
  */
 public class WorldContactListener implements ContactListener {
-
-	private B2dModel parent;
-	
-	public WorldContactListener(B2dModel parent) {
-		this.parent = parent;
-	}
 	
 	@Override
 	public void beginContact(Contact contact) {

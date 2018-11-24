@@ -21,6 +21,7 @@ import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
 import com.deadlast.world.BodyFactory;
+import com.deadlast.world.WorldContactListener;
 
 /**
  * The screen responsible for displaying
@@ -78,7 +79,7 @@ public class GameScreen extends DefaultScreen {
 		
 		controller = new KeyboardController();
 		world = new World(new Vector2(0,0), true);
-		// world.setContactListener(new B2dContactListener());
+		world.setContactListener(new WorldContactListener());
 		
 		debugRenderer = new Box2DDebugRenderer();
 		
