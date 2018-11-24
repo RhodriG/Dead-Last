@@ -88,7 +88,7 @@ public class GameScreen extends DefaultScreen {
 		enemies = new ArrayList<>();
 		pickups = new ArrayList<>();
 		
-		EnemyFactory enemyFactory = EnemyFactory.getInstance(world, game);
+		enemyFactory = EnemyFactory.getInstance(world, game);
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
