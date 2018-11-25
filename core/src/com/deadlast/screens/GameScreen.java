@@ -94,6 +94,7 @@ public class GameScreen extends DefaultScreen {
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		player = new Player(world, game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
+		player.defineBody();
 		Enemy enemy1 = new Enemy.Builder()
 				.setWorld(world)
 				.setGame(game)
@@ -109,6 +110,7 @@ public class GameScreen extends DefaultScreen {
 		enemies.add(enemy1);
 		Enemy enemy2 = enemyFactory.get(EnemyType.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
 		enemies.add(enemy2);
+		enemies.forEach(enemy -> enemy.defineBody());
 	}
 	
 	/**

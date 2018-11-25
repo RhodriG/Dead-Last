@@ -39,6 +39,8 @@ public abstract class Entity {
 	 */
 	protected Sprite sprite;
 	
+	protected Vector2 initialPos;
+	
 	
 	/**
 	 * Creates an entity using the default score value and texture and places it at the origin.
@@ -68,9 +70,9 @@ public abstract class Entity {
 		this.scoreValue = scoreValue;
 		this.sprite = sprite;
 		this.bRadius = bRadius;
+		this.initialPos = initialPos;
 		sprite.setSize(bRadius * 2, bRadius * 2);
 		sprite.setOrigin(bRadius, bRadius);
-		defineBody(initialPos);
 	}
 	
 	/**
@@ -106,6 +108,10 @@ public abstract class Entity {
 	// TODO: This should NOT be called during world.step, as it will cause errors.
 	// Implement a flag so that it can be deleted after physics simulation has been
 	// completed for that render cycle.
+	/**
+	 * Removes the body from the world and destroys it.
+	 * @warning	do not call this method during world.step()
+	 */
 	public void delete() {
 		world.destroyBody(this.b2body);
 		b2body.setUserData(null);
@@ -115,7 +121,7 @@ public abstract class Entity {
 	/**
 	 * Defines this entity's body that exists in the world.
 	 */
-	protected abstract void defineBody(Vector2 position);
+	public abstract void defineBody();
 	
 	/**
 	 * Draws this entity's sprite in the correct place every render cycle.

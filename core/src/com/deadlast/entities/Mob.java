@@ -98,10 +98,10 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	protected void defineBody(Vector2 position) {
+	public void defineBody() {
 		BodyDef bDef = new BodyDef();
 		bDef.type = BodyDef.BodyType.DynamicBody;
-		bDef.position.set(position);
+		bDef.position.set(initialPos);
 		
 		CircleShape shape = new CircleShape();
 		shape.setRadius(this.bRadius);
