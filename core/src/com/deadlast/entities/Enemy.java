@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
 
@@ -27,8 +30,33 @@ public class Enemy extends Mob {
 	}
 	
 	@Override
-	public void defineBody(Vector2 initialPos) {
-		super.defineBody(initialPos);
+	public void defineBody() {
+		BodyDef bDef = new BodyDef();
+		bDef.type = BodyDef.BodyType.DynamicBody;
+		bDef.position.set(initialPos);
+		
+		// The physical body of the enemy
+		FixtureDef fBodyDef = new FixtureDef();
+		CircleShape shape = new CircleShape();
+		shape.setRadius(this.bRadius);
+		fBodyDef.shape = shape;
+		
+		// The 'hearing' radius of the enemy
+		FixtureDef fDetectionDef = new FixtureDef();
+		CircleShape detectionShape = new CircleShape();
+		detectionShape.setRadius(this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
+		fDetectionDef.shape = detectionShape;
+		fDetectionDef.isSensor = true;
+		
+		// Create body and add fixtures
+		b2body = world.createBody(bDef);
+		b2body.createFixture(fBodyDef);
+		b2body.createFixture(fDetectionDef);
+		b2body.setUserData(this);
+
+		shape.dispose();
+		detectionShape.dispose();
+		
 		b2body.setLinearDamping(5.0f);
 	}
 	
