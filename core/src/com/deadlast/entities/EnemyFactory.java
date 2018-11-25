@@ -38,10 +38,10 @@ public class EnemyFactory {
 		case FAST:
 			break;
 		case HEAVY:
-			builder.setHealthStat(100)
-				.setSpeedStat(20)
-				.setStrengthStat(75)
-				.setDetectionStat(20)
+			builder.setHealthStat(10)
+				.setSpeedStat(7)
+				.setStrengthStat(10)
+				.setDetectionStat(10)
 				.setSprite(null)
 				.setScoreValue(50)
 				.setInitialPosition(new Vector2(3,3))
