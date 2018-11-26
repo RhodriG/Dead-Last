@@ -152,7 +152,7 @@ public class GameScreen extends DefaultScreen {
 		float speed;
 		
 		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 1.5f;
+			speed = player.getSpeed() * 2.5f;
 		} else {
 			speed = player.getSpeed();
 		}
