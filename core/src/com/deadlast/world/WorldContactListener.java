@@ -17,7 +17,7 @@ public class WorldContactListener implements ContactListener {
 	
 	@Override
 	public void beginContact(Contact contact) {
-		System.out.println("Contact began!");
+		System.out.println("Contact begun!");
 		Fixture fA = contact.getFixtureA();
 		Fixture fB = contact.getFixtureB();
 		if (fA.getUserData() != null && fA.getBody().getUserData() instanceof Entity) {
