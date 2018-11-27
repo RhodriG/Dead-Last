@@ -3,6 +3,7 @@ package com.deadlast.screens;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +40,7 @@ public class GameScreen extends DefaultScreen {
 	 * The debug renderer that shows bodies without sprites
 	 */
 	private Box2DDebugRenderer debugRenderer;
+	private boolean showDebugRenderer = false;
 	/**
 	 * The controller adapter that handles inputs from keyboard/mouse
 	 */
@@ -110,6 +112,7 @@ public class GameScreen extends DefaultScreen {
 		enemies.add(enemy1);
 		Enemy enemy2 = enemyFactory.get(EnemyType.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
 		enemies.add(enemy2);
+		enemies.add(enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build());
 		enemies.forEach(enemy -> enemy.defineBody());
 	}
 	
@@ -129,10 +132,19 @@ public class GameScreen extends DefaultScreen {
 	@Override
 	public void render(float delta) {
 		handleInput(delta);
-		update(delta);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		debugRenderer.render(world, camera.combined);
+		
+		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+		camera.position.x = player.getBody().getPosition().x;
+		camera.position.y = player.getBody().getPosition().y;
+		camera.update();
+		
+		enemies.forEach(enemy -> enemy.update(player.getBody()));
+		
+		if (showDebugRenderer) {
+			debugRenderer.render(world, camera.combined);
+		}
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		player.render(batch,camera);
@@ -140,15 +152,11 @@ public class GameScreen extends DefaultScreen {
 		batch.end();
 	}
 	
-	public void update(float delta) {
-		//player.update(delta);
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		camera.position.x = player.getBody().getPosition().x;
-		camera.position.y = player.getBody().getPosition().y;
-		camera.update();
-	}
-	
 	public void handleInput(float delta) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+			showDebugRenderer = !showDebugRenderer;
+		}
+		
 		float speed;
 		
 		if (controller.isShiftDown) {

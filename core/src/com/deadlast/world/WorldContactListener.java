@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.deadlast.entities.Enemy;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 
@@ -32,6 +33,12 @@ public class WorldContactListener implements ContactListener {
 		) {
 			System.out.println("Player has entered detection range of enemy.");
 		}
+		if (fA.isSensor() && fB.getBody().getUserData() instanceof Player) {
+			((Enemy)fA.getBody().getUserData()).beginContact(fB.getBody());
+		}
+		if (fB.isSensor() && fA.getBody().getUserData() instanceof Player) {
+			((Enemy)fB.getBody().getUserData()).beginContact(fA.getBody());
+		}
 	}
 
 	@Override
@@ -44,6 +51,12 @@ public class WorldContactListener implements ContactListener {
 			(fB.isSensor() && fA.getBody().getUserData() instanceof Player)
 		) {
 			System.out.println("Player has left detection range of enemy.");
+		}
+		if (fA.isSensor() && fB.getBody().getUserData() instanceof Player) {
+			((Enemy)fA.getBody().getUserData()).endContact(fB.getBody());
+		}
+		if (fB.isSensor() && fA.getBody().getUserData() instanceof Player) {
+			((Enemy)fB.getBody().getUserData()).endContact(fA.getBody());
 		}
 	}
 

@@ -36,15 +36,21 @@ public class EnemyFactory {
 		case BOMBER:
 			break;
 		case FAST:
+			builder.setHealthStat(4)
+				.setSpeedStat(10)
+				.setStrengthStat(5)
+				.setDetectionStat(7)
+				.setSprite(null)
+				.setScoreValue(20)
+				.setBodyRadius(0.4f);
 			break;
 		case HEAVY:
 			builder.setHealthStat(10)
-				.setSpeedStat(7)
+				.setSpeedStat(6)
 				.setStrengthStat(10)
-				.setDetectionStat(10)
+				.setDetectionStat(9)
 				.setSprite(null)
 				.setScoreValue(50)
-				.setInitialPosition(new Vector2(3,3))
 				.setBodyRadius(0.75f);
 			break;
 		case HORDLING:

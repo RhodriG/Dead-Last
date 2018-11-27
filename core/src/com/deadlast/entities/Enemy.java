@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -19,6 +20,8 @@ import com.deadlast.world.BodyFactory;
 public class Enemy extends Mob {
 	
 	private int detectionStat;
+	
+	private boolean knowsPlayerLocation = false;
 
 	public Enemy(World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
@@ -55,6 +58,23 @@ public class Enemy extends Mob {
 		shape.dispose();
 		
 		b2body.setLinearDamping(5.0f);
+	}
+	
+	public void beginContact(Body body) {
+		this.knowsPlayerLocation = true;
+		
+	}
+	
+	public void endContact(Body body) {
+		this.knowsPlayerLocation = false;
+	}
+	
+	public void update(Body body) {
+		if (knowsPlayerLocation) {
+			Vector2 playerLoc = body.getPosition();
+			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x));
+			this.setAngle(angle - 90);
+		}
 	}
 	
 	/**
