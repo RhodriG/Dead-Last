@@ -1,18 +1,17 @@
 package com.deadlast.world;
 
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * 
+ * Factory singleton for easy creation of {@link FixtureDef} and {@link Body} objects.
  * @author Xzytl
  *
  */
@@ -122,12 +121,14 @@ public class BodyFactory {
 		return boxBody;
 	}
 	
-	public void makeAllFixturesSensors(Body body) {
-		for (Fixture fix : body.getFixtureList()) {
-			fix.setSensor(true);
-		}
-	}
-	
+	/**
+	 * Creates a cone-shaped {@link FixtureDef} sensor to be used as a field-of-view
+	 * @param body		the {@link Body} to add the fixture to
+	 * @param points	the integer number of points to use in the curved section (more is smoother);
+	 * 					must be greater than 1 and less than 8
+	 * @param angle		the f.o.v. angle
+	 * @param radius	the radius of the sector
+	 */
 	public void makeConeSensor(Body body, int points, float angle, float radius) {
 		if (points < 2) {
 			throw new IllegalArgumentException("Must have more than two points!");
@@ -156,6 +157,11 @@ public class BodyFactory {
 		polyShape.dispose();
 	}
 	
+	/**
+	 * Creates a circular {@link FixtureDef} sensor to be used as a hearing radius/general detection area
+	 * @param body		the {@link Body} to add the fixture to
+	 * @param radius	the radius of the circle
+	 */
 	public void makeHearingSensor(Body body, float radius) {
 		FixtureDef fDef = new FixtureDef();
 		CircleShape detectionShape = new CircleShape();
