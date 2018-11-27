@@ -122,28 +122,48 @@ public class BodyFactory {
 		return boxBody;
 	}
 	
-	public void makeConeSensor(Body body, float size) {
-		FixtureDef fixtureDef = new FixtureDef();
-		PolygonShape polyShape = new PolygonShape();
-		
-		float radius = size;
-		Vector2[] vertices = new Vector2[5];
-		
-		vertices[0] = new Vector2(0,0);
-		for (int i = 2; i < 6; i++) {
-			float angle = (float) (i / 6.0 * 145 * DEGTORAD);
-			vertices[i - 1] = new Vector2(radius * ((float)Math.cos(angle)), radius * ((float)Math.sin(angle)));
-		}
-		polyShape.set(vertices);
-		fixtureDef.shape = polyShape;
-		body.createFixture(fixtureDef);
-		polyShape.dispose();
-	}
-	
 	public void makeAllFixturesSensors(Body body) {
 		for (Fixture fix : body.getFixtureList()) {
 			fix.setSensor(true);
 		}
+	}
+	
+	public void makeConeSensor(Body body, int points, float angle, float radius) {
+		if (points < 2) {
+			throw new IllegalArgumentException("Must have more than two points!");
+		}
+		FixtureDef fDef = new FixtureDef();
+		PolygonShape polyShape = new PolygonShape();
+		Vector2[] vertices = new Vector2[points + 1];
+		
+		vertices[0] = new Vector2(0,0);
+		float startAngle;
+		float subAngle = angle / (float)points;
+		if (points % 2 == 0) {
+			startAngle = (subAngle / 2) + (((points - 2) / 2) * subAngle) + 90;
+		} else {
+			startAngle = subAngle * ((points - 1) / 2) + 90;
+		}
+		for (int i = 0; i < points; i++) {
+			double radAngle = Math.toRadians(startAngle);
+			vertices[i+1] = new Vector2(radius * (float)Math.cos(radAngle), radius * (float)Math.sin(radAngle));
+			startAngle -= subAngle;
+		}
+		polyShape.set(vertices);
+		fDef.shape = polyShape;
+		fDef.isSensor = true;
+		body.createFixture(fDef);
+		polyShape.dispose();
+	}
+	
+	public void makeHearingSensor(Body body, float radius) {
+		FixtureDef fDef = new FixtureDef();
+		CircleShape detectionShape = new CircleShape();
+		detectionShape.setRadius(radius);
+		fDef.shape = detectionShape;
+		fDef.isSensor = true;
+		body.createFixture(fDef);
+		detectionShape.dispose();
 	}
 
 }

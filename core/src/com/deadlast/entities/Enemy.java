@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
+import com.deadlast.world.BodyFactory;
 
 /**
  * A hostile mob that will attempt to damage the player.
@@ -41,21 +42,17 @@ public class Enemy extends Mob {
 		shape.setRadius(this.bRadius);
 		fBodyDef.shape = shape;
 		
-		// The 'hearing' radius of the enemy
-		FixtureDef fDetectionDef = new FixtureDef();
-		CircleShape detectionShape = new CircleShape();
-		detectionShape.setRadius(this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
-		fDetectionDef.shape = detectionShape;
-		fDetectionDef.isSensor = true;
-		
 		// Create body and add fixtures
 		b2body = world.createBody(bDef);
 		b2body.createFixture(fBodyDef);
-		b2body.createFixture(fDetectionDef);
+		
+		BodyFactory bFactory = BodyFactory.getInstance(world);
+		bFactory.makeConeSensor(b2body, 7, 70, 5f);
+		bFactory.makeHearingSensor(b2body, this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
+		
 		b2body.setUserData(this);
 
 		shape.dispose();
-		detectionShape.dispose();
 		
 		b2body.setLinearDamping(5.0f);
 	}
