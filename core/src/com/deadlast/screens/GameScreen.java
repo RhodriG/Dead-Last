@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -21,6 +25,7 @@ import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
 import com.deadlast.world.BodyFactory;
+import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
 /**
@@ -52,7 +57,6 @@ public class GameScreen extends DefaultScreen {
 	 * The number of points the player has earned
 	 */
 	public int score;
-	
 	/**
 	 * The controllable player character
 	 */
@@ -125,19 +129,30 @@ public class GameScreen extends DefaultScreen {
 	public void show() {
 		Gdx.input.setInputProcessor(controller);
 	}
-
+	private String[] roomRefs;
 	@Override
 	public void render(float delta) {
+		
+		roomRefs[0] = "test";
+		Level level = new Level(roomRefs);//Test to see if level works
+		level.rooms[0].render(camera);
+		
 		handleInput(delta);
 		update(delta);
+		
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		debugRenderer.render(world, camera.combined);
+		
+        
+        debugRenderer.render(world, camera.combined);
 		batch.setProjectionMatrix(camera.combined);
+		
+		
 		batch.begin();
 		player.render(batch,camera);
 		enemies.forEach(enemy -> enemy.render(batch));
 		batch.end();
+		
 	}
 	
 	public void update(float delta) {
@@ -213,5 +228,6 @@ public class GameScreen extends DefaultScreen {
 		debugRenderer.dispose();
 		world.dispose();
 	}
+	
 
 }

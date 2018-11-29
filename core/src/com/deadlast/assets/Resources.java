@@ -17,9 +17,9 @@ public class Resources {
 	
 	public final String skin = "ui/uiskin.json";
 	
-	public final String playerImage = "entities/player.png";
-	public final String enemyImage = "entities/enemy.png";
-	public final String entityImage = "entities/entity.png";
+	public final String playerImage = "/entities/player.png";
+	public final String enemyImage = "/entities/enemy.png";
+	public final String entityImage = "/entities/entity.png";
 	
 	public void loadSkin() {
 		SkinParameter params = new SkinParameter("uiskin.atlas");
