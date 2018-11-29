@@ -27,9 +27,9 @@ public class Resources {
 	}
 	
 	public void loadImages() {
-		manager.load(playerImage, Texture.class);
-		manager.load(enemyImage, Texture.class);
-		manager.load(entityImage, Texture.class);
+//		manager.load(playerImage, Texture.class);
+//		manager.load(enemyImage, Texture.class);
+//		manager.load(entityImage, Texture.class);
 	}
 	
 	public void loadFonts() {};
