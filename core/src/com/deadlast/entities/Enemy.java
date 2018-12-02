@@ -69,9 +69,10 @@ public class Enemy extends Mob {
 		this.knowsPlayerLocation = false;
 	}
 	
-	public void update(Body body) {
+	@Override
+	public void update() {
 		if (knowsPlayerLocation) {
-			Vector2 playerLoc = body.getPosition();
+			Vector2 playerLoc = gameManager.getPlayerPos();
 			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x));
 			this.setAngle(angle - 90);
 		}
