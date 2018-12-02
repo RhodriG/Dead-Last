@@ -122,11 +122,15 @@ public class GameManager implements Disposable {
 		return mousePos;
 	}
 	
+	public Vector2 getPlayerPos() {
+		return player.getBody().getPosition();
+	}
+	
 	public void update(float delta) {
 		if(gameCamera == null || batch == null) return;
 		handleInput();
 		// Step through the physics world simulation
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+		world.step(1/60f, 6, 2);
 		// Centre the camera on the player character
 		gameCamera.position.x = player.getBody().getPosition().x;
 		gameCamera.position.y = player.getBody().getPosition().y;
