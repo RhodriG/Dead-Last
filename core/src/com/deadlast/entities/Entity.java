@@ -16,13 +16,14 @@ import com.deadlast.game.GameManager;
 public abstract class Entity {
 	
 	/**
-	 * The {@link World} this entity exists in.
-	 */
-	protected World world;
-	/**
 	 * The instance of {@link DeadLast} this entity belongs to.
 	 */
 	protected DeadLast game;
+	protected GameManager gameManager;
+	/**
+	 * The {@link World} this entity exists in.
+	 */
+	protected World world;
 	/**
 	 * The radius of this entity's body.
 	 */
@@ -36,10 +37,12 @@ public abstract class Entity {
 	 */
 	protected Body b2body;
 	/**
-	 * The sprite that represents this entity in the world
+	 * The sprite that represents this entity in the world.
 	 */
 	protected Sprite sprite;
-	
+	/**
+	 * The initial world position of this entity.
+	 */
 	protected Vector2 initialPos;
 	
 	/**
@@ -52,7 +55,7 @@ public abstract class Entity {
 	 */
 	public Entity(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos) {
 		this.game = game;
-		GameManager gameManager = GameManager.getInstance(game);
+		gameManager = GameManager.getInstance(game);
 		this.world = gameManager.getWorld();
 		this.scoreValue = scoreValue;
 		this.sprite = sprite;
