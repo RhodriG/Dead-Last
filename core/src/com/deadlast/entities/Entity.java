@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
+import com.deadlast.game.GameManager;
 
 /**
  * Represents a dynamic object in the world.
@@ -41,32 +42,18 @@ public abstract class Entity {
 	
 	protected Vector2 initialPos;
 	
-	
-	/**
-	 * Creates an entity using the default score value and texture and places it at the origin.
-	 * @param world		the {@link World} the entity exists in
-	 * @param game		the instance of the game the entity belongs to
-	 */
-	public Entity(World world, DeadLast game) {
-		this(world, game, 0, game.resources.manager.get(game.resources.entityImage), 0.5f, new Vector2(0,0));
-	}
-	
-	public Entity(World world, DeadLast game, int scoreValue) {
-		this(world, game, scoreValue, game.resources.manager.get(game.resources.entityImage), 0.5f, new Vector2(0,0));
-	}
-	
 	/**
 	 * Creates an entity with a score value and a specific sprite.
-	 * @param world			the {@link World} the entity exists in
 	 * @param game			the instance of the game the entity belongs to
 	 * @param scoreValue	the score value given when this entity is interacted with
 	 * @param sprite		the {@link Sprite} that represents this entity in the world
 	 * @param bRadius		the radius of the circular body that represents this entity
 	 * @param initialPos	the position the entity should spawn in the world
 	 */
-	public Entity(World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos) {
-		this.world = world;
+	public Entity(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos) {
 		this.game = game;
+		GameManager gameManager = GameManager.getInstance(game);
+		this.world = gameManager.getWorld();
 		this.scoreValue = scoreValue;
 		this.sprite = sprite;
 		this.bRadius = bRadius;
@@ -135,5 +122,7 @@ public abstract class Entity {
 		sprite.setRotation(rotation);
 		sprite.draw(batch);
 	}
+	
+	public abstract void update();
 
 }

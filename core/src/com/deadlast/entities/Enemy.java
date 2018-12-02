@@ -23,9 +23,9 @@ public class Enemy extends Mob {
 	
 	private boolean knowsPlayerLocation = false;
 
-	public Enemy(World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
+	public Enemy(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
-		super(world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
+		super(game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.detectionStat = detectionStat;
 	}
 	
@@ -83,8 +83,7 @@ public class Enemy extends Mob {
 	 *
 	 */
 	public static class Builder {
-		
-		private World world;
+
 		private DeadLast game;
 		private int scoreValue;
 		private Sprite sprite;
@@ -94,11 +93,6 @@ public class Enemy extends Mob {
 		private int speedStat;
 		private int strengthStat;
 		private int detectionStat;
-		
-		public Builder setWorld(World world) {
-			this.world = world;
-			return this;
-		}
 		
 		public Builder setGame(DeadLast game) {
 			this.game = game;
@@ -153,9 +147,6 @@ public class Enemy extends Mob {
 		public Enemy build() {
 			// Ensure variables are not undefined
 			// Note that primitive's are initialised as zero by default
-			if (world == null) {
-				throw new IllegalArgumentException("Invalid 'world' parameter");
-			}
 			if (game == null) {
 				throw new IllegalArgumentException("Invalid 'game' parameter");
 			}
@@ -169,7 +160,7 @@ public class Enemy extends Mob {
 				throw new IllegalArgumentException("Invalid 'initialPos' parameter");
 			}
 			return new Enemy(
-					world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat,
+					game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat,
 					strengthStat, detectionStat
 			);
 		}
