@@ -38,36 +38,13 @@ public class GameScreen extends DefaultScreen {
 	private OrthographicCamera camera;
 	private ExtendViewport gamePort;
 	/**
-	 * The debug renderer that shows bodies without sprites
-	 */
-	private Box2DDebugRenderer debugRenderer;
-	private boolean showDebugRenderer = false;
-	/**
-	 * The controller adapter that handles inputs from keyboard/mouse
-	 */
-	private KeyboardController controller;
-	// private World world;
-	/**
 	 * The SpriteBatch which renders game sprites
 	 */
 	private SpriteBatch batch;
 	/**
-	 * The number of points the player has earned
-	 */
-	public int score;
-	
-	/**
 	 * The controllable player character
 	 */
 	private Player player;
-	/**
-	 * The enemies on the current level
-	 */
-	private ArrayList<Enemy> enemies;
-	/**
-	 * The pickups/powerups on the current level
-	 */
-	private ArrayList<Entity> pickups;
 	
 	private EnemyFactory enemyFactory;
 	
@@ -87,15 +64,10 @@ public class GameScreen extends DefaultScreen {
 		gameManager.setGameCamera(camera);
 		gameManager.setSpriteBatch(batch);
 		
-//		controller = new KeyboardController();
-//		world = new World(new Vector2(0,0), true);
-//		world.setContactListener(new WorldContactListener());
-//		
-//		debugRenderer = new Box2DDebugRenderer();
-//		
-//		enemies = new ArrayList<>();
-//		pickups = new ArrayList<>();
-//		
+		
+		/**
+		 * The below code is being maintained for the time being, but it should eventually be moved
+		 */
 		enemyFactory = EnemyFactory.getInstance(game);
 		BodyFactory bodyFactory = BodyFactory.getInstance(gameManager.getWorld());
 //		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
@@ -128,14 +100,6 @@ public class GameScreen extends DefaultScreen {
 //		
 //		enemies.forEach(enemy -> enemy.defineBody());
 		
-	}
-	
-	/**
-	 * Changes the score the player has achieved.
-	 * @param points	the number of points to increase/decrease the score by
-	 */
-	public void addScore(int points) {
-		this.score += points;
 	}
 
 	@Override
