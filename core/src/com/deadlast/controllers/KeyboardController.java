@@ -1,4 +1,4 @@
-package com.deadlast.controller;
+package com.deadlast.controllers;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
