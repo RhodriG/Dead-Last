@@ -21,6 +21,7 @@ import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
+import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
 import com.deadlast.world.WorldContactListener;
 
@@ -37,38 +38,17 @@ public class GameScreen extends DefaultScreen {
 	private OrthographicCamera camera;
 	private ExtendViewport gamePort;
 	/**
-	 * The debug renderer that shows bodies without sprites
-	 */
-	private Box2DDebugRenderer debugRenderer;
-	private boolean showDebugRenderer = false;
-	/**
-	 * The controller adapter that handles inputs from keyboard/mouse
-	 */
-	private KeyboardController controller;
-	private World world;
-	/**
 	 * The SpriteBatch which renders game sprites
 	 */
 	private SpriteBatch batch;
 	/**
-	 * The number of points the player has earned
-	 */
-	public int score;
-	
-	/**
 	 * The controllable player character
 	 */
 	private Player player;
-	/**
-	 * The enemies on the current level
-	 */
-	private ArrayList<Enemy> enemies;
-	/**
-	 * The pickups/powerups on the current level
-	 */
-	private ArrayList<Entity> pickups;
 	
 	private EnemyFactory enemyFactory;
+	
+	private GameManager gameManager = GameManager.getInstance(this.game);
 
 	public GameScreen(DeadLast game) {
 		super(game);
@@ -79,26 +59,25 @@ public class GameScreen extends DefaultScreen {
 		
 		camera.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 		
-		controller = new KeyboardController();
-		world = new World(new Vector2(0,0), true);
-		world.setContactListener(new WorldContactListener());
-		
-		debugRenderer = new Box2DDebugRenderer();
-		
 		batch = new SpriteBatch();
 		
-		enemies = new ArrayList<>();
-		pickups = new ArrayList<>();
+		gameManager.setGameCamera(camera);
+		gameManager.setSpriteBatch(batch);
 		
-		enemyFactory = EnemyFactory.getInstance(world, game);
-		BodyFactory bodyFactory = BodyFactory.getInstance(world);
-		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
+		
+		/**
+		 * The below code is being maintained for the time being, but it should eventually be moved
+		 */
+		enemyFactory = EnemyFactory.getInstance(game);
+		BodyFactory bodyFactory = BodyFactory.getInstance(gameManager.getWorld());
+//		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
-		
-		player = new Player(world, game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
+//		
+		player = new Player(game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
 		player.defineBody();
+		
+		gameManager.setPlayer(player);
 		Enemy enemy1 = new Enemy.Builder()
-				.setWorld(world)
 				.setGame(game)
 				.setScoreValue(10)
 				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/enemy.png"))))
@@ -109,87 +88,88 @@ public class GameScreen extends DefaultScreen {
 				.setStrengthStat(5)
 				.setDetectionStat(5)
 				.build();
-		enemies.add(enemy1);
+		enemy1.defineBody();
 		Enemy enemy2 = enemyFactory.get(EnemyType.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
-		enemies.add(enemy2);
-		enemies.add(enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build());
-		enemies.forEach(enemy -> enemy.defineBody());
-	}
-	
-	/**
-	 * Changes the score the player has achieved.
-	 * @param points	the number of points to increase/decrease the score by
-	 */
-	public void addScore(int points) {
-		this.score += points;
+		enemy2.defineBody();
+		Enemy enemy3 = enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build();
+		enemy3.defineBody();
+		gameManager.addEnemies(enemy1, enemy2, enemy3);
+//		enemies.add(enemy1);
+//		
+//		enemies.add(enemy2);
+//		
+//		enemies.forEach(enemy -> enemy.defineBody());
+		
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(controller);
+		Gdx.input.setInputProcessor(gameManager.getController());
 	}
 
 	@Override
 	public void render(float delta) {
-		handleInput(delta);
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		camera.position.x = player.getBody().getPosition().x;
-		camera.position.y = player.getBody().getPosition().y;
-		camera.update();
+		gameManager.update(delta);
+		gameManager.render();
 		
-		enemies.forEach(enemy -> enemy.update(player.getBody()));
+//		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+//		camera.position.x = player.getBody().getPosition().x;
+//		camera.position.y = player.getBody().getPosition().y;
+//		camera.update();
+//		
+//		enemies.forEach(enemy -> enemy.update(player.getBody()));
 		
-		if (showDebugRenderer) {
-			debugRenderer.render(world, camera.combined);
-		}
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		player.render(batch,camera);
-		enemies.forEach(enemy -> enemy.render(batch));
-		batch.end();
+//		if (showDebugRenderer) {
+//			debugRenderer.render(world, camera.combined);
+//		}
+//		batch.setProjectionMatrix(camera.combined);
+//		batch.begin();
+//		player.render(batch,camera);
+//		enemies.forEach(enemy -> enemy.render(batch));
+//		batch.end();
 	}
 	
-	public void handleInput(float delta) {
-		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-			showDebugRenderer = !showDebugRenderer;
-		}
-		
-		float speed;
-		
-		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 2.5f;
-		} else {
-			speed = player.getSpeed();
-		}
-		
-		if (controller.left) {
-			//player.applyForceToCenter(-10, 0, true);
-			player.getBody().setLinearVelocity(-1 * speed, player.getBody().getLinearVelocity().y);
-		}
-		if (controller.right) {
-			//player.applyForceToCenter(10, 0, true);
-			player.getBody().setLinearVelocity(speed, player.getBody().getLinearVelocity().y);
-		}
-		if (controller.up) {
-			//player.applyForceToCenter(0, 10, true);
-			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, speed);
-		}
-		if (controller.down) {
-			//player.applyForceToCenter(0, -10, true);
-			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
-		}
-		
-		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
-			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-		}
-		if ((!controller.left && !controller.right) || (controller.left && controller.right )) {
-			player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
-		}
-		
-	}
+//	public void handleInput(float delta) {
+//		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
+//			showDebugRenderer = !showDebugRenderer;
+//		}
+//		
+//		float speed;
+//		
+//		if (controller.isShiftDown) {
+//			speed = player.getSpeed() * 2.5f;
+//		} else {
+//			speed = player.getSpeed();
+//		}
+//		
+//		if (controller.left) {
+//			//player.applyForceToCenter(-10, 0, true);
+//			player.getBody().setLinearVelocity(-1 * speed, player.getBody().getLinearVelocity().y);
+//		}
+//		if (controller.right) {
+//			//player.applyForceToCenter(10, 0, true);
+//			player.getBody().setLinearVelocity(speed, player.getBody().getLinearVelocity().y);
+//		}
+//		if (controller.up) {
+//			//player.applyForceToCenter(0, 10, true);
+//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, speed);
+//		}
+//		if (controller.down) {
+//			//player.applyForceToCenter(0, -10, true);
+//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
+//		}
+//		
+//		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
+//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
+//		}
+//		if ((!controller.left && !controller.right) || (controller.left && controller.right )) {
+//			player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
+//		}
+//		
+//	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -218,8 +198,9 @@ public class GameScreen extends DefaultScreen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		batch.dispose();
-		debugRenderer.dispose();
-		world.dispose();
+		gameManager.dispose();
+//		debugRenderer.dispose();
+//		world.dispose();
 	}
 
 }

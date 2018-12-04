@@ -13,24 +13,21 @@ public class EnemyFactory {
 	
 	private static EnemyFactory instance;
 	
-	private World world;
 	private DeadLast game;
 	
-	private EnemyFactory(World world, DeadLast game) {
-		this.world = world;
+	private EnemyFactory(DeadLast game) {
 		this.game = game;
 	}
 	
-	public static EnemyFactory getInstance(World world, DeadLast game) {
+	public static EnemyFactory getInstance(DeadLast game) {
 		if (instance == null) {
-			instance = new EnemyFactory(world, game);
+			instance = new EnemyFactory(game);
 		}
 		return instance;
 	}
 	
 	public Enemy.Builder get(EnemyType type) {
 		Enemy.Builder builder = new Enemy.Builder()
-				.setWorld(world)
 				.setGame(game);
 		switch(type) {
 		case BOMBER:

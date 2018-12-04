@@ -42,10 +42,10 @@ public class Mob extends Entity {
 	private float currentStrength;
 	
 	public Mob(
-			World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius,
+			DeadLast game, int scoreValue, Sprite sprite, float bRadius,
 			Vector2 initialPos, int healthStat, int speedStat, int strengthStat
 	) {
-		super(world, game, scoreValue, sprite, bRadius, initialPos);
+		super(game, scoreValue, sprite, bRadius, initialPos);
 		this.healthStat = healthStat;
 		this.speedStat = speedStat;
 		this.strengthStat = strengthStat;
@@ -115,5 +115,7 @@ public class Mob extends Entity {
 
 		shape.dispose();
 	}
+	
+	public void update() {};
 
 }
