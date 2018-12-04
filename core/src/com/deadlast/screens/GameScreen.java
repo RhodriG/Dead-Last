@@ -64,7 +64,7 @@ public class GameScreen extends DefaultScreen {
 		BodyFactory bodyFactory = BodyFactory.getInstance(gameManager.getWorld());
 //		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
-//		
+		
 		player = new Player(game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
 		player.defineBody();
 		
