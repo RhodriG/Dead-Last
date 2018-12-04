@@ -116,6 +116,6 @@ public class Mob extends Entity {
 		shape.dispose();
 	}
 	
-	public void update() {};
+	public void update(float delta) {};
 
 }

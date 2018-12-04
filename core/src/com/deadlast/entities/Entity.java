@@ -126,6 +126,6 @@ public abstract class Entity {
 		sprite.draw(batch);
 	}
 	
-	public abstract void update();
+	public abstract void update(float delta);
 
 }

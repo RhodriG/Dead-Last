@@ -62,7 +62,6 @@ public class Enemy extends Mob {
 	
 	public void beginContact(Body body) {
 		this.knowsPlayerLocation = true;
-		
 	}
 	
 	public void endContact(Body body) {
@@ -70,11 +69,11 @@ public class Enemy extends Mob {
 	}
 	
 	@Override
-	public void update() {
+	public void update(float delta) {
 		if (knowsPlayerLocation) {
 			Vector2 playerLoc = gameManager.getPlayerPos();
-			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x));
-			this.setAngle(angle - 90);
+			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x)) - 90;
+			this.setAngle(angle);
 		}
 	}
 	

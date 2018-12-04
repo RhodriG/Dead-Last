@@ -135,7 +135,7 @@ public class GameManager implements Disposable {
 		gameCamera.position.x = player.getBody().getPosition().x;
 		gameCamera.position.y = player.getBody().getPosition().y;
 		gameCamera.update();
-		entities.forEach(Entity::update);
+		entities.forEach(entity -> entity.update(delta));
 		
 		if (showDebugRenderer) {
 			debugRenderer.render(world, gameCamera.combined);
