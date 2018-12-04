@@ -13,6 +13,7 @@ import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Player;
+import com.deadlast.entities.PlayerType;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
@@ -65,7 +66,18 @@ public class GameScreen extends DefaultScreen {
 //		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
-		player = new Player(game, 0, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.5f, new Vector2(0,0), 5, 5, 5, 5);
+		
+		PlayerType playerType = PlayerType.STEALTH;
+		player = new Player.Builder()
+				.setGame(game)
+				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
+				.setBodyRadius(playerType.getBodyRadius())
+				.setInitialPosition(new Vector2(0,0))
+				.setHealthStat(playerType.getHealth())
+				.setSpeedStat(playerType.getSpeed())
+				.setStealthStat(playerType.getStealth())
+				.setStrengthStat(playerType.getStealth())
+				.build();
 		player.defineBody();
 		
 		gameManager.setPlayer(player);

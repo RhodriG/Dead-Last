@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.deadlast.entities.Enemy.Builder;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 
@@ -24,10 +25,10 @@ public class Player extends Mob {
 	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
 	
 	public Player(
-			DeadLast game, int scoreValue, Sprite sprite, float bRadius,
+			DeadLast game, Sprite sprite, float bRadius,
 			Vector2 initialPos, int healthStat, int speedStat, int strengthStat, int stealthStat
 	) {
-		super(game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
+		super(game, 0, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
 	}
@@ -61,6 +62,65 @@ public class Player extends Mob {
 		b2body.setUserData(this);
 
 		shape.dispose();
+	}
+	
+	public static class Builder {
+		
+		private DeadLast game;
+		private Sprite sprite;
+		private float bRadius;
+		private Vector2 initialPos;
+		private int healthStat;
+		private int speedStat;
+		private int strengthStat;
+		private int stealthStat;
+
+		public Builder setGame(DeadLast game) {
+			this.game = game;
+			return this;
+		}
+		
+		public Builder setSprite(Sprite sprite) {
+			this.sprite = sprite;
+			return this;
+		}
+		
+		public Builder setBodyRadius(float bRadius) {
+			this.bRadius = bRadius;
+			return this;
+		}
+		
+		public Builder setInitialPosition(Vector2 initialPos) {
+			this.initialPos = initialPos;
+			return this;
+		}
+		
+		public Builder setHealthStat(int healthStat) {
+			this.healthStat = healthStat;
+			return this;
+		}
+		
+		public Builder setSpeedStat(int speedStat) {
+			this.speedStat = speedStat;
+			return this;
+		}
+		
+		public Builder setStrengthStat(int strengthStat) {
+			this.strengthStat = strengthStat;
+			return this;
+		}
+		
+		public Builder setStealthStat(int stealthStat) {
+			this.stealthStat = stealthStat;
+			return this;
+		}
+		
+		public Player build() {
+			return new Player(
+				game, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat, stealthStat
+			);
+		}
+		
 	}
 
 }
