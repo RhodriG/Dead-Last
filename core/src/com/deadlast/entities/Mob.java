@@ -18,28 +18,28 @@ public class Mob extends Entity {
 	/**
 	 * Normal maximum health of this mob.
 	 */
-	private float healthStat;
+	private int healthStat;
 	/**
 	 * Normal maximum speed of this mob.
 	 */
-	private float speedStat;
+	private int speedStat;
 	/**
 	 * Normal maximum strength of this mob.
 	 */
-	private float strengthStat;
+	private int strengthStat;
 	
 	/**
 	 * Current health of this mob.
 	 */
-	private float currentHealth;
+	private int currentHealth;
 	/**
 	 * Current speed of this mob.
 	 */
-	private float currentSpeed;
+	private int currentSpeed;
 	/**
 	 * Current strength of this mob.
 	 */
-	private float currentStrength;
+	private int currentStrength;
 	
 	public Mob(
 			DeadLast game, int scoreValue, Sprite sprite, float bRadius,
@@ -56,7 +56,7 @@ public class Mob extends Entity {
 	 * Sets the health of the mob.
 	 * @param currentHealth		the health to which the mob should be set
 	 */
-	public void setCurrentHealth(float currentHealth) {
+	public void setCurrentHealth(int currentHealth) {
 		this.currentHealth = currentHealth;
 	}
 	
@@ -64,7 +64,7 @@ public class Mob extends Entity {
 	 * Set the speed of the mob.
 	 * @param currentSpeed		the speed to which the mob should be set
 	 */
-	public void setCurrentSpeed(float currentSpeed) {
+	public void setCurrentSpeed(int currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 	
@@ -72,19 +72,19 @@ public class Mob extends Entity {
 	 * Set the strength of the mob.
 	 * @param currentStrength	the strength to which the mob should be set
 	 */
-	public void setCurrentStrength(float currentStrength) {
+	public void setCurrentStrength(int currentStrength) {
 		this.currentStrength = currentStrength;
 	}
 	
-	public float getHealth() {
+	public int getHealth() {
 		return currentHealth;
 	}
 	
-	public float getSpeed() {
+	public int getSpeed() {
 		return currentSpeed;
 	}
 	
-	public float getStrength() {
+	public int getStrength() {
 		return currentStrength;
 	}
 	
