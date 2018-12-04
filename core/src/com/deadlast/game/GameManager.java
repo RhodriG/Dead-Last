@@ -11,11 +11,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.deadlast.controller.KeyboardController;
+import com.deadlast.controllers.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
+import com.deadlast.stages.Hud;
 import com.deadlast.world.WorldContactListener;
 
 public class GameManager implements Disposable {
@@ -39,21 +40,17 @@ public class GameManager implements Disposable {
 	private OrthographicCamera hudCamera;
 	private SpriteBatch batch;
 	
+	private Hud hud;
+	
+	private int totalScore;
+	
 	private int score;
-	private int time;
+	private float time;
 	
 	private GameManager(DeadLast game) {
+		System.out.println("Created GameManager instance!");
 		this.game = game;
-		world = new World(Vector2.Zero, true);
-		world.setContactListener(new WorldContactListener());
-		debugRenderer = new Box2DDebugRenderer();
-		controller = new KeyboardController();
-		
-		enemyFactory = EnemyFactory.getInstance(game);
-		
-		this.entities = new ArrayList<>();
-		this.enemies = new ArrayList<>();
-		this.pickups = new ArrayList<>();
+		loadLevel();
 	}
 	
 	public static GameManager getInstance(DeadLast game) {
@@ -61,6 +58,25 @@ public class GameManager implements Disposable {
 			instance = new GameManager(game);
 		}
 		return instance;
+	}
+	
+	public void loadLevel() {
+		System.out.println("Loading level...");
+		world = new World(Vector2.Zero, true);
+		world.setContactListener(new WorldContactListener());
+		debugRenderer = new Box2DDebugRenderer();
+		controller = new KeyboardController();
+		hud = new Hud(game);
+		
+		enemyFactory = EnemyFactory.getInstance(game);
+		
+		this.entities = new ArrayList<>();
+		this.enemies = new ArrayList<>();
+		this.pickups = new ArrayList<>();
+		
+		score = 0;
+		time = 0;
+		
 	}
 	
 	public void setGameCamera(OrthographicCamera camera) {
@@ -140,6 +156,10 @@ public class GameManager implements Disposable {
 		if (showDebugRenderer) {
 			debugRenderer.render(world, gameCamera.combined);
 		}
+		
+		time += delta;
+		this.hud.setTime((int)Math.round(Math.floor(time)));
+		this.hud.setHealth(this.player.getHealth());
 	}
 	
 	public void handleInput() {
@@ -185,6 +205,7 @@ public class GameManager implements Disposable {
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
 		batch.end();
+		hud.stage.draw();
 	}
 
 	@Override
