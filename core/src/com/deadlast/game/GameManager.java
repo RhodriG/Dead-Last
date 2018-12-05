@@ -49,6 +49,10 @@ public class GameManager implements Disposable {
 	private GameManager(DeadLast game) {
 		System.out.println("Created GameManager instance!");
 		this.game = game;
+		
+		controller = new KeyboardController();
+		enemyFactory = EnemyFactory.getInstance(game);
+		
 		loadLevel();
 	}
 	
@@ -66,17 +70,15 @@ public class GameManager implements Disposable {
 	}
 	
 	/**
-	 * Creates/refreshes parameters required when a new level is loaded.
+	 * Creates parameters required when a new level is loaded.
 	 */
 	public void loadLevel() {
 		System.out.println("Loading level...");
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
-		controller = new KeyboardController();
-		hud = new Hud(game);
 		
-		enemyFactory = EnemyFactory.getInstance(game);
+		hud = new Hud(game);
 		
 		this.entities = new ArrayList<>();
 		this.enemies = new ArrayList<>();
@@ -85,6 +87,13 @@ public class GameManager implements Disposable {
 		score = 0;
 		time = 0;
 		
+	}
+	
+	public void clearLevel() {
+		world.dispose();
+		hud.dispose();
+		debugRenderer.dispose();
+		totalScore += score;
 	}
 	
 	/**
