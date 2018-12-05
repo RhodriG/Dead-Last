@@ -37,7 +37,6 @@ public class GameManager implements Disposable {
 	private EnemyFactory enemyFactory;
 	
 	private OrthographicCamera gameCamera;
-	private OrthographicCamera hudCamera;
 	private SpriteBatch batch;
 	
 	private Hud hud;
@@ -53,6 +52,12 @@ public class GameManager implements Disposable {
 		loadLevel();
 	}
 	
+	/**
+	 * Fetches the instance of GameManager belonging to the specified game, or creates a new one
+	 * if one has not yet been created.
+	 * @param game	the game instance to fetch the game manager for
+	 * @return		an instance of GameManager attached to the specified game instance
+	 */
 	public static GameManager getInstance(DeadLast game) {
 		if (instance == null) {
 			instance = new GameManager(game);
@@ -60,6 +65,9 @@ public class GameManager implements Disposable {
 		return instance;
 	}
 	
+	/**
+	 * Creates/refreshes parameters required when a new level is loaded.
+	 */
 	public void loadLevel() {
 		System.out.println("Loading level...");
 		world = new World(Vector2.Zero, true);
@@ -79,14 +87,20 @@ public class GameManager implements Disposable {
 		
 	}
 	
+	/**
+	 * Sets the {@link OrthographicCamera} used by {@link GameScreen} to display the game world.
+	 * Must be set before update() is called.
+	 * @param camera	the camera to use.
+	 */
 	public void setGameCamera(OrthographicCamera camera) {
 		this.gameCamera = camera;
 	}
 	
-	public void setHudCamera(OrthographicCamera camera) {
-		this.hudCamera = camera;
-	}
-	
+	/**
+	 * Sets the {@link SpriteBatch} used to render the entities stored in this manager.
+	 * Must be set before update() or render() are called.
+	 * @param batch		the SpriteBatch to use
+	 */
 	public void setSpriteBatch(SpriteBatch batch) {
 		this.batch = batch;
 	}
@@ -96,17 +110,29 @@ public class GameManager implements Disposable {
 		this.entities.add(player);
 	}
 	
+	/**
+	 * Adds an enemy to the list of enemies and entities.
+	 * @param enemy	the enemy to add
+	 */
 	public void addEnemy(Enemy enemy) {
 		this.enemies.add(enemy);
 		this.entities.add(enemy);
 	}
 	
+	/**
+	 * Adds an enemy or multiple enemies to the list of enemies and entities.
+	 * @param enemies	the enemies to add
+	 */
 	public void addEnemies(Enemy... enemies) {
 		for (Enemy enemy : enemies) {
 			addEnemy(enemy);
 		}
 	}
 	
+	/**
+	 * Removes an enemy from the list of entities and the list of enemies.
+	 * @param enemy	the enemy to remove
+	 */
 	public void removeEnemy(Enemy enemy) {
 		this.enemies.remove(enemy);
 		this.entities.remove(enemy);
@@ -162,6 +188,9 @@ public class GameManager implements Disposable {
 		this.hud.setHealth(this.player.getHealth());
 	}
 	
+	/**
+	 * Processes user input from a {@link InputController} (in this case, {@link KeyboardController}).
+	 */
 	public void handleInput() {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
 			showDebugRenderer = !showDebugRenderer;
@@ -200,7 +229,11 @@ public class GameManager implements Disposable {
 		}
 	}
 	
+	/**
+	 * Renders entities held by this game manager.
+	 */
 	public void render() {
+		if (batch == null) return;
 		batch.setProjectionMatrix(gameCamera.combined);
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
