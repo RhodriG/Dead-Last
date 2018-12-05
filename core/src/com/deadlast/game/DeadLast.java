@@ -5,7 +5,7 @@ import com.deadlast.assets.Resources;
 import com.deadlast.screens.*;
 
 /**
- * Main game class that orchestrates 
+ * Main game class that orchestrates screen changes.
  * @author Xzytl
  *
  */

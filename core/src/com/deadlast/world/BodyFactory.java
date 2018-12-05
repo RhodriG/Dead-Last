@@ -1,18 +1,17 @@
 package com.deadlast.world;
 
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
- * 
+ * Factory singleton for easy creation of {@link FixtureDef} and {@link Body} objects.
  * @author Xzytl
  *
  */
@@ -25,8 +24,6 @@ public class BodyFactory {
 	public static final int WOOD = 1;
 	public static final int RUBBER = 2;
 	public static final int STONE = 3;
-	
-	private final float DEGTORAD = 0.0174533f;
 	
 	private BodyFactory(World world) {
 		this.world = world;
@@ -122,28 +119,56 @@ public class BodyFactory {
 		return boxBody;
 	}
 	
-	public void makeConeSensor(Body body, float size) {
-		FixtureDef fixtureDef = new FixtureDef();
+	/**
+	 * Creates a cone-shaped {@link FixtureDef} sensor to be used as a field-of-view
+	 * @param body		the {@link Body} to add the fixture to
+	 * @param points	the integer number of points to use in the arc (more is smoother);
+	 * 					must be greater than 1 and less than 8
+	 * @param angle		the f.o.v. angle
+	 * @param radius	the radius of the sector
+	 * @throws IllegalArgumentException	if points parameter is not 1 < x < 8
+	 */
+	public void makeConeSensor(Body body, int points, float angle, float radius) throws IllegalArgumentException {
+		if (points < 2 || points > 7) {
+			throw new IllegalArgumentException("Points must be between 2 and 7 (inclusive)!");
+		}
+		FixtureDef fDef = new FixtureDef();
 		PolygonShape polyShape = new PolygonShape();
-		
-		float radius = size;
-		Vector2[] vertices = new Vector2[5];
+		Vector2[] vertices = new Vector2[points + 1];
 		
 		vertices[0] = new Vector2(0,0);
-		for (int i = 2; i < 6; i++) {
-			float angle = (float) (i / 6.0 * 145 * DEGTORAD);
-			vertices[i - 1] = new Vector2(radius * ((float)Math.cos(angle)), radius * ((float)Math.sin(angle)));
+		float startAngle;
+		float subAngle = angle / (float)points;
+		if (points % 2 == 0) {
+			startAngle = (subAngle / 2) + (((points - 2) / 2) * subAngle) + 90;
+		} else {
+			startAngle = subAngle * ((points - 1) / 2) + 90;
+		}
+		for (int i = 0; i < points; i++) {
+			double radAngle = Math.toRadians(startAngle);
+			vertices[i+1] = new Vector2(radius * (float)Math.cos(radAngle), radius * (float)Math.sin(radAngle));
+			startAngle -= subAngle;
 		}
 		polyShape.set(vertices);
-		fixtureDef.shape = polyShape;
-		body.createFixture(fixtureDef);
+		fDef.shape = polyShape;
+		fDef.isSensor = true;
+		body.createFixture(fDef);
 		polyShape.dispose();
 	}
 	
-	public void makeAllFixturesSensors(Body body) {
-		for (Fixture fix : body.getFixtureList()) {
-			fix.setSensor(true);
-		}
+	/**
+	 * Creates a circular {@link FixtureDef} sensor to be used as a hearing radius/general detection area
+	 * @param body		the {@link Body} to add the fixture to
+	 * @param radius	the radius of the circle
+	 */
+	public void makeHearingSensor(Body body, float radius) {
+		FixtureDef fDef = new FixtureDef();
+		CircleShape detectionShape = new CircleShape();
+		detectionShape.setRadius(radius);
+		fDef.shape = detectionShape;
+		fDef.isSensor = true;
+		body.createFixture(fDef);
+		detectionShape.dispose();
 	}
 
 }

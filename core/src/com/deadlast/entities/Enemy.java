@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
+import com.deadlast.world.BodyFactory;
 
 /**
  * A hostile mob that will attempt to damage the player.
@@ -18,10 +20,12 @@ import com.deadlast.game.DeadLast;
 public class Enemy extends Mob {
 	
 	private int detectionStat;
+	
+	private boolean knowsPlayerLocation = false;
 
-	public Enemy(World world, DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
+	public Enemy(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
-		super(world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
+		super(game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.detectionStat = detectionStat;
 	}
 	
@@ -41,23 +45,36 @@ public class Enemy extends Mob {
 		shape.setRadius(this.bRadius);
 		fBodyDef.shape = shape;
 		
-		// The 'hearing' radius of the enemy
-		FixtureDef fDetectionDef = new FixtureDef();
-		CircleShape detectionShape = new CircleShape();
-		detectionShape.setRadius(this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
-		fDetectionDef.shape = detectionShape;
-		fDetectionDef.isSensor = true;
-		
 		// Create body and add fixtures
 		b2body = world.createBody(bDef);
 		b2body.createFixture(fBodyDef);
-		b2body.createFixture(fDetectionDef);
+		
+		BodyFactory bFactory = BodyFactory.getInstance(world);
+		bFactory.makeConeSensor(b2body, 7, 70, 5f);
+		bFactory.makeHearingSensor(b2body, this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
+		
 		b2body.setUserData(this);
 
 		shape.dispose();
-		detectionShape.dispose();
 		
 		b2body.setLinearDamping(5.0f);
+	}
+	
+	public void beginContact(Body body) {
+		this.knowsPlayerLocation = true;
+	}
+	
+	public void endContact(Body body) {
+		this.knowsPlayerLocation = false;
+	}
+	
+	@Override
+	public void update(float delta) {
+		if (knowsPlayerLocation) {
+			Vector2 playerLoc = gameManager.getPlayerPos();
+			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x)) - 90;
+			this.setAngle(angle);
+		}
 	}
 	
 	/**
@@ -66,8 +83,7 @@ public class Enemy extends Mob {
 	 *
 	 */
 	public static class Builder {
-		
-		private World world;
+
 		private DeadLast game;
 		private int scoreValue;
 		private Sprite sprite;
@@ -77,11 +93,6 @@ public class Enemy extends Mob {
 		private int speedStat;
 		private int strengthStat;
 		private int detectionStat;
-		
-		public Builder setWorld(World world) {
-			this.world = world;
-			return this;
-		}
 		
 		public Builder setGame(DeadLast game) {
 			this.game = game;
@@ -136,9 +147,6 @@ public class Enemy extends Mob {
 		public Enemy build() {
 			// Ensure variables are not undefined
 			// Note that primitive's are initialised as zero by default
-			if (world == null) {
-				throw new IllegalArgumentException("Invalid 'world' parameter");
-			}
 			if (game == null) {
 				throw new IllegalArgumentException("Invalid 'game' parameter");
 			}
@@ -152,7 +160,7 @@ public class Enemy extends Mob {
 				throw new IllegalArgumentException("Invalid 'initialPos' parameter");
 			}
 			return new Enemy(
-					world, game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat,
+					game, scoreValue, sprite, bRadius, initialPos, healthStat, speedStat,
 					strengthStat, detectionStat
 			);
 		}

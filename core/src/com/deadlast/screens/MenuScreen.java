@@ -32,7 +32,7 @@ public class MenuScreen extends DefaultScreen {
 		Gdx.input.setInputProcessor(stage);
 		Table mainTable = new Table();
 		mainTable.setFillParent(true);
-		mainTable.top();
+		mainTable.center();
 		
 		// TODO: Replace with an asset manager
 		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
