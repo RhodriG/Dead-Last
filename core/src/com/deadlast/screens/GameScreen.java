@@ -119,61 +119,7 @@ public class GameScreen extends DefaultScreen {
 		gameManager.update(delta);
 		gameManager.render();
 		
-//		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-//		camera.position.x = player.getBody().getPosition().x;
-//		camera.position.y = player.getBody().getPosition().y;
-//		camera.update();
-//		
-//		enemies.forEach(enemy -> enemy.update(player.getBody()));
-		
-//		if (showDebugRenderer) {
-//			debugRenderer.render(world, camera.combined);
-//		}
-//		batch.setProjectionMatrix(camera.combined);
-//		batch.begin();
-//		player.render(batch,camera);
-//		enemies.forEach(enemy -> enemy.render(batch));
-//		batch.end();
 	}
-	
-//	public void handleInput(float delta) {
-//		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-//			showDebugRenderer = !showDebugRenderer;
-//		}
-//		
-//		float speed;
-//		
-//		if (controller.isShiftDown) {
-//			speed = player.getSpeed() * 2.5f;
-//		} else {
-//			speed = player.getSpeed();
-//		}
-//		
-//		if (controller.left) {
-//			//player.applyForceToCenter(-10, 0, true);
-//			player.getBody().setLinearVelocity(-1 * speed, player.getBody().getLinearVelocity().y);
-//		}
-//		if (controller.right) {
-//			//player.applyForceToCenter(10, 0, true);
-//			player.getBody().setLinearVelocity(speed, player.getBody().getLinearVelocity().y);
-//		}
-//		if (controller.up) {
-//			//player.applyForceToCenter(0, 10, true);
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, speed);
-//		}
-//		if (controller.down) {
-//			//player.applyForceToCenter(0, -10, true);
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
-//		}
-//		
-//		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-//		}
-//		if ((!controller.left && !controller.right) || (controller.left && controller.right )) {
-//			player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
-//		}
-//		
-//	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -203,8 +149,6 @@ public class GameScreen extends DefaultScreen {
 		// TODO Auto-generated method stub
 		batch.dispose();
 		gameManager.dispose();
-//		debugRenderer.dispose();
-//		world.dispose();
 	}
 
 }
