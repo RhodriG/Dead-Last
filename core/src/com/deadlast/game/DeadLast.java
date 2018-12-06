@@ -76,6 +76,21 @@ public class DeadLast extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (loadingScreen != null) {
+			loadingScreen.dispose();
+		}
+		if (scoreboardScreen != null) {
+			scoreboardScreen.dispose();
+		}
+		if (menuScreen != null) {
+			menuScreen.dispose();
+		}
+		if (gameScreen != null) {
+			gameScreen.dispose();
+		}
+		if (helpScreen != null) {
+			helpScreen.dispose();
+		}
 	}
 	
 	@Override
