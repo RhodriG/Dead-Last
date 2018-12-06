@@ -18,7 +18,7 @@ import com.deadlast.game.DeadLast;
  */
 public class MenuScreen extends DefaultScreen {
 
-	protected Stage stage;
+	private Stage stage;
 
 	public MenuScreen(DeadLast game) {
 		super(game);
