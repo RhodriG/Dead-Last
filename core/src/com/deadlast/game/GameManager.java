@@ -86,6 +86,8 @@ public class GameManager implements Disposable {
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 		
+		tiledMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\test.tmx");
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
 		
 		
 		hud = new Hud(game);
@@ -257,8 +259,8 @@ public class GameManager implements Disposable {
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
 		
-		tiledMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps");
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
+		tiledMapRenderer.setView(gameCamera);
+		tiledMapRenderer.render();
 		batch.end();
 		hud.stage.draw();
 	}
