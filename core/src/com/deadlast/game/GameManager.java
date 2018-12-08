@@ -4,8 +4,13 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -28,6 +33,9 @@ public class GameManager implements Disposable {
 	private Box2DDebugRenderer debugRenderer;
 	private boolean showDebugRenderer = false;
 	
+	
+	private TiledMap tiledMap;
+	private TiledMapRenderer tiledMapRenderer;
 	private KeyboardController controller;
 	
 	private Player player;
@@ -77,6 +85,8 @@ public class GameManager implements Disposable {
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
+		
+		
 		
 		hud = new Hud(game);
 		
@@ -246,6 +256,9 @@ public class GameManager implements Disposable {
 		batch.setProjectionMatrix(gameCamera.combined);
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
+		
+		tiledMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps");
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
 		batch.end();
 		hud.stage.draw();
 	}

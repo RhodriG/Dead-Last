@@ -6,10 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -21,11 +17,6 @@ import com.deadlast.entities.PlayerType;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
-<<<<<<< HEAD
-import com.deadlast.world.Level;
-import com.deadlast.world.WorldContactListener;
-=======
->>>>>>> 644ad98fb7a048bc8aa6deb9d44b8648563a8c10
 
 /**
  * The screen responsible for displaying the game world and relevant elements
@@ -44,13 +35,6 @@ public class GameScreen extends DefaultScreen {
 	 */
 	private SpriteBatch batch;
 	/**
-<<<<<<< HEAD
-	 * The number of points the player has earned
-	 */
-	public int score;
-	/**
-=======
->>>>>>> 644ad98fb7a048bc8aa6deb9d44b8648563a8c10
 	 * The controllable player character
 	 */
 	private Player player;
@@ -126,112 +110,16 @@ public class GameScreen extends DefaultScreen {
 	public void show() {
 		Gdx.input.setInputProcessor(gameManager.getController());
 	}
-	private String[] roomRefs;
+
 	@Override
 	public void render(float delta) {
-<<<<<<< HEAD
-		
-		roomRefs[0] = "test";
-		Level level = new Level(roomRefs);//Test to see if level works
-		level.rooms[0].render(camera);
-		
-		handleInput(delta);
-		update(delta);
-		
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-        
-        debugRenderer.render(world, camera.combined);
-		batch.setProjectionMatrix(camera.combined);
-		
-		
-		batch.begin();
-		player.render(batch,camera);
-		enemies.forEach(enemy -> enemy.render(batch));
-		batch.end();
-		
-	}
-	
-	public void update(float delta) {
-		//player.update(delta);
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-		camera.position.x = player.getBody().getPosition().x;
-		camera.position.y = player.getBody().getPosition().y;
-		camera.update();
-	}
-	
-	public void handleInput(float delta) {
-		float speed;
-		
-		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 1.5f;
-		} else {
-			speed = player.getSpeed();
-		}
-=======
-		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
->>>>>>> 644ad98fb7a048bc8aa6deb9d44b8648563a8c10
 		
 		gameManager.update(delta);
 		gameManager.render();
 		
-//		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
-//		camera.position.x = player.getBody().getPosition().x;
-//		camera.position.y = player.getBody().getPosition().y;
-//		camera.update();
-//		
-//		enemies.forEach(enemy -> enemy.update(player.getBody()));
-		
-//		if (showDebugRenderer) {
-//			debugRenderer.render(world, camera.combined);
-//		}
-//		batch.setProjectionMatrix(camera.combined);
-//		batch.begin();
-//		player.render(batch,camera);
-//		enemies.forEach(enemy -> enemy.render(batch));
-//		batch.end();
 	}
-	
-//	public void handleInput(float delta) {
-//		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
-//			showDebugRenderer = !showDebugRenderer;
-//		}
-//		
-//		float speed;
-//		
-//		if (controller.isShiftDown) {
-//			speed = player.getSpeed() * 2.5f;
-//		} else {
-//			speed = player.getSpeed();
-//		}
-//		
-//		if (controller.left) {
-//			//player.applyForceToCenter(-10, 0, true);
-//			player.getBody().setLinearVelocity(-1 * speed, player.getBody().getLinearVelocity().y);
-//		}
-//		if (controller.right) {
-//			//player.applyForceToCenter(10, 0, true);
-//			player.getBody().setLinearVelocity(speed, player.getBody().getLinearVelocity().y);
-//		}
-//		if (controller.up) {
-//			//player.applyForceToCenter(0, 10, true);
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, speed);
-//		}
-//		if (controller.down) {
-//			//player.applyForceToCenter(0, -10, true);
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
-//		}
-//		
-//		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
-//			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
-//		}
-//		if ((!controller.left && !controller.right) || (controller.left && controller.right )) {
-//			player.getBody().setLinearVelocity(0, player.getBody().getLinearVelocity().y);
-//		}
-//		
-//	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -261,9 +149,6 @@ public class GameScreen extends DefaultScreen {
 		// TODO Auto-generated method stub
 		batch.dispose();
 		gameManager.dispose();
-//		debugRenderer.dispose();
-//		world.dispose();
 	}
-	
 
 }
