@@ -259,7 +259,15 @@ public class GameManager implements Disposable {
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
 		
-		tiledMapRenderer.setView(gameCamera);
+		//below renders the background sprites
+		//TODO: push background sprites to the bottom
+		//Implement switching between levels ie. multiple maps
+		/*
+		 * First param: projection matrix
+		 * 2nd and 3rd: x and y coords for the bottom left corner of the map.
+		 * 4th and 5th: x and y dimension of a portion of the map. (eg. input of 3f,3f will render 3x3 box relative to the map)
+		 */
+		tiledMapRenderer.setView(gameCamera.combined, 10f,10f,16f,16f);
 		tiledMapRenderer.render();
 		batch.end();
 		hud.stage.draw();
