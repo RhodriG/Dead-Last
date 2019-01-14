@@ -17,6 +17,11 @@ public class PowerUpFactory {
 	private World world;
 	private DeadLast game;
 	
+	private PowerUpFactory(World world, DeadLast game) {
+		this.world = world;
+		this.game = game;
+	}
+	
 	private static PowerUpFactory getInstance(World world, DeadLast game) {
 		if (instance == null ) {
 			instance = new PowerUpFactory(world, game);
@@ -25,15 +30,31 @@ public class PowerUpFactory {
 	}
 	
 	public PowerUp.Builder get(PowerUpType type) {
-		PowerUp.builder builder = new PowerUp.Builder().setWorld(world).setGame(game);
+		PowerUp.Builder builder = new PowerUp.Builder().setWorld(world).setGame(game);
 		switch(type) {
 		case SNEAK:
+			builder.setStealthMultiplier(2)
+				.setDamageMultiplier(1)
+				.setPointsMultiplier(1)
+				.setSprite(null)
+				.setBodyRadius(1f);
 			break;
 		case INSTA_KILL:
+			builder.setStealthMultiplier(1)
+			.setDamageMultiplier(2)
+			.setPointsMultiplier(1)
+			.setSprite(null)
+			.setBodyRadius(1f);
 			break;
 		case DOUBLE_POINTS:
+			builder.setStealthMultiplier(1)
+			.setDamageMultiplier(1)
+			.setPointsMultiplier(2)
+			.setSprite(null)
+			.setBodyRadius(1f);
 			break;
 		}
+		return builder;
 	}
 
 }
