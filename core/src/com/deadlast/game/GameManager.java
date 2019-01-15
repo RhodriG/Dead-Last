@@ -22,6 +22,7 @@ import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.stages.Hud;
+import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
 public class GameManager implements Disposable {
@@ -34,11 +35,12 @@ public class GameManager implements Disposable {
 	private boolean showDebugRenderer = false;
 	
 	
-	private TiledMap tiledMap;
 	private TiledMapRenderer tiledMapRenderer;
 	private KeyboardController controller;
 	
 	private Player player;
+	private Level currentLevel;
+	private String[] roomRefs = new String[1];
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Entity> pickups;
@@ -86,9 +88,15 @@ public class GameManager implements Disposable {
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 		
-		tiledMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\test.tmx");
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, 1/32f);
 		
+		/*
+		 * fix this
+		 */
+		roomRefs[0] = "test2";
+		
+		this.currentLevel = new Level(roomRefs);
+		System.out.println(currentLevel.getCurrentRoom().getMapName());
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(currentLevel.getCurrentRoom().getMap(), 1/32f);
 		
 		hud = new Hud(game);
 		
@@ -215,6 +223,7 @@ public class GameManager implements Disposable {
 	public void handleInput() {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
 			showDebugRenderer = !showDebugRenderer;
+			
 		}
 		
 		float speed;
