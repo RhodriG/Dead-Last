@@ -119,55 +119,55 @@ public class Level {
 					System.out.println(spawnLayer.getCell(i, j).getTile().getId());
 					//This case statement detects the type of tile on the spawn layer. If you need to add more types of spawn point, edit this.
 					//subtracts one because i fucked up, ok?
-					switch (spawnLayer.getCell(i, j).getTile().getId()-1){
-					case 0: roomExits.add(new Vector2(i,j));
+					switch (spawnLayer.getCell(i, j).getTile().getId()-1) {
+						case 0: roomExits.add(new Vector2(i,j));
 					
-					//TODO: Replace below with ENUMs
-					//TODO: Replace below with appropriate text when powerUps have been made.
-					//Case 1 through 5 implement PowerUp spawn points
+						//TODO: Replace below with ENUMs
+						//TODO: Replace below with appropriate text when powerUps have been made.
+						//Case 1 through 5 implement PowerUp spawn points
+							
+	//					case 1: powerSpawnPoints.add(new SpawnPoint(i,j,"P1TYPE"));
+	//							break;
+	//					case 2: powerSpawnPoints.add(new SpawnPoint(i,j,"P2TYPE"));
+	//							break;
+	//					case 3: powerSpawnPoints.add(new SpawnPoint(i,j,"P3TYPE"));
+	//							break;
+	//					case 4: powerSpawnPoints.add(new SpawnPoint(i,j,"P4TYPE"));
+	//							break;
+	//					case 5: powerSpawnPoints.add(new SpawnPoint(i,j,"P5TYPE"));
+	//							break;
 						
-//					case 1: powerSpawnPoints.add(new SpawnPoint(i,j,"P1TYPE"));
-//							break;
-//					case 2: powerSpawnPoints.add(new SpawnPoint(i,j,"P2TYPE"));
-//							break;
-//					case 3: powerSpawnPoints.add(new SpawnPoint(i,j,"P3TYPE"));
-//							break;
-//					case 4: powerSpawnPoints.add(new SpawnPoint(i,j,"P4TYPE"));
-//							break;
-//					case 5: powerSpawnPoints.add(new SpawnPoint(i,j,"P5TYPE"));
-//							break;
-					
-					//Case 6 through 11 implement zombie spawn points
-					case 6: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.NORMAL));
-						
-					case 7: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.FAST));
-						
-					case 8: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.BOMBER));
-						
-					case 9: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.HEAVY));
-						
-					case 10: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.JOCKEY));
+						//Case 6 through 11 implement zombie spawn points
+						case 6: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.NORMAL));
+							
+						case 7: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.FAST));
+							
+						case 8: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.BOMBER));
+							
+						case 9: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.HEAVY));
+							
+						case 10: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.JOCKEY));
+									
+						case 11: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.MR_TICKLE));
+							
+						//Remaining cases are spare.
+	//					case 12: 
+	//							break;
+	//					case 13:
+	//							break;
+	//					case 14:
+	//							break;
+	//					case 15:
+	//							break;
+						case 16:
+								roomEntrances.add(new Vector2(i,j));
 								
-					case 11: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.MR_TICKLE));
-						
-					//Remaining cases are spare.
-//					case 12: 
-//							break;
-//					case 13:
-//							break;
-//					case 14:
-//							break;
-//					case 15:
-//							break;
-					case 16:
-							roomEntrances.add(new Vector2(i,j));
+						case 27:
+								roomBoundaries.add(new Vector2(i,j));
+								
 							
-					case 27:
-							roomBoundaries.add(new Vector2(i,j));
-							
-						
-					default:
-						break;
+						default:
+							break;
 					}
 				}
 				
