@@ -77,7 +77,7 @@ public class Level {
 			
 			this.roomExits = new ArrayList<Vector2>();
 			this.roomEntrances = new ArrayList<Vector2>();
-			
+			this.roomBoundaries = new ArrayList<Vector2>();
 			this.parseSpawnPoints();
 		}
 		
@@ -114,57 +114,66 @@ public class Level {
 		 * Generates spawn points from a layer called spawn-points in the tiled map file.
 		 */
 		private void parseSpawnPoints() {
+			System.out.println(String.valueOf(spawnLayer.getWidth()) + " " + String.valueOf(spawnLayer.getHeight()));
 			for(int i=0; i < spawnLayer.getWidth(); i++) {
 				for(int j=0; j<spawnLayer.getHeight(); j++) {
-					System.out.println(spawnLayer.getCell(i, j).getTile().getId());
-					//This case statement detects the type of tile on the spawn layer. If you need to add more types of spawn point, edit this.
-					//subtracts one because i fucked up, ok?
-					switch (spawnLayer.getCell(i, j).getTile().getId()-1) {
-						case 0: roomExits.add(new Vector2(i,j));
 					
+					
+					//This case statement detects the type of tile on the spawn layer. If you need to add more types of spawn point, edit this.
+					switch (spawnLayer.getCell(i, j).getTile().getId()) {
+						
+						case 1: roomExits.add(new Vector2(i,j));
+								System.out.println("Exit added at: " + String.valueOf(i) + " " + String.valueOf(j));
+								System.out.println(String.valueOf(spawnLayer.getCell(i, j).getTile().getId()));
+								break;
 						//TODO: Replace below with ENUMs
 						//TODO: Replace below with appropriate text when powerUps have been made.
 						//Case 1 through 5 implement PowerUp spawn points
 							
-	//					case 1: powerSpawnPoints.add(new SpawnPoint(i,j,"P1TYPE"));
+	//					case 2: powerSpawnPoints.add(new SpawnPoint(i,j,"P1TYPE"));
 	//							break;
-	//					case 2: powerSpawnPoints.add(new SpawnPoint(i,j,"P2TYPE"));
+	//					case 3: powerSpawnPoints.add(new SpawnPoint(i,j,"P2TYPE"));
 	//							break;
-	//					case 3: powerSpawnPoints.add(new SpawnPoint(i,j,"P3TYPE"));
+	//					case 4: powerSpawnPoints.add(new SpawnPoint(i,j,"P3TYPE"));
 	//							break;
-	//					case 4: powerSpawnPoints.add(new SpawnPoint(i,j,"P4TYPE"));
+	//					case 5: powerSpawnPoints.add(new SpawnPoint(i,j,"P4TYPE"));
 	//							break;
-	//					case 5: powerSpawnPoints.add(new SpawnPoint(i,j,"P5TYPE"));
+	//					case 6 powerSpawnPoints.add(new SpawnPoint(i,j,"P5TYPE"));
 	//							break;
 						
 						//Case 6 through 11 implement zombie spawn points
-						case 6: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.NORMAL));
-							
-						case 7: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.FAST));
-							
-						case 8: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.BOMBER));
-							
-						case 9: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.HEAVY));
-							
-						case 10: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.JOCKEY));
-									
-						case 11: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.MR_TICKLE));
-							
+						case 7: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.NORMAL));
+						System.out.println("Zombie 1 Spawn added at: " + String.valueOf(i) + " " + String.valueOf(j));
+						System.out.println(String.valueOf(spawnLayer.getCell(i, j).getTile().getId()));
+							break;
+						case 8: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.FAST));
+							break;
+						case 9: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.BOMBER));
+							break;
+						case 10: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.HEAVY));
+							break;
+						case 11: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.JOCKEY));
+							break;		
+						case 12: zombieSpawnPoints.add(new SpawnPoint(i,j,EnemyType.MR_TICKLE));
+							break;
 						//Remaining cases are spare.
-	//					case 12: 
-	//							break;
-	//					case 13:
+	//					case 13: 
 	//							break;
 	//					case 14:
 	//							break;
 	//					case 15:
 	//							break;
-						case 16:
+	//					case 16:
+	//							break;
+						case 17:
 								roomEntrances.add(new Vector2(i,j));
-								
-						case 27:
+								System.out.println("Entrance added at: " + String.valueOf(i) + " " + String.valueOf(j));
+								System.out.println(String.valueOf(spawnLayer.getCell(i, j).getTile().getId()));
+								break;
+						case 28:
 								roomBoundaries.add(new Vector2(i,j));
 								
+								break;
 							
 						default:
 							break;

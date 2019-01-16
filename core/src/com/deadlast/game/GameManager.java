@@ -89,9 +89,6 @@ public class GameManager implements Disposable {
 		debugRenderer = new Box2DDebugRenderer();
 		
 		
-		/*
-		 * fix this
-		 */
 		roomRefs[0] = "test2";
 		
 		this.currentLevel = new Level(roomRefs);
