@@ -1,6 +1,8 @@
 package com.deadlast.game;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,8 +17,9 @@ import com.deadlast.controllers.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
-import com.deadlast.entities.Mob;
 import com.deadlast.entities.Player;
+import com.deadlast.entities.PowerUp;
+import com.deadlast.screens.GameScreen;
 import com.deadlast.stages.Hud;
 import com.deadlast.world.WorldContactListener;
 
@@ -34,7 +37,7 @@ public class GameManager implements Disposable {
 	private Player player;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
-	private ArrayList<Entity> pickups;
+	private ArrayList<Entity> powerUps;
 	private EnemyFactory enemyFactory;
 	
 	private OrthographicCamera gameCamera;
@@ -66,6 +69,7 @@ public class GameManager implements Disposable {
 	public static GameManager getInstance(DeadLast game) {
 		if (instance == null) {
 			instance = new GameManager(game);
+			System.out.println("Created GameManager instance");
 		}
 		return instance;
 	}
@@ -83,7 +87,7 @@ public class GameManager implements Disposable {
 		
 		this.entities = new ArrayList<>();
 		this.enemies = new ArrayList<>();
-		this.pickups = new ArrayList<>();
+		this.powerUps = new ArrayList<>();
 		
 		score = 0;
 		time = 0;
@@ -148,6 +152,24 @@ public class GameManager implements Disposable {
 		this.entities.remove(enemy);
 	}
 	
+	/**
+	 * Adds a power-up to the list of power-up's and entities
+	 * @param powerUp the power-up to add
+	 */
+	public void addPowerUp(PowerUp powerUp) {
+		this.powerUps.add(powerUp);
+		this.entities.add(powerUp);
+	}
+	
+	/**
+	 * Removes a power-up from the list of entities and the list of power-up's
+	 * @param powerUp the power-up to remove
+	 */
+	public void removePowerUp(PowerUp powerUp) {
+		this.powerUps.remove(powerUp);
+		this.entities.remove(powerUp);
+	}
+	
 	public World getWorld() {
 		return world;
 	}
@@ -189,7 +211,10 @@ public class GameManager implements Disposable {
 		gameCamera.update();
 		entities.forEach(entity -> entity.update(delta));
 		// Fetch and delete dead entities
-		entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).forEach(e -> e.delete());;
+		List<Entity> deadEntities = entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).collect(Collectors.toList());
+		deadEntities.forEach(e -> e.delete());
+		deadEntities.forEach(e -> this.score += e.getScoreValue());
+		deadEntities.forEach(e -> entities.remove(e));
 		
 		if (showDebugRenderer) {
 			debugRenderer.render(world, gameCamera.combined);
@@ -198,6 +223,7 @@ public class GameManager implements Disposable {
 		time += delta;
 		this.hud.setTime((int)Math.round(Math.floor(time)));
 		this.hud.setHealth(this.player.getHealth());
+		this.hud.setScore(this.score);
 	}
 	
 	/**
