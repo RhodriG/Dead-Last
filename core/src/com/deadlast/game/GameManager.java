@@ -75,7 +75,7 @@ public class GameManager implements Disposable {
 	}
 	
 	/**
-	 * Creates parameters required when a new level is loaded.
+	 * Creates/refreshes parameters required when a new level is loaded.
 	 */
 	public void loadLevel() {
 		System.out.println("Loading level...");
@@ -200,6 +200,13 @@ public class GameManager implements Disposable {
 		return player;
 	}
 	
+	public int getScoreMultiplier() {
+		if (player != null && player.isPowerUpActive(PowerUp.Type.DOUBLE_POINTS)) {
+			return 2;
+		}
+		return 1;
+	}
+	
 	public void update(float delta) {
 		if(gameCamera == null || batch == null) return;
 		handleInput();
@@ -213,7 +220,7 @@ public class GameManager implements Disposable {
 		// Fetch and delete dead entities
 		List<Entity> deadEntities = entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).collect(Collectors.toList());
 		deadEntities.forEach(e -> e.delete());
-		deadEntities.forEach(e -> this.score += e.getScoreValue());
+		deadEntities.forEach(e -> this.score += (e.getScoreValue() * getScoreMultiplier()));
 		deadEntities.forEach(e -> entities.remove(e));
 		
 		if (showDebugRenderer) {

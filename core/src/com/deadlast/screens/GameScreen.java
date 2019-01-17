@@ -99,9 +99,12 @@ public class GameScreen extends DefaultScreen {
 		Enemy enemy3 = enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build();
 		enemy3.defineBody();
 		gameManager.addEnemies(enemy1, enemy2, enemy3);
-		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
-		powerUp.defineBody();
-		gameManager.addPowerUp(powerUp);
+		PowerUp powerUp1 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
+		powerUp1.defineBody();
+		gameManager.addPowerUp(powerUp1);
+		PowerUp powerUp2 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(2, -2), PowerUp.Type.DOUBLE_DAMAGE);
+		powerUp2.defineBody();
+		gameManager.addPowerUp(powerUp2);
 //		enemies.add(enemy1);
 //		
 //		enemies.add(enemy2);

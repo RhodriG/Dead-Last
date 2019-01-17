@@ -74,16 +74,12 @@ public class Player extends Mob {
 		activePowerUps.put(powerUp.getType(), 30f);
 	}
 	
+	public boolean isPowerUpActive(PowerUp.Type type) {
+		return activePowerUps.containsKey(type);
+	}
+	
 	@Override
 	public void update(float delta) {
-//		activePowerUps.forEach((k,v) -> {
-//			if (v - delta > 0) {
-//				activePowerUps.put(k, v - delta);
-//			} else {
-//				activePowerUps.put(k, 0f);
-//				
-//			}
-//		});
 		for(Map.Entry<PowerUp.Type, Float> entry : activePowerUps.entrySet()) {
 			if (entry.getValue() - delta > 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
