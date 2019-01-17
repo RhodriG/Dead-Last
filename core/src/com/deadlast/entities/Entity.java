@@ -44,6 +44,13 @@ public abstract class Entity {
 	 * The initial world position of this entity.
 	 */
 	protected Vector2 initialPos;
+	/**
+	 * Whether the entity is currently 'alive'
+	 * For a mob, this is a literal description
+	 * For pickups, it describes whether it has been destroyed by being picked up, etc
+	 * This functions as a flag for the 'delete' method
+	 */
+	protected boolean alive = true;
 	
 	/**
 	 * Creates an entity with a score value and a specific sprite.
@@ -74,6 +81,14 @@ public abstract class Entity {
 	}
 	
 	/**
+	 * Convenience method to fetch entity position in the world
+	 * @return the Vector2 representing the entity's world position
+	 */
+	public Vector2 getPos() {
+		return this.b2body.getPosition();
+	}
+	
+	/**
 	 * Teleports the entity to the specified location. Be aware that it may cause issues with physics
 	 * objects.
 	 * @param x		The x coordinate of the destination
@@ -95,17 +110,18 @@ public abstract class Entity {
 		setAngle((float)angle);
 	}
 	
-	// TODO: This should NOT be called during world.step, as it will cause errors.
-	// Implement a flag so that it can be deleted after physics simulation has been
-	// completed for that render cycle.
 	/**
 	 * Removes the body from the world and destroys it.
-	 * @warning	do not call this method during world.step()
+	 * Do not call this method during world.step(), as it will cause errors.
 	 */
 	public void delete() {
 		world.destroyBody(this.b2body);
 		b2body.setUserData(null);
 		b2body = null;
+	}
+	
+	public boolean isAlive() {
+		return alive;
 	}
 	
 	/**
