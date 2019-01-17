@@ -14,6 +14,7 @@ import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PlayerType;
+import com.deadlast.entities.PowerUp;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
@@ -98,6 +99,9 @@ public class GameScreen extends DefaultScreen {
 		Enemy enemy3 = enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build();
 		enemy3.defineBody();
 		gameManager.addEnemies(enemy1, enemy2, enemy3);
+		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
+		powerUp.defineBody();
+		gameManager.addPowerUp(powerUp);
 //		enemies.add(enemy1);
 //		
 //		enemies.add(enemy2);
