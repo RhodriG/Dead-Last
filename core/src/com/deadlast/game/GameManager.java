@@ -15,6 +15,7 @@ import com.deadlast.controllers.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
+import com.deadlast.entities.Mob;
 import com.deadlast.entities.Player;
 import com.deadlast.stages.Hud;
 import com.deadlast.world.WorldContactListener;
@@ -173,8 +174,8 @@ public class GameManager implements Disposable {
 		return mousePos;
 	}
 	
-	public Vector2 getPlayerPos() {
-		return player.getBody().getPosition();
+	public Player getPlayer() {
+		return player;
 	}
 	
 	public void update(float delta) {
@@ -187,6 +188,8 @@ public class GameManager implements Disposable {
 		gameCamera.position.y = player.getBody().getPosition().y;
 		gameCamera.update();
 		entities.forEach(entity -> entity.update(delta));
+		// Fetch and delete dead entities
+		entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).forEach(e -> e.delete());;
 		
 		if (showDebugRenderer) {
 			debugRenderer.render(world, gameCamera.combined);
