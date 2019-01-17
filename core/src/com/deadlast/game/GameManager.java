@@ -6,9 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -19,10 +21,12 @@ import com.badlogic.gdx.utils.Disposable;
 import com.deadlast.controllers.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
+import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.stages.Hud;
 import com.deadlast.world.Level;
+import com.deadlast.world.Level.SpawnPoint;
 import com.deadlast.world.WorldContactListener;
 
 public class GameManager implements Disposable {
@@ -88,8 +92,8 @@ public class GameManager implements Disposable {
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 		
-		
-		roomRefs[0] = "test2";
+		//TESTING VALUE
+		roomRefs[0] = "test3";
 		
 		this.currentLevel = new Level(roomRefs);
 		System.out.println(currentLevel.getCurrentRoom().getMapName());
@@ -101,6 +105,19 @@ public class GameManager implements Disposable {
 		this.enemies = new ArrayList<>();
 		this.pickups = new ArrayList<>();
 		
+		//Adding zombie spawns
+		
+		for (int i = 0; i < currentLevel.getCurrentRoom().getZombieSpawnPoints().size(); i++) {
+			SpawnPoint sp = currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i);
+			this.enemies.add(enemyFactory.get(sp.getType()).setInitialPosition(sp.getPos()).build());
+					
+		}
+	
+		//Adding powerUp spawns 
+		for (int i = 0; i < currentLevel.getCurrentRoom().getPowerUpSpawnPoints().size();i++) {
+			//this.pickups.add([PICKUP FACTORY LOGIC HERE]);
+			continue;
+		}
 		score = 0;
 		time = 0;
 		
@@ -207,6 +224,8 @@ public class GameManager implements Disposable {
 		
 		if (showDebugRenderer) {
 			debugRenderer.render(world, gameCamera.combined);
+			//THE LINE BELOW BREAKS
+			//this.tiledMapRenderer.renderTileLayer((TiledMapTileLayer) this.currentLevel.getCurrentRoom().getMap().getLayers().get("spawn-layer"));
 		}
 		
 		time += delta;
@@ -269,6 +288,7 @@ public class GameManager implements Disposable {
 					 */
 		tiledMapRenderer.setView(gameCamera.combined, 0f,0f,50f,50f);
 		tiledMapRenderer.render();
+
 		
 		//rendering entity sprites.
 		if (batch == null) return;

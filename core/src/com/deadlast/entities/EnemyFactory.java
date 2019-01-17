@@ -57,6 +57,13 @@ public class EnemyFactory {
 		case MR_TICKLE:
 			break;
 		case NORMAL:
+			builder.setHealthStat(4)
+			.setSpeedStat(10)
+			.setStrengthStat(5)
+			.setDetectionStat(7)
+			.setSprite(null)
+			.setScoreValue(20)
+			.setBodyRadius(0.4f);
 			break;
 		default:
 			break;

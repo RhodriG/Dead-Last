@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.entities.EnemyType;
+import com.deadlast.entities.Entity;
 import com.deadlast.screens.GameScreen;
 
 /**
@@ -66,9 +67,7 @@ public class Level {
 			this.mapName = mapName;
 			System.out.println("/map/" + this.mapName + ".tmx");
 			this.levelMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\" + this.mapName + ".tmx");
-			
-			
-			
+				
 			this.spawnLayer = (TiledMapTileLayer) levelMap.getLayers().get("spawn-layer");
 			
 			
@@ -118,7 +117,10 @@ public class Level {
 			for(int i=0; i < spawnLayer.getWidth(); i++) {
 				for(int j=0; j<spawnLayer.getHeight(); j++) {
 					
-					
+					if (spawnLayer.getCell(i,j) == null) {
+						
+						continue;
+					}
 					//This case statement detects the type of tile on the spawn layer. If you need to add more types of spawn point, edit this.
 					switch (spawnLayer.getCell(i, j).getTile().getId()) {
 						
@@ -192,15 +194,21 @@ public class Level {
 	 */
 	public class SpawnPoint{
 		
-		public float xPos;
-		public float yPos;
+		public Vector2 position;
 		public EnemyType type;
 		
 		public SpawnPoint(float x, float y, EnemyType type) {
-			this.xPos = x;
-			this.yPos = y;
+			
+			this.position = new Vector2(x,y);
 			this.type = type;
 			
+		}
+		public EnemyType getType() {
+			return this.type;
+		}
+		
+		public Vector2 getPos() {
+			return this.position;
 		}
 		
 	}
