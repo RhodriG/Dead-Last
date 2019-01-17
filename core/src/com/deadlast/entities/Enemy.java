@@ -19,9 +19,19 @@ import com.deadlast.world.BodyFactory;
  */
 public class Enemy extends Mob {
 	
+	/**
+	 * Determines how good the enemy is at detecting the player
+	 */
 	private int detectionStat;
 	
+	/**
+	 * Whether the enemy is alerted the the player and knows where he/she is
+	 */
 	private boolean knowsPlayerLocation = false;
+	/**
+	 * Whether the player is close enough to the player to attack
+	 */
+	private boolean inMeleeRange = false;
 
 	public Enemy(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
@@ -60,20 +70,57 @@ public class Enemy extends Mob {
 		b2body.setLinearDamping(5.0f);
 	}
 	
-	public void beginContact(Body body) {
+	/**
+	 * Called by {@link WorldContactListener} when the player enters a sensor
+	 * @param body
+	 */
+	public void beginDetection(Body body) {
 		this.knowsPlayerLocation = true;
 	}
 	
-	public void endContact(Body body) {
+	/**
+	 * Called by {@link WorldContactListener} when the player exits sensor range
+	 * @param body
+	 */
+	public void endDetection(Body body) {
 		this.knowsPlayerLocation = false;
+	}
+	
+	/**
+	 * Called by {@link WorldContactListener} when the player is in contact
+	 * @param body
+	 */
+	public void beginContact(Body body) {
+		this.inMeleeRange = true;
+	}
+	
+	/**
+	 * Called by {@link WorldContactListener} when the player leaves contact
+	 * @param body
+	 */
+	public void endContact(Body body) {
+		this.inMeleeRange = false;
 	}
 	
 	@Override
 	public void update(float delta) {
+		super.update(delta);
 		if (knowsPlayerLocation) {
-			Vector2 playerLoc = gameManager.getPlayerPos();
+			Vector2 playerLoc = gameManager.getPlayer().getPos();
 			double angle = Math.toDegrees(Math.atan2(playerLoc.y - b2body.getPosition().y, playerLoc.x - b2body.getPosition().x)) - 90;
 			this.setAngle(angle);
+		}
+		if (inMeleeRange) {
+			if (attackCooldown == 0) {
+				Player player = gameManager.getPlayer();
+				player.applyDamage(this.getStrength());
+				attackCooldown = (float) ((-0.5 * (this.getSpeed())) + 6);
+			}
+		}
+		if (attackCooldown - delta < 0) {
+			attackCooldown = 0;
+		} else {
+			attackCooldown -= delta;
 		}
 	}
 	
