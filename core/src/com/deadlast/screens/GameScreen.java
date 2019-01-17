@@ -76,7 +76,7 @@ public class GameScreen extends DefaultScreen {
 				.setHealthStat(playerType.getHealth())
 				.setSpeedStat(playerType.getSpeed())
 				.setStealthStat(playerType.getStealth())
-				.setStrengthStat(playerType.getStealth())
+				.setStrengthStat(playerType.getStrength())
 				.build();
 		player.defineBody();
 		
