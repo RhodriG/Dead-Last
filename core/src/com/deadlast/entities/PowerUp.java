@@ -30,7 +30,7 @@ public class PowerUp extends StaticEntity {
 		bDef.type = BodyDef.BodyType.DynamicBody;
 		bDef.position.set(initialPos);
 		
-		// The physical body of the enemy
+		// The physical body of the powerup
 		FixtureDef fBodyDef = new FixtureDef();
 		CircleShape shape = new CircleShape();
 		shape.setRadius(this.bRadius);
@@ -128,7 +128,7 @@ public class PowerUp extends StaticEntity {
 				throw new IllegalArgumentException("Invalid 'initialPos' parameter");
 			}
 			return new PowerUp(
-					world, game, sprite, bRadius, initialPos, stealthMultiplier, damageMultiplier, pointsMultiplier
+					world, game, 0, sprite, bRadius, initialPos, stealthMultiplier, damageMultiplier, pointsMultiplier
 			);
 		}
 	}

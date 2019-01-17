@@ -26,7 +26,7 @@ public class StaticEntity extends Entity {
 	private float damageMultiplier;
 	
 	/**
-	 * Points muliplier of power up
+	 * Points multiplier of power up
 	 */
 	private float pointsMultiplier;
 	

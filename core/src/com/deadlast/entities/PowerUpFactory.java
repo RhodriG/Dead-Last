@@ -22,7 +22,7 @@ public class PowerUpFactory {
 		this.game = game;
 	}
 	
-	private static PowerUpFactory getInstance(World world, DeadLast game) {
+	public static PowerUpFactory getInstance(World world, DeadLast game) {
 		if (instance == null ) {
 			instance = new PowerUpFactory(world, game);
 		}
@@ -39,7 +39,7 @@ public class PowerUpFactory {
 				.setSprite(null)
 				.setBodyRadius(1f);
 			break;
-		case INSTA_KILL:
+		case DOUBLE_DAMAGE:
 			builder.setStealthMultiplier(1)
 			.setDamageMultiplier(2)
 			.setPointsMultiplier(1)

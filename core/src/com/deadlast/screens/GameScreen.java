@@ -18,6 +18,9 @@ import com.deadlast.controller.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.EnemyType;
+import com.deadlast.entities.PowerUp;
+import com.deadlast.entities.PowerUpFactory;
+import com.deadlast.entities.PowerUpType;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.game.DeadLast;
@@ -66,9 +69,11 @@ public class GameScreen extends DefaultScreen {
 	/**
 	 * The pickups/powerups on the current level
 	 */
-	private ArrayList<Entity> pickups;
+	private ArrayList<PowerUp> pickups;
 	
 	private EnemyFactory enemyFactory;
+	
+	private PowerUpFactory powerUpFactory;
 
 	public GameScreen(DeadLast game) {
 		super(game);
@@ -91,6 +96,7 @@ public class GameScreen extends DefaultScreen {
 		pickups = new ArrayList<>();
 		
 		enemyFactory = EnemyFactory.getInstance(world, game);
+		powerUpFactory = PowerUpFactory.getInstance(world, game);
 		BodyFactory bodyFactory = BodyFactory.getInstance(world);
 		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
@@ -114,6 +120,12 @@ public class GameScreen extends DefaultScreen {
 		enemies.add(enemy2);
 		enemies.add(enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build());
 		enemies.forEach(enemy -> enemy.defineBody());
+		PowerUp powerup1 = powerUpFactory.get(PowerUpType.SNEAK).setInitialPosition(new Vector2(10,10)).build();
+		PowerUp powerup2 = powerUpFactory.get(PowerUpType.DOUBLE_POINTS).setInitialPosition(new Vector2(4,4)).build();
+		pickups.add(powerup1);
+		pickups.add(powerup2);
+		pickups.forEach(powerup -> powerup.definebody());
+		
 	}
 	
 	/**
