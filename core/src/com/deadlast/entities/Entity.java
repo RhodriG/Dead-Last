@@ -124,6 +124,14 @@ public abstract class Entity {
 		return alive;
 	}
 	
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+	
+	public int getScoreValue() {
+		return scoreValue;
+	}
+	
 	/**
 	 * Defines this entity's body that exists in the world.
 	 */
