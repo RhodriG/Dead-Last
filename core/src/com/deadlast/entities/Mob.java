@@ -40,6 +40,10 @@ public class Mob extends Entity {
 	 * Current strength of this mob.
 	 */
 	private int currentStrength;
+	/**
+	 * The time until the mob can use it's attack ability again
+	 */
+	protected float attackCooldown = 0;
 	
 	public Mob(
 			DeadLast game, int scoreValue, Sprite sprite, float bRadius,
@@ -116,6 +120,24 @@ public class Mob extends Entity {
 		shape.dispose();
 	}
 	
-	public void update(float delta) {};
+	@Override
+	public void update(float delta) {
+		if (this.currentHealth <= 0 ) {
+			this.alive = false;
+			return;
+		}
+	};
+	
+	/**
+	 * Convenience method for applying damage
+	 * @param damage the amount of damage to apply to the mob
+	 */
+	public void applyDamage(int damage) {
+		if (this.currentHealth - damage < 0) {
+			this.currentHealth = 0;
+		} else {
+			this.currentHealth -= damage;
+		}
+	}
 
 }
