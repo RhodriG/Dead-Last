@@ -44,7 +44,7 @@ public class GameManager implements Disposable {
 	
 	private Player player;
 	private Level currentLevel;
-	private ArrayList<String> roomRefs;
+	private String levelRef;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Entity> pickups;
@@ -63,7 +63,6 @@ public class GameManager implements Disposable {
 	private GameManager(DeadLast game) {
 		System.out.println("Created GameManager instance!");
 		this.game = game;
-		
 		controller = new KeyboardController();
 		enemyFactory = EnemyFactory.getInstance(game);
 		
@@ -78,7 +77,7 @@ public class GameManager implements Disposable {
 	 */
 	public static GameManager getInstance(DeadLast game) {
 		if (instance == null) {
-			System.out.println("instance was null");
+
 			instance = new GameManager(game);
 		}
 		return instance;
@@ -93,54 +92,42 @@ public class GameManager implements Disposable {
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 		
-		roomRefs.clear();
 		//Forgive me for making this the most convoluted function of all time.
 		switch (levelIndex){
 		//
 		case 0:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level1" + "Room" + String.valueOf(i));
+				this.levelRef = "Level1";
 				break;
-			}
+			
 		case 1:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level2" + "Room" + String.valueOf(i));
+				this.levelRef = "Level2";
 				break;
-			}
+			
 		case 2:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level3" + "Room" + String.valueOf(i));
+				this.levelRef = "Level3";
 				break;
-			}
+			
 		case 3:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level4" + "Room" + String.valueOf(i));
+				this.levelRef = "Level4";
 				break;
-			}
 		case 4:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level5" + "Room" + String.valueOf(i));
-				break;			}
+				this.levelRef = "Level5";
+				break;	
 		case 5:
-			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
-				roomRefs.add("Level6" + "Room" + String.valueOf(i));
-				break;			}
+				this.levelRef = "Level6";
+				break;			
 			
 		case 100://test case
-			roomRefs.add("test3");
-			roomRefs.add("test4");
-			roomRefs.add("test5");
-			break;
+				this.levelRef = "test3";
+				break;
 		
 		
 		
 		}
-				
-		
-		
-		this.currentLevel = new Level(roomRefs);
-		System.out.println(currentLevel.getCurrentRoom().getMapName());
-		tiledMapRenderer = new OrthogonalTiledMapRenderer(currentLevel.getCurrentRoom().getMap(), 1/32f);
+					
+		this.currentLevel = new Level(levelRef);
+		System.out.println(currentLevel.getMapName());
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(currentLevel.getMap(), 1/32f);
 		
 		hud = new Hud(game);
 		
@@ -150,25 +137,25 @@ public class GameManager implements Disposable {
 		
 		//Adding zombie spawns
 		
-		for (int i = 0; i < currentLevel.getCurrentRoom().getZombieSpawnPoints().size(); i++) {
-			
-			this.enemies.add(
-					enemyFactory.get(currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i).getType())
-					.setInitialPosition(currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i).getPos())
-					.build());
-			
-			System.out.println("looped once");	
-		}
-			System.out.println("looped entirely");
-		//Adding powerUp spawns 
-		for (int i = 0; i < currentLevel.getCurrentRoom().getPowerUpSpawnPoints().size();i++) {
-			//this.pickups.add([PICKUP FACTORY LOGIC HERE]);
-			continue;
-		}
-		
-		for (int i = 0; i < currentLevel.getCurrentRoom().getRoomExits().size();i++) {
-			
-		}
+//		for (int i = 0; i < currentLevel.getCurrentRoom().getZombieSpawnPoints().size(); i++) {
+//			
+//			this.enemies.add(
+//					enemyFactory.get(currentLevel.getZombieSpawnPoints().get(i).getType())
+//					.setInitialPosition(currentLevel..getZombieSpawnPoints().get(i).getPos())
+//					.build());
+//			
+//			System.out.println("looped once");	
+//		}
+//			System.out.println("looped entirely");
+//		//Adding powerUp spawns 
+//		for (int i = 0; i < currentLevel.getCurrentRoom().getPowerUpSpawnPoints().size();i++) {
+//			//this.pickups.add([PICKUP FACTORY LOGIC HERE]);
+//			continue;
+//		}
+//		
+//		for (int i = 0; i < currentLevel..getRoomExits().size();i++) {
+//			
+//		}
 		score = 0;
 		time = 0;
 		
