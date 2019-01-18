@@ -71,7 +71,7 @@ public class Player extends Mob {
 	
 	public void onPickup(PowerUp powerUp) {
 		System.out.println("Picked up power-up: " + powerUp.getType());
-		activePowerUps.put(powerUp.getType(), 30f);
+		activePowerUps.put(powerUp.getType(), 15f);
 	}
 	
 	public boolean isPowerUpActive(PowerUp.Type type) {
