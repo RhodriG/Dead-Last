@@ -66,7 +66,7 @@ public class GameManager implements Disposable {
 		controller = new KeyboardController();
 		enemyFactory = EnemyFactory.getInstance(game);
 		
-		loadLevel(100);
+		loadLevel(0);
 	}
 	
 	/**
@@ -324,7 +324,7 @@ public class GameManager implements Disposable {
 					 * 2nd and 3rd: x and y coords for the bottom left corner of the map.
 					 * 4th and 5th: x and y dimension of a portion of the map. (eg. input of 3f,3f will render 3x3 box relative to the map)
 					 */
-		tiledMapRenderer.setView(gameCamera.combined, 0f,0f,50f,50f);
+		tiledMapRenderer.setView(gameCamera.combined, 0f,0f,200f,200f);
 		tiledMapRenderer.render();
 
 		
