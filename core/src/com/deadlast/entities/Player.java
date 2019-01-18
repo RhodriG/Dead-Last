@@ -1,13 +1,15 @@
 package com.deadlast.entities;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
-import com.deadlast.entities.Enemy.Builder;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 
@@ -22,6 +24,8 @@ public class Player extends Mob {
 	
 	private boolean isHidden;
 	
+	private Map<PowerUp.Type, Float> activePowerUps;
+	
 	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
 	
 	public Player(
@@ -31,6 +35,7 @@ public class Player extends Mob {
 		super(game, 0, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
+		this.activePowerUps = new HashMap<>();
 	}
 	
 	public int getStealthStat() {
@@ -62,6 +67,27 @@ public class Player extends Mob {
 		b2body.setUserData(this);
 
 		shape.dispose();
+	}
+	
+	public void onPickup(PowerUp powerUp) {
+		System.out.println("Picked up power-up: " + powerUp.getType());
+		activePowerUps.put(powerUp.getType(), 15f);
+	}
+	
+	public boolean isPowerUpActive(PowerUp.Type type) {
+		return activePowerUps.containsKey(type);
+	}
+	
+	@Override
+	public void update(float delta) {
+		for(Map.Entry<PowerUp.Type, Float> entry : activePowerUps.entrySet()) {
+			if (entry.getValue() - delta > 0) {
+				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
+			} else {
+				activePowerUps.remove(entry.getKey());
+				System.out.println(entry.getKey() + " expired.");
+			}
+		}
 	}
 	
 	public static class Builder {

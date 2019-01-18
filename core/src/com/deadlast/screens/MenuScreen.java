@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.deadlast.game.DeadLast;
+import com.deadlast.game.GameManager;
 
 /**
  * 
@@ -41,7 +42,11 @@ public class MenuScreen extends DefaultScreen {
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.changeScreen(DeadLast.GAME);
+				if (GameManager.getInstance(game).isGameRunning()) {
+					game.changeScreen(DeadLast.GAME);
+				} else {
+					game.changeScreen(DeadLast.CHARACTER);
+				}
 			}
 		});
 		

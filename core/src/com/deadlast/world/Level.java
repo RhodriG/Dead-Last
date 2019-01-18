@@ -2,7 +2,6 @@ package com.deadlast.world;
 
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**

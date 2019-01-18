@@ -14,6 +14,7 @@ import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PlayerType;
+import com.deadlast.entities.PowerUp;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
@@ -57,6 +58,8 @@ public class GameScreen extends DefaultScreen {
 		gameManager.setGameCamera(camera);
 		gameManager.setSpriteBatch(batch);
 		
+		gameManager.loadLevel();
+		
 		
 		/**
 		 * The below code is being maintained for the time being, but it should eventually be moved
@@ -67,7 +70,7 @@ public class GameScreen extends DefaultScreen {
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		
-		PlayerType playerType = PlayerType.STEALTH;
+		PlayerType playerType = gameManager.getPlayerType();
 		player = new Player.Builder()
 				.setGame(game)
 				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
@@ -76,7 +79,7 @@ public class GameScreen extends DefaultScreen {
 				.setHealthStat(playerType.getHealth())
 				.setSpeedStat(playerType.getSpeed())
 				.setStealthStat(playerType.getStealth())
-				.setStrengthStat(playerType.getStealth())
+				.setStrengthStat(playerType.getStrength())
 				.build();
 		player.defineBody();
 		
@@ -98,6 +101,12 @@ public class GameScreen extends DefaultScreen {
 		Enemy enemy3 = enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build();
 		enemy3.defineBody();
 		gameManager.addEnemies(enemy1, enemy2, enemy3);
+		PowerUp powerUp1 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
+		powerUp1.defineBody();
+		gameManager.addPowerUp(powerUp1);
+		PowerUp powerUp2 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(2, -2), PowerUp.Type.DOUBLE_DAMAGE);
+		powerUp2.defineBody();
+		gameManager.addPowerUp(powerUp2);
 //		enemies.add(enemy1);
 //		
 //		enemies.add(enemy2);

@@ -1,6 +1,5 @@
 package com.deadlast.world;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
+import com.deadlast.entities.PowerUp;
 
 /**
  * Handles contact interactions with world bodies.
@@ -49,6 +49,16 @@ public class WorldContactListener implements ContactListener {
 		}
 		if (fB.isSensor() && fA.getBody().getUserData() instanceof Player) {
 			((Enemy)fB.getBody().getUserData()).beginDetection(fA.getBody());
+		}
+		
+		// Player picks up powerup
+		if (fA.getBody().getUserData() instanceof Player && fB.getBody().getUserData() instanceof PowerUp) {
+			((Player)fA.getBody().getUserData()).onPickup((PowerUp)fB.getBody().getUserData());
+			((PowerUp)fB.getBody().getUserData()).setAlive(false);
+		}
+		if (fB.getBody().getUserData() instanceof Player && fA.getBody().getUserData() instanceof PowerUp) {
+			((Player)fB.getBody().getUserData()).onPickup((PowerUp)fA.getBody().getUserData());
+			((PowerUp)fA.getBody().getUserData()).setAlive(false);
 		}
 	}
 

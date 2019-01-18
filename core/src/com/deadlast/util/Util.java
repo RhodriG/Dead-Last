@@ -1,6 +1,5 @@
 package com.deadlast.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.stream.Stream;

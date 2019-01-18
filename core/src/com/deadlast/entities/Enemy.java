@@ -8,9 +8,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.game.DeadLast;
 import com.deadlast.world.BodyFactory;
+import com.deadlast.world.WorldContactListener;
 
 /**
  * A hostile mob that will attempt to damage the player.
@@ -114,7 +114,7 @@ public class Enemy extends Mob {
 			if (attackCooldown == 0) {
 				Player player = gameManager.getPlayer();
 				player.applyDamage(this.getStrength());
-				attackCooldown = (float) ((-0.5 * (this.getSpeed())) + 6);
+				attackCooldown = (float) ((-0.5 * (this.getSpeed())) + 3);
 			}
 		}
 		if (attackCooldown - delta < 0) {

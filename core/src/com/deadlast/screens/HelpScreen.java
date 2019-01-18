@@ -2,16 +2,10 @@ package com.deadlast.screens;
 
 import com.deadlast.screens.DefaultScreen;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -53,8 +47,8 @@ public class HelpScreen extends DefaultScreen {
 				"\n",
 				"Movement controls:",
 				"WASD or arrow keys to move",
-				"Mouse to look around",
-				"Click to attack",
+				"Mouse to look around and aim",
+				"Space to attack",
 				"\n",
 				"More text here."
 		};
@@ -75,7 +69,7 @@ public class HelpScreen extends DefaultScreen {
 		Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
 		
 		table.setSkin(skin);
-		table.pad(10);
+		table.pad(15);
 		
 		pageTitle = new Label("How to Play", skin);
 		pageContents = new Label(sb.toString(), skin);
@@ -102,8 +96,7 @@ public class HelpScreen extends DefaultScreen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.render(delta);
 		stage.act();
 		stage.draw();
 	}
