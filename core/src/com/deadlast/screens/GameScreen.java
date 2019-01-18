@@ -59,44 +59,6 @@ public class GameScreen extends DefaultScreen {
 		
 		gameManager.loadLevel();
 		
-		
-		/**
-		 * The below code is being maintained for the time being, but it should eventually be moved
-		 */
-		enemyFactory = EnemyFactory.getInstance(game);
-		BodyFactory bodyFactory = BodyFactory.getInstance(gameManager.getWorld());
-//		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
-		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
-		
-//		Enemy enemy1 = new Enemy.Builder()
-//				.setGame(game)
-//				.setScoreValue(10)
-//				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/enemy.png"))))
-//				.setBodyRadius(0.5f)
-//				.setInitialPosition(new Vector2(-4, -4))
-//				.setHealthStat(5)
-//				.setSpeedStat(5)
-//				.setStrengthStat(5)
-//				.setDetectionStat(5)
-//				.build();
-//		enemy1.defineBody();
-//		Enemy enemy2 = enemyFactory.get(Enemy.Type.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
-//		enemy2.defineBody();
-//		Enemy enemy3 = enemyFactory.get(Enemy.Type.FAST).setInitialPosition(new Vector2(7, 7)).build();
-//		enemy3.defineBody();
-//		gameManager.addEnemies(enemy1, enemy2, enemy3);
-//		PowerUp powerUp1 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
-//		powerUp1.defineBody();
-//		gameManager.addPowerUp(powerUp1);
-//		PowerUp powerUp2 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(2, -2), PowerUp.Type.DOUBLE_DAMAGE);
-//		powerUp2.defineBody();
-//		gameManager.addPowerUp(powerUp2);
-//		enemies.add(enemy1);
-//		
-//		enemies.add(enemy2);
-//		
-//		enemies.forEach(enemy -> enemy.defineBody());
-		
 	}
 
 	@Override
