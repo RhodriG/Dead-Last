@@ -18,6 +18,7 @@ import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
+import com.deadlast.entities.PlayerType;
 import com.deadlast.entities.PowerUp;
 import com.deadlast.screens.GameScreen;
 import com.deadlast.stages.Hud;
@@ -28,12 +29,15 @@ public class GameManager implements Disposable {
 	private static GameManager instance;
 	private final DeadLast game;
 	
+	private boolean gameRunning = false;
+	
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private boolean showDebugRenderer = false;
 	
 	private KeyboardController controller;
 	
+	private PlayerType playerType;
 	private Player player;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
@@ -56,8 +60,6 @@ public class GameManager implements Disposable {
 		
 		controller = new KeyboardController();
 		enemyFactory = EnemyFactory.getInstance(game);
-		
-		loadLevel();
 	}
 	
 	/**
@@ -69,9 +71,16 @@ public class GameManager implements Disposable {
 	public static GameManager getInstance(DeadLast game) {
 		if (instance == null) {
 			instance = new GameManager(game);
-			System.out.println("Created GameManager instance");
 		}
 		return instance;
+	}
+	
+	public void setGameRunning(boolean running) {
+		this.gameRunning = running;
+	}
+	
+	public boolean isGameRunning() {
+		return gameRunning;
 	}
 	
 	/**
@@ -122,6 +131,18 @@ public class GameManager implements Disposable {
 	public void setPlayer(Player player) {
 		this.player = player;
 		this.entities.add(player);
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public void setPlayerType(PlayerType type) {
+		this.playerType = type;
+	}
+	
+	public PlayerType getPlayerType() {
+		return playerType;
 	}
 	
 	/**
@@ -194,10 +215,6 @@ public class GameManager implements Disposable {
 		Vector3 mousePos3D = gameCamera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 		Vector2 mousePos = new Vector2(mousePos3D.x, mousePos3D.y);
 		return mousePos;
-	}
-	
-	public Player getPlayer() {
-		return player;
 	}
 	
 	public int getScoreMultiplier() {

@@ -58,6 +58,8 @@ public class GameScreen extends DefaultScreen {
 		gameManager.setGameCamera(camera);
 		gameManager.setSpriteBatch(batch);
 		
+		gameManager.loadLevel();
+		
 		
 		/**
 		 * The below code is being maintained for the time being, but it should eventually be moved
@@ -68,7 +70,7 @@ public class GameScreen extends DefaultScreen {
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
 		
-		PlayerType playerType = PlayerType.STEALTH;
+		PlayerType playerType = gameManager.getPlayerType();
 		player = new Player.Builder()
 				.setGame(game)
 				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
