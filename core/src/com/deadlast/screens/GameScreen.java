@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
-import com.deadlast.entities.EnemyType;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PlayerType;
 import com.deadlast.entities.PowerUp;
@@ -69,44 +68,29 @@ public class GameScreen extends DefaultScreen {
 //		bodyFactory.makeCirclePolyBody(2, 2, 1, BodyFactory.STEEL, BodyType.DynamicBody, false);
 		bodyFactory.makeBoxPolyBody(10, 10, 10, 2, BodyFactory.STEEL, BodyType.StaticBody, true);
 		
-		
-		PlayerType playerType = gameManager.getPlayerType();
-		player = new Player.Builder()
-				.setGame(game)
-				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
-				.setBodyRadius(playerType.getBodyRadius())
-				.setInitialPosition(new Vector2(0,0))
-				.setHealthStat(playerType.getHealth())
-				.setSpeedStat(playerType.getSpeed())
-				.setStealthStat(playerType.getStealth())
-				.setStrengthStat(playerType.getStrength())
-				.build();
-		player.defineBody();
-		
-		gameManager.setPlayer(player);
-		Enemy enemy1 = new Enemy.Builder()
-				.setGame(game)
-				.setScoreValue(10)
-				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/enemy.png"))))
-				.setBodyRadius(0.5f)
-				.setInitialPosition(new Vector2(-4, -4))
-				.setHealthStat(5)
-				.setSpeedStat(5)
-				.setStrengthStat(5)
-				.setDetectionStat(5)
-				.build();
-		enemy1.defineBody();
-		Enemy enemy2 = enemyFactory.get(EnemyType.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
-		enemy2.defineBody();
-		Enemy enemy3 = enemyFactory.get(EnemyType.FAST).setInitialPosition(new Vector2(7, 7)).build();
-		enemy3.defineBody();
-		gameManager.addEnemies(enemy1, enemy2, enemy3);
-		PowerUp powerUp1 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
-		powerUp1.defineBody();
-		gameManager.addPowerUp(powerUp1);
-		PowerUp powerUp2 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(2, -2), PowerUp.Type.DOUBLE_DAMAGE);
-		powerUp2.defineBody();
-		gameManager.addPowerUp(powerUp2);
+//		Enemy enemy1 = new Enemy.Builder()
+//				.setGame(game)
+//				.setScoreValue(10)
+//				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/enemy.png"))))
+//				.setBodyRadius(0.5f)
+//				.setInitialPosition(new Vector2(-4, -4))
+//				.setHealthStat(5)
+//				.setSpeedStat(5)
+//				.setStrengthStat(5)
+//				.setDetectionStat(5)
+//				.build();
+//		enemy1.defineBody();
+//		Enemy enemy2 = enemyFactory.get(Enemy.Type.HEAVY).setInitialPosition(new Vector2(4, 0)).build();
+//		enemy2.defineBody();
+//		Enemy enemy3 = enemyFactory.get(Enemy.Type.FAST).setInitialPosition(new Vector2(7, 7)).build();
+//		enemy3.defineBody();
+//		gameManager.addEnemies(enemy1, enemy2, enemy3);
+//		PowerUp powerUp1 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(-2, -2), PowerUp.Type.DOUBLE_POINTS);
+//		powerUp1.defineBody();
+//		gameManager.addPowerUp(powerUp1);
+//		PowerUp powerUp2 = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, new Vector2(2, -2), PowerUp.Type.DOUBLE_DAMAGE);
+//		powerUp2.defineBody();
+//		gameManager.addPowerUp(powerUp2);
 //		enemies.add(enemy1);
 //		
 //		enemies.add(enemy2);

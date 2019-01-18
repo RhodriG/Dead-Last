@@ -12,7 +12,7 @@ import com.deadlast.game.DeadLast;
  * @author Xzytl
  *
  */
-public class Mob extends Entity {
+public abstract class Mob extends Entity {
 
 	/**
 	 * Normal maximum health of this mob.

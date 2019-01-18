@@ -19,6 +19,15 @@ import com.deadlast.world.WorldContactListener;
  */
 public class Enemy extends Mob {
 	
+	public enum Type {
+		HEAVY,
+		FAST,
+		BOMBER,
+		HORDLING,
+		JOCKEY,
+		NORMAL
+	}
+	
 	/**
 	 * Determines how good the enemy is at detecting the player
 	 */

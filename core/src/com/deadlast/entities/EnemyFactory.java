@@ -24,7 +24,7 @@ public class EnemyFactory {
 		return instance;
 	}
 	
-	public Enemy.Builder get(EnemyType type) {
+	public Enemy.Builder get(Enemy.Type type) {
 		Enemy.Builder builder = new Enemy.Builder()
 				.setGame(game);
 		switch(type) {
@@ -51,8 +51,6 @@ public class EnemyFactory {
 		case HORDLING:
 			break;
 		case JOCKEY:
-			break;
-		case MR_TICKLE:
 			break;
 		case NORMAL:
 			break;

@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +24,7 @@ import com.deadlast.entities.PlayerType;
 import com.deadlast.entities.PowerUp;
 import com.deadlast.screens.GameScreen;
 import com.deadlast.stages.Hud;
+import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
 public class GameManager implements Disposable {
@@ -39,6 +42,7 @@ public class GameManager implements Disposable {
 	
 	private PlayerType playerType;
 	private Player player;
+	private Vector2 playerSpawn;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Entity> powerUps;
@@ -101,6 +105,21 @@ public class GameManager implements Disposable {
 		score = 0;
 		time = 0;
 		
+		Level level = new Level(game);
+		level.load();
+		
+		player = new Player.Builder()
+				.setGame(game)
+				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
+				.setBodyRadius(playerType.getBodyRadius())
+				.setInitialPosition(playerSpawn)
+				.setHealthStat(playerType.getHealth())
+				.setSpeedStat(playerType.getSpeed())
+				.setStealthStat(playerType.getStealth())
+				.setStrengthStat(playerType.getStrength())
+				.build();
+		player.defineBody();
+		entities.add(player);
 	}
 	
 	public void clearLevel() {
@@ -145,11 +164,17 @@ public class GameManager implements Disposable {
 		return playerType;
 	}
 	
+	public void setPlayerSpawn(Vector2 playerSpawn) {
+		this.playerSpawn = playerSpawn;
+	}
+	
 	/**
 	 * Adds an enemy to the list of enemies and entities.
 	 * @param enemy	the enemy to add
 	 */
-	public void addEnemy(Enemy enemy) {
+	public void addEnemy(Enemy.Type type, Vector2 initialPos) {
+		Enemy enemy = enemyFactory.get(type).setInitialPosition(initialPos).build();
+		enemy.defineBody();
 		this.enemies.add(enemy);
 		this.entities.add(enemy);
 	}
@@ -158,11 +183,11 @@ public class GameManager implements Disposable {
 	 * Adds an enemy or multiple enemies to the list of enemies and entities.
 	 * @param enemies	the enemies to add
 	 */
-	public void addEnemies(Enemy... enemies) {
-		for (Enemy enemy : enemies) {
-			addEnemy(enemy);
-		}
-	}
+//	public void addEnemies(Enemy... enemies) {
+//		for (Enemy enemy : enemies) {
+//			addEnemy(enemy);
+//		}
+//	}
 	
 	/**
 	 * Removes an enemy from the list of entities and the list of enemies.
@@ -177,7 +202,9 @@ public class GameManager implements Disposable {
 	 * Adds a power-up to the list of power-up's and entities
 	 * @param powerUp the power-up to add
 	 */
-	public void addPowerUp(PowerUp powerUp) {
+	public void addPowerUp(PowerUp.Type type, Vector2 initialPos) {
+		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, initialPos, type);
+		powerUp.defineBody();
 		this.powerUps.add(powerUp);
 		this.entities.add(powerUp);
 	}
