@@ -15,6 +15,11 @@ import com.deadlast.entities.PlayerType;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 
+/**
+ * Screen responsible for presenting character selection choice and transferring to the game screen
+ * @author Xzytl
+ *
+ */
 public class CharacterScreen extends DefaultScreen {
 	
 	private Stage stage;
