@@ -19,7 +19,8 @@ public class PowerUp extends Entity {
 	public enum Type {
 		STEALTH,
 		DOUBLE_DAMAGE,
-		DOUBLE_POINTS
+		DOUBLE_POINTS,
+		REGEN
 	}
 	
 	public Type getType() {
