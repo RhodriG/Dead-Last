@@ -23,6 +23,10 @@ public class WorldContactListener implements ContactListener {
 		Fixture fA = contact.getFixtureA();
 		Fixture fB = contact.getFixtureB();
 		
+		if (fA.getUserData() != null && fB.getUserData() != null) {
+			System.out.println("Contact between fixtures of type " + fA.getUserData() + " and " + fB.getUserData());
+		}
+		
 		if (fA.getUserData() != null && fA.getBody().getUserData() instanceof Entity) {
 			// Alert entity to contact
 		}

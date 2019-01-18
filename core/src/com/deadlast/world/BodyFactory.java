@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.deadlast.entities.Entity;
 
 /**
  * Factory singleton for easy creation of {@link FixtureDef} and {@link Body} objects.
@@ -152,7 +153,9 @@ public class BodyFactory {
 		polyShape.set(vertices);
 		fDef.shape = polyShape;
 		fDef.isSensor = true;
-		body.createFixture(fDef);
+		fDef.filter.categoryBits = Entity.ENEMY_VISION;
+		fDef.filter.maskBits = Entity.PLAYER;
+		body.createFixture(fDef).setUserData(FixtureType.VISUAL_SENSOR);;
 		polyShape.dispose();
 	}
 	
@@ -167,7 +170,9 @@ public class BodyFactory {
 		detectionShape.setRadius(radius);
 		fDef.shape = detectionShape;
 		fDef.isSensor = true;
-		body.createFixture(fDef);
+		fDef.filter.categoryBits = Entity.ENEMY_HEARING;
+		fDef.filter.maskBits = Entity.PLAYER;
+		body.createFixture(fDef).setUserData(FixtureType.HEARING_SENSOR);
 		detectionShape.dispose();
 	}
 

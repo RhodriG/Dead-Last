@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
+import com.deadlast.world.FixtureType;
 
 public class PowerUp extends Entity {
 	
@@ -20,7 +21,8 @@ public class PowerUp extends Entity {
 		STEALTH,
 		DOUBLE_DAMAGE,
 		DOUBLE_POINTS,
-		REGEN
+		REGEN,
+		SPEED
 	}
 	
 	public Type getType() {
@@ -38,9 +40,11 @@ public class PowerUp extends Entity {
 		
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = shape;
+		fDef.filter.categoryBits = Entity.POWERUP;
+		fDef.filter.maskBits = Entity.PLAYER;
 		
 		b2body = world.createBody(bDef);
-		b2body.createFixture(fDef);
+		b2body.createFixture(fDef).setUserData(FixtureType.POWERUP);
 		b2body.setUserData(this);
 
 		shape.dispose();

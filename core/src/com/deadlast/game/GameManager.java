@@ -27,6 +27,11 @@ import com.deadlast.stages.Hud;
 import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class GameManager implements Disposable {
 	
 	private static GameManager instance;
@@ -251,6 +256,13 @@ public class GameManager implements Disposable {
 		return 1;
 	}
 	
+	public float getSpeedMultiplier() {
+		if (player != null && player.isPowerUpActive(PowerUp.Type.SPEED)) {
+			return 1.5f;
+		}
+		return 1f;
+	}
+	
 	public void update(float delta) {
 		if(gameCamera == null || batch == null) return;
 		handleInput();
@@ -288,10 +300,12 @@ public class GameManager implements Disposable {
 		float speed;
 		
 		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 2.5f;
+			speed = player.getSpeed() * 0.5f;
 		} else {
 			speed = player.getSpeed();
 		}
+		
+		speed *= getSpeedMultiplier();
 		
 		if (controller.left) {
 			//player.applyForceToCenter(-10, 0, true);
@@ -308,6 +322,9 @@ public class GameManager implements Disposable {
 		if (controller.down) {
 			//player.applyForceToCenter(0, -10, true);
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
+		}
+		if (controller.isSpaceDown) {
+			
 		}
 		
 		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {

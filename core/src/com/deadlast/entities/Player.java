@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
+import com.deadlast.world.FixtureType;
 
 /**
  * Represents the player character.
@@ -25,6 +26,8 @@ public class Player extends Mob {
 	private boolean isHidden;
 	
 	private Map<PowerUp.Type, Float> activePowerUps;
+	
+	private float healCooldown = 1f;
 	
 	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
 	
@@ -61,9 +64,11 @@ public class Player extends Mob {
 		
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = shape;
+		fDef.filter.categoryBits = Entity.PLAYER;
+		fDef.filter.maskBits = Entity.BOUNDARY | Entity.ENEMY | Entity.POWERUP | Entity.ENEMY_HEARING | Entity.ENEMY_VISION;
 		
 		b2body = world.createBody(bDef);
-		b2body.createFixture(fDef);
+		b2body.createFixture(fDef).setUserData(FixtureType.PLAYER);
 		b2body.setUserData(this);
 
 		shape.dispose();
@@ -80,8 +85,16 @@ public class Player extends Mob {
 	
 	@Override
 	public void update(float delta) {
+		if (isPowerUpActive(PowerUp.Type.REGEN)) {
+			if (healCooldown <= 0 && this.getHealth() < this.getMaxHealth()) {
+				this.setHealth(this.getHealth() + 1);
+				healCooldown = 1f;
+			} else {
+				healCooldown -= delta;
+			}
+		}
 		for(Map.Entry<PowerUp.Type, Float> entry : activePowerUps.entrySet()) {
-			if (entry.getValue() - delta > 0) {
+			if (entry.getValue() - delta >= 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
 			} else {
 				activePowerUps.remove(entry.getKey());

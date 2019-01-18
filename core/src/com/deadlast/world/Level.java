@@ -12,12 +12,14 @@ import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 
 /**
- * 
+ * Represents a level in the game
+ * Holds spawn locations from the player, zombies, and power-ups
  * @author ljd546
- *
+ * @author Xzytl
  */
 public class Level {
 	
+	@SuppressWarnings("unused")
 	private DeadLast game;
 	private Vector2 playerSpawn;
 	private List<SpawnPoint<Enemy.Type>> enemySpawns;
@@ -45,6 +47,9 @@ public class Level {
 		);
 		powerUpSpawns.add(
 			new SpawnPoint<PowerUp.Type>(PowerUp.Type.DOUBLE_DAMAGE, new Vector2(2,-2))
+		);
+		powerUpSpawns.add(
+			new SpawnPoint<PowerUp.Type>(PowerUp.Type.REGEN, new Vector2(4,-2))
 		);
 		playerSpawn = new Vector2(0,0);
 	}

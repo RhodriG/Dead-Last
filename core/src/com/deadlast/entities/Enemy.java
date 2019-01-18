@@ -7,9 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
 import com.deadlast.world.BodyFactory;
+import com.deadlast.world.FixtureType;
 import com.deadlast.world.WorldContactListener;
 
 /**
@@ -63,10 +65,12 @@ public class Enemy extends Mob {
 		CircleShape shape = new CircleShape();
 		shape.setRadius(this.bRadius);
 		fBodyDef.shape = shape;
+		fBodyDef.filter.categoryBits = Entity.ENEMY;
+		fBodyDef.filter.maskBits = Entity.BOUNDARY | Entity.PLAYER | Entity.PLAYER_MELEE;
 		
 		// Create body and add fixtures
 		b2body = world.createBody(bDef);
-		b2body.createFixture(fBodyDef);
+		b2body.createFixture(fBodyDef).setUserData(FixtureType.ENEMY);
 		
 		BodyFactory bFactory = BodyFactory.getInstance(world);
 		bFactory.makeConeSensor(b2body, 7, 70, 5f);
@@ -207,7 +211,7 @@ public class Enemy extends Mob {
 				throw new IllegalArgumentException("Invalid 'game' parameter");
 			}
 			if (sprite == null) {
-				sprite = new Sprite(new Texture(Gdx.files.internal("entities/enemy.png")));
+				sprite = new Sprite(new Texture(Gdx.files.internal("entities/zombie.png")));
 			}
 			if (bRadius == 0) {
 				bRadius = 0.5f;
