@@ -44,7 +44,7 @@ public class GameManager implements Disposable {
 	
 	private Player player;
 	private Level currentLevel;
-	private String[] roomRefs = new String[1];
+	private ArrayList<String> roomRefs;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Entity> pickups;
@@ -67,7 +67,7 @@ public class GameManager implements Disposable {
 		controller = new KeyboardController();
 		enemyFactory = EnemyFactory.getInstance(game);
 		
-		loadLevel();
+		loadLevel(100);
 	}
 	
 	/**
@@ -78,6 +78,7 @@ public class GameManager implements Disposable {
 	 */
 	public static GameManager getInstance(DeadLast game) {
 		if (instance == null) {
+			System.out.println("instance was null");
 			instance = new GameManager(game);
 		}
 		return instance;
@@ -86,14 +87,56 @@ public class GameManager implements Disposable {
 	/**
 	 * Creates parameters required when a new level is loaded.
 	 */
-	public void loadLevel() {
+	public void loadLevel(int levelIndex) {
 		System.out.println("Loading level...");
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
 		
-		//TESTING VALUE
-		roomRefs[0] = "test3";
+		roomRefs.clear();
+		//Forgive me for making this the most convoluted function of all time.
+		switch (levelIndex){
+		//
+		case 0:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level1" + "Room" + String.valueOf(i));
+				break;
+			}
+		case 1:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level2" + "Room" + String.valueOf(i));
+				break;
+			}
+		case 2:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level3" + "Room" + String.valueOf(i));
+				break;
+			}
+		case 3:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level4" + "Room" + String.valueOf(i));
+				break;
+			}
+		case 4:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level5" + "Room" + String.valueOf(i));
+				break;			}
+		case 5:
+			for (int i = 0; i < 7; i++) { //replace i < 7 with i < [however many rooms are in the level]
+				roomRefs.add("Level6" + "Room" + String.valueOf(i));
+				break;			}
+			
+		case 100://test case
+			roomRefs.add("test3");
+			roomRefs.add("test4");
+			roomRefs.add("test5");
+			break;
+		
+		
+		
+		}
+				
+		
 		
 		this.currentLevel = new Level(roomRefs);
 		System.out.println(currentLevel.getCurrentRoom().getMapName());
@@ -108,15 +151,23 @@ public class GameManager implements Disposable {
 		//Adding zombie spawns
 		
 		for (int i = 0; i < currentLevel.getCurrentRoom().getZombieSpawnPoints().size(); i++) {
-			SpawnPoint sp = currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i);
-			this.enemies.add(enemyFactory.get(sp.getType()).setInitialPosition(sp.getPos()).build());
-					
+			
+			this.enemies.add(
+					enemyFactory.get(currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i).getType())
+					.setInitialPosition(currentLevel.getCurrentRoom().getZombieSpawnPoints().get(i).getPos())
+					.build());
+			
+			System.out.println("looped once");	
 		}
-	
+			System.out.println("looped entirely");
 		//Adding powerUp spawns 
 		for (int i = 0; i < currentLevel.getCurrentRoom().getPowerUpSpawnPoints().size();i++) {
 			//this.pickups.add([PICKUP FACTORY LOGIC HERE]);
 			continue;
+		}
+		
+		for (int i = 0; i < currentLevel.getCurrentRoom().getRoomExits().size();i++) {
+			
 		}
 		score = 0;
 		time = 0;

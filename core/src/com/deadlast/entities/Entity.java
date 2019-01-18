@@ -55,7 +55,9 @@ public abstract class Entity {
 	 */
 	public Entity(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos) {
 		this.game = game;
+		
 		gameManager = GameManager.getInstance(game);
+		
 		this.world = gameManager.getWorld();
 		this.scoreValue = scoreValue;
 		this.sprite = sprite;

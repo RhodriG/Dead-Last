@@ -2,24 +2,12 @@ package com.deadlast.world;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.World;
 import com.deadlast.entities.EnemyType;
-import com.deadlast.entities.Entity;
-import com.deadlast.screens.GameScreen;
 
 /**
  * 
@@ -35,11 +23,11 @@ public class Level {
 	/*
 	 * Level constructor must be passed a string of rooms which are the filenames of the maps without the .tmx suffix.
 	 */
-	public Level(String[] roomRefs) {
-		this.rooms = new Room[roomRefs.length];
-		for (int i = 0; i < roomRefs.length; i++) {
+	public Level(ArrayList<String> roomRefs) {
+		this.rooms = new Room[roomRefs.size()];
+		for (int i = 0; i < roomRefs.size(); i++) {
 			
-			this.rooms[i] = new Room(roomRefs[i]);
+			this.rooms[i] = new Room(roomRefs.get(i));
 			
 		}
 		
@@ -57,25 +45,28 @@ public class Level {
 		private TiledMapTileLayer spawnLayer;
 		public ArrayList<SpawnPoint> powerSpawnPoints; //points to load in powerups.
 		public ArrayList<SpawnPoint> zombieSpawnPoints; //points to load in zombies
-		public ArrayList<Vector2> roomExits;//points to load in new room/level
-		public ArrayList<Vector2> roomEntrances;//points where the player will load in.
+		public ArrayList<Exit> roomExits;//points to load in new room/level
+		public ArrayList<Entrance> roomEntrances;//points where the player will load in.
 		public ArrayList<Vector2> roomBoundaries;//walls of the room
 		protected TmxMapLoader roomLoader;
+		private TiledMapTileLayer playerSpawnLayer;
+		private TiledMapTileLayer roomIndexLayer;
 		
 		private Room(String mapName) {
 			
 			this.mapName = mapName;
-			System.out.println("/map/" + this.mapName + ".tmx");
+			System.out.println("FILE LOADED: /map/" + this.mapName + ".tmx");
 			this.levelMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\" + this.mapName + ".tmx");
 				
 			this.spawnLayer = (TiledMapTileLayer) levelMap.getLayers().get("spawn-layer");
-			
+			this.playerSpawnLayer = (TiledMapTileLayer) levelMap.getLayers().get("player-spawn-layer");
+			this.roomIndexLayer = (TiledMapTileLayer) levelMap.getLayers().get("room-index-layer");
 			
 			this.powerSpawnPoints = new ArrayList<SpawnPoint>();
 			this.zombieSpawnPoints = new ArrayList<SpawnPoint>();
 			
-			this.roomExits = new ArrayList<Vector2>();
-			this.roomEntrances = new ArrayList<Vector2>();
+			this.roomExits = new ArrayList<Exit>();
+			this.roomEntrances = new ArrayList<Entrance>();
 			this.roomBoundaries = new ArrayList<Vector2>();
 			this.parseSpawnPoints();
 		}
@@ -98,11 +89,11 @@ public class Level {
 			
 		}
 		
-		public ArrayList<Vector2> getRoomExits(){
+		public ArrayList<Exit> getRoomExits(){
 			return this.roomExits;
 		}
 		
-		public ArrayList<Vector2> getRoomEntrances(){
+		public ArrayList<Entrance> getRoomEntrances(){
 			return this.roomEntrances;
 		}
 		
@@ -124,9 +115,16 @@ public class Level {
 					//This case statement detects the type of tile on the spawn layer. If you need to add more types of spawn point, edit this.
 					switch (spawnLayer.getCell(i, j).getTile().getId()) {
 						
-						case 1: roomExits.add(new Vector2(i,j));
+						case 1: roomExits.add(
+								new Exit(i,j,
+								roomIndexLayer.getCell(i,j).getTile().getId(),
+								playerSpawnLayer.getCell(i, j).getTile().getId()));
+								//Console faff
 								System.out.println("Exit added at: " + String.valueOf(i) + " " + String.valueOf(j));
-								System.out.println(String.valueOf(spawnLayer.getCell(i, j).getTile().getId()));
+								System.out.println("Points to spawn point " + String.valueOf(playerSpawnLayer.getCell(i, j).getTile().getId())
+								+ " in room " + String.valueOf(roomIndexLayer.getCell(i,j).getTile().getId()));
+								
+								
 								break;
 						//TODO: Replace below with ENUMs
 						//TODO: Replace below with appropriate text when powerUps have been made.
@@ -168,9 +166,10 @@ public class Level {
 	//					case 16:
 	//							break;
 						case 17:
-								roomEntrances.add(new Vector2(i,j));
+								roomEntrances.add(new Entrance(i,j,
+												playerSpawnLayer.getCell(i, j).getTile().getId()));
+								
 								System.out.println("Entrance added at: " + String.valueOf(i) + " " + String.valueOf(j));
-								System.out.println(String.valueOf(spawnLayer.getCell(i, j).getTile().getId()));
 								break;
 						case 28:
 								roomBoundaries.add(new Vector2(i,j));
@@ -192,14 +191,25 @@ public class Level {
 	/*
 	 * SpawnPoint has a position, as well as a type which can be passed to the game manager.
 	 */
-	public class SpawnPoint{
-		
+	public abstract class Point{
 		public Vector2 position;
+		
+		public Point(float x, float y) {
+			this.position = new Vector2(x,y);
+		
+		}
+		
+		public Vector2 getPos() {
+			return this.position;
+		}
+	}
+	public class SpawnPoint extends Point{
+		
 		public EnemyType type;
 		
 		public SpawnPoint(float x, float y, EnemyType type) {
 			
-			this.position = new Vector2(x,y);
+			super(x,y);
 			this.type = type;
 			
 		}
@@ -207,9 +217,27 @@ public class Level {
 			return this.type;
 		}
 		
-		public Vector2 getPos() {
-			return this.position;
-		}
+	}
+	
+	public class Exit extends Point{
 		
+		
+		public int nextRoomIndex; //provides an index for the next room in room refs.
+		public int spawnIndex; //used to choose which spawnpoint in the next room the player will be loaded in at.
+		public Exit(float x, float y, int nextRoom, int spawnIndex) {
+			super(x,y);
+			this.nextRoomIndex = nextRoom;
+			this.spawnIndex = spawnIndex;
+			
+		}
+	}
+	
+	public class Entrance extends Point{
+		
+		public int spawnIndex; //matches an exit from another room.
+		public Entrance(float x,float y, int spawnIndex) {
+			super(x,y);
+			this.spawnIndex = spawnIndex;
+		}
 	}
 }

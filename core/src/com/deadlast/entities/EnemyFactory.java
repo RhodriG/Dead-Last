@@ -17,6 +17,7 @@ public class EnemyFactory {
 	
 	private EnemyFactory(DeadLast game) {
 		this.game = game;
+		
 	}
 	
 	public static EnemyFactory getInstance(DeadLast game) {
@@ -31,6 +32,13 @@ public class EnemyFactory {
 				.setGame(game);
 		switch(type) {
 		case BOMBER:
+			builder.setHealthStat(4)
+			.setSpeedStat(10)
+			.setStrengthStat(5)
+			.setDetectionStat(7)
+			.setSprite(null)
+			.setScoreValue(20)
+			.setBodyRadius(0.4f);
 			break;
 		case FAST:
 			builder.setHealthStat(4)
@@ -51,10 +59,31 @@ public class EnemyFactory {
 				.setBodyRadius(0.75f);
 			break;
 		case HORDLING:
+			builder.setHealthStat(4)
+			.setSpeedStat(10)
+			.setStrengthStat(5)
+			.setDetectionStat(7)
+			.setSprite(null)
+			.setScoreValue(20)
+			.setBodyRadius(0.4f);
 			break;
 		case JOCKEY:
+			builder.setHealthStat(4)
+			.setSpeedStat(10)
+			.setStrengthStat(5)
+			.setDetectionStat(7)
+			.setSprite(null)
+			.setScoreValue(20)
+			.setBodyRadius(0.4f);
 			break;
 		case MR_TICKLE:
+			builder.setHealthStat(4)
+			.setSpeedStat(10)
+			.setStrengthStat(5)
+			.setDetectionStat(7)
+			.setSprite(null)
+			.setScoreValue(20)
+			.setBodyRadius(0.4f);
 			break;
 		case NORMAL:
 			builder.setHealthStat(4)
