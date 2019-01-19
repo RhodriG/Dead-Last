@@ -120,6 +120,15 @@ public class BodyFactory {
 		return boxBody;
 	}
 	
+	/**
+	 * Creates a cone-shaped {@link FixtureDef} sensor to be used as a melee range indicator
+	 * @param body		the {@link Body} to add the fixture to
+	 * @param points	the integer number of points to use in the arc (more is smoother);
+	 * 					must be greater than 1 and less than 8
+	 * @param angle		the f.o.v. angle
+	 * @param radius	the radius of the sector
+	 * @throws IllegalArgumentException	if points parameter is not 1 < x < 8
+	 */
 	public void makeMeleeSensor(Body body, int points, float angle, float radius) {
 		if (points < 2 || points > 7) {
 			throw new IllegalArgumentException("Points must be between 2 and 7 (inclusive)!");

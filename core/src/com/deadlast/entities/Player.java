@@ -1,29 +1,24 @@
 package com.deadlast.entities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
 import com.deadlast.world.FixtureType;
+import com.deadlast.world.WorldContactListener;
 
 /**
- * Represents the player character.
+ * This class represents the player character.
  * @author Xzytl
  *
  */
@@ -31,20 +26,50 @@ public class Player extends Mob {
 	
 	private int stealthStat;
 	
+	/**
+	 * Represents whether the zombies on the map are aware of the player by default.
+	 * Currently unimplemented.
+	 */
 	private boolean isHidden;
 	
+	/**
+	 * Whether the player is attempting to use their attack ability.
+	 */
 	private boolean isAttacking;
 	
+	/**
+	 * Contains the power-ups currently active on the player.
+	 * Float is the number of seconds remaining until the effect expires.
+	 */
 	private Map<PowerUp.Type, Float> activePowerUps;
 	
+	/**
+	 * The time until the player can next be healed by a regen power-up.
+	 */
 	private float healCooldown = 1f;
 	
+	/**
+	 * The time until the player can next use the attack ability.
+	 */
 	private float attackCooldown = 2f;
 	
+	/**
+	 * Contains the enemies currently in range and in front of the player that will be
+	 * damaged when the attack ability is used.
+	 */
 	private Set<Enemy> enemiesInRange;
 	
-	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
-	
+	/**
+	 * Default constructor
+	 * @param game			a reference to the DeadLast game instance
+	 * @param sprite		the graphical sprite to use
+	 * @param bRadius		the radius of the player's hitbox circle
+	 * @param initialPos	the initial position to place the player
+	 * @param healthStat	the player's normal health
+	 * @param speedStat		the player's normal speed
+	 * @param strengthStat	the player's normal strength
+	 * @param stealthStat	the player's normal stealth level
+	 */
 	public Player(
 			DeadLast game, Sprite sprite, float bRadius,
 			Vector2 initialPos, int healthStat, int speedStat, int strengthStat, int stealthStat
@@ -102,21 +127,36 @@ public class Player extends Mob {
 		shape.dispose();
 	}
 	
+	/**
+	 * Called by {@link WorldContactListener} when the player makes contact with a power-up.
+	 * @param powerUp the power-up the user obtained
+	 */
 	public void onPickup(PowerUp powerUp) {
 		System.out.println("Picked up power-up: " + powerUp.getType());
 		activePowerUps.put(powerUp.getType(), 15f);
 	}
 	
+	/**
+	 * Called by {@link WorldContactListener} when an enemy enters the player's effective melee zone.
+	 * @param enemy
+	 */
 	public void onMeleeRangeEntered(Enemy enemy) {
-		System.out.println("Enemy entered melee range");
 		this.enemiesInRange.add(enemy);
 	}
 	
+	/**
+	 * Called by {@link WorldContactListener} when an enemy leaves the player's effective melee zone.
+	 * @param enemy
+	 */
 	public void onMeleeRangeLeft(Enemy enemy) {
-		System.out.println("Enemy left melee range");
 		this.enemiesInRange.remove(enemy);
 	}
 	
+	/**
+	 * Convenience method to check whether a player has a particular active power-up
+	 * @param type
+	 * @return
+	 */
 	public boolean isPowerUpActive(PowerUp.Type type) {
 		return activePowerUps.containsKey(type);
 	}
