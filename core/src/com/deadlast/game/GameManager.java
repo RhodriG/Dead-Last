@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -57,6 +58,8 @@ public class GameManager implements Disposable {
 	private SpriteBatch batch;
 	
 	private Hud hud;
+	
+	private TiledMapRenderer tiledMapRenderer;
 	
 	private int totalScore;
 	
@@ -345,6 +348,13 @@ public class GameManager implements Disposable {
 		entities.forEach(entity -> entity.render(batch));
 		batch.end();
 		hud.stage.draw();
+		/*
+		 * First param: projection matrix
+		 * 2nd and 3rd: x and y coords for the bottom left corner of the map.
+		 * 4th and 5th: x and y dimension of a portion of the map. (eg. input of 3f,3f will render 3x3 box relative to the map)
+		 */
+		tiledMapRenderer.setView(gameCamera.combined, 0f,0f,200f,200f);
+		tiledMapRenderer.render();
 	}
 
 	@Override
