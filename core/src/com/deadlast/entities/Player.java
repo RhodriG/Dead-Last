@@ -1,17 +1,25 @@
 package com.deadlast.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
+import com.deadlast.world.BodyFactory;
 import com.deadlast.world.FixtureType;
 
 /**
@@ -25,9 +33,15 @@ public class Player extends Mob {
 	
 	private boolean isHidden;
 	
+	private boolean isAttacking;
+	
 	private Map<PowerUp.Type, Float> activePowerUps;
 	
 	private float healCooldown = 1f;
+	
+	private float attackCooldown = 2f;
+	
+	private Set<Enemy> enemiesInRange;
 	
 	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
 	
@@ -39,10 +53,19 @@ public class Player extends Mob {
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
 		this.activePowerUps = new HashMap<>();
+		this.enemiesInRange = new HashSet<>();
 	}
 	
 	public int getStealthStat() {
 		return this.stealthStat;
+	}
+	
+	public boolean isAttacking() {
+		return isAttacking;
+	}
+	
+	public void isAttacking(boolean bool) {
+		this.isAttacking = bool;
 	}
 	
 	@Override
@@ -69,7 +92,12 @@ public class Player extends Mob {
 		
 		b2body = world.createBody(bDef);
 		b2body.createFixture(fDef).setUserData(FixtureType.PLAYER);
+		
+		BodyFactory bFactory = BodyFactory.getInstance(world);
+		bFactory.makeMeleeSensor(b2body, 7, 50, 1f);
+		
 		b2body.setUserData(this);
+		b2body.setSleepingAllowed(false);
 
 		shape.dispose();
 	}
@@ -77,6 +105,16 @@ public class Player extends Mob {
 	public void onPickup(PowerUp powerUp) {
 		System.out.println("Picked up power-up: " + powerUp.getType());
 		activePowerUps.put(powerUp.getType(), 15f);
+	}
+	
+	public void onMeleeRangeEntered(Enemy enemy) {
+		System.out.println("Enemy entered melee range");
+		this.enemiesInRange.add(enemy);
+	}
+	
+	public void onMeleeRangeLeft(Enemy enemy) {
+		System.out.println("Enemy left melee range");
+		this.enemiesInRange.remove(enemy);
 	}
 	
 	public boolean isPowerUpActive(PowerUp.Type type) {
@@ -100,6 +138,15 @@ public class Player extends Mob {
 				activePowerUps.remove(entry.getKey());
 				System.out.println(entry.getKey() + " expired.");
 			}
+		}
+		if (isAttacking) {
+			if (attackCooldown - delta <= 0) {
+				enemiesInRange.forEach(e -> e.applyDamage(this.getStrength()));
+				attackCooldown = 2f;
+			} else {
+				attackCooldown -= delta;
+			}
+			
 		}
 	}
 	

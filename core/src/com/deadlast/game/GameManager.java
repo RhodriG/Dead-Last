@@ -324,7 +324,9 @@ public class GameManager implements Disposable {
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
 		}
 		if (controller.isSpaceDown) {
-			
+			player.isAttacking(true);
+		} else {
+			player.isAttacking(false);
 		}
 		
 		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
