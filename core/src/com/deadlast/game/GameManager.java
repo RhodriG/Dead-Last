@@ -27,6 +27,8 @@ import com.deadlast.stages.Hud;
 import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
+import box2dLight.RayHandler;
+
 /**
  * 
  * @author Xzytl
@@ -57,6 +59,7 @@ public class GameManager implements Disposable {
 	private SpriteBatch batch;
 	
 	private Hud hud;
+	private RayHandler rayHandler;
 	
 	private int totalScore;
 	
@@ -100,6 +103,7 @@ public class GameManager implements Disposable {
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
+		rayHandler = new RayHandler(world);
 		
 		hud = new Hud(game);
 		
@@ -131,6 +135,7 @@ public class GameManager implements Disposable {
 		world.dispose();
 		hud.dispose();
 		debugRenderer.dispose();
+		rayHandler.dispose();
 		totalScore += score;
 	}
 	
@@ -208,7 +213,7 @@ public class GameManager implements Disposable {
 	 * @param powerUp the power-up to add
 	 */
 	public void addPowerUp(PowerUp.Type type, Vector2 initialPos) {
-		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/player.png"))), 0.25f, initialPos, type);
+		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/regen_powerup.png"))), 0.25f, initialPos, type);
 		powerUp.defineBody();
 		this.powerUps.add(powerUp);
 		this.entities.add(powerUp);
@@ -229,6 +234,10 @@ public class GameManager implements Disposable {
 	
 	public KeyboardController getController() {
 		return controller;
+	}
+	
+	public RayHandler getRayHandler() {
+		return rayHandler;
 	}
 	
 	/**
@@ -342,6 +351,8 @@ public class GameManager implements Disposable {
 	 */
 	public void render() {
 		if (batch == null) return;
+		rayHandler.setCombinedMatrix(gameCamera);
+		rayHandler.updateAndRender();
 		batch.setProjectionMatrix(gameCamera.combined);
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
@@ -353,6 +364,7 @@ public class GameManager implements Disposable {
 	public void dispose() {
 		world.dispose();
 		debugRenderer.dispose();
+		rayHandler.dispose();
 	}
 
 }
