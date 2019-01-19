@@ -3,6 +3,9 @@ package com.deadlast.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.deadlast.entities.Entity;
 import com.deadlast.entities.PowerUp;
@@ -24,6 +27,16 @@ public class Level {
 	private Vector2 playerSpawn;
 	private List<SpawnPoint<Enemy.Type>> enemySpawns;
 	private List<SpawnPoint<PowerUp.Type>> powerUpSpawns;
+	public List<Exit> roomExits;//points to load in new room/level
+	public List<Entrance> roomEntrances;//points where the player will load in.
+	
+	private String mapName;	
+	private TiledMap levelMap;
+	private TiledMapTileLayer spawnLayer;
+	
+	public ArrayList<Vector2> roomBoundaries;//walls of the room
+	protected TmxMapLoader levelLoader;
+	private TiledMapTileLayer playerSpawnLayer;
 	
 	private GameManager gameManager;
 	
