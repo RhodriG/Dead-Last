@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -60,7 +61,8 @@ public class Level {
 	
 	public void parseMap() {
 	
-			this.levelMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\" + this.mapName + ".tmx");
+			this.levelMap = new TmxMapLoader(new InternalFileHandleResolver()).load("maps/Level1.tmx");
+			//this.levelMap = new TmxMapLoader(new ExternalFileHandleResolver()).load("Dead-Last\\core\\assets\\maps\\" + this.mapName + ".tmx");
 			System.out.println("FILE LOADED: /map/" + this.mapName + ".tmx");
 			this.spawnTileSetOffset = (Integer) this.levelMap.getTileSets().getTileSet("SpawnPointTileset").getProperties().get("firstgid");
 			System.out.println(String.valueOf(this.spawnTileSetOffset));
