@@ -1,6 +1,7 @@
 package com.deadlast.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +15,8 @@ import com.deadlast.world.BodyFactory;
 import com.deadlast.world.FixtureType;
 import com.deadlast.world.WorldContactListener;
 
+import box2dLight.ConeLight;
+
 /**
  * A hostile mob that will attempt to damage the player.
  * @author Xzytl
@@ -21,6 +24,11 @@ import com.deadlast.world.WorldContactListener;
  */
 public class Enemy extends Mob {
 	
+	/**
+	 * Types of enemy, used with {@link BodyFactory}.
+	 * @author Xzytl
+	 *
+	 */
 	public enum Type {
 		HEAVY,
 		FAST,
@@ -43,6 +51,8 @@ public class Enemy extends Mob {
 	 * Whether the player is close enough to the player to attack
 	 */
 	private boolean inMeleeRange = false;
+	
+	private ConeLight coneLight;
 
 	public Enemy(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
@@ -75,6 +85,9 @@ public class Enemy extends Mob {
 		BodyFactory bFactory = BodyFactory.getInstance(world);
 		bFactory.makeConeSensor(b2body, 7, 70, 5f);
 		bFactory.makeHearingSensor(b2body, this.bRadius + ((0.1f * (float)this.detectionStat)) + 0.5f);
+		
+		coneLight = new ConeLight(gameManager.getRayHandler(), 7, Color.RED, 6, b2body.getPosition().x, b2body.getPosition().y, b2body.getAngle() + 90, 35);
+		coneLight.attachToBody(b2body, 0, 0, 90);
 		
 		b2body.setUserData(this);
 
