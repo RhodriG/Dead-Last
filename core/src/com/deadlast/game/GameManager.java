@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -114,7 +115,7 @@ public class GameManager implements Disposable {
 		time = 0;
 		
 		Level level = new Level(game);
-		level.load();
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(level.load());
 		
 		player = new Player.Builder()
 				.setGame(game)
