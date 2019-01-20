@@ -188,8 +188,6 @@ public class Player extends Mob {
 			if (entry.getValue() - delta >= 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
 			} else {
-				// Java likes throwing ConcurrentModificationException's here, so can't use remove
-				// until I find a fix
 				activePowerUps.remove(entry.getKey());
 				System.out.println(entry.getKey() + " expired.");
 			}
@@ -203,6 +201,12 @@ public class Player extends Mob {
 			}
 			
 		}
+	}
+	
+	@Override
+	public void delete() {
+		super.delete();
+		coneLight.dispose();
 	}
 	
 	public static class Builder {

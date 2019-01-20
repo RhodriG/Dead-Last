@@ -155,6 +155,12 @@ public class Enemy extends Mob {
 		}
 	}
 	
+	@Override
+	public void delete() {
+		super.delete();
+		coneLight.dispose();
+	}
+	
 	/**
 	 * Utility for building Enemy instances.
 	 * @author Xzytl
