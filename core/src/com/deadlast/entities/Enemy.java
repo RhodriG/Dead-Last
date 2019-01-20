@@ -50,8 +50,6 @@ public class Enemy extends Mob {
 	 * Whether the player is close enough to the player to attack
 	 */
 	private boolean inMeleeRange = false;
-	
-	private ConeLight coneLight;
 
 	public Enemy(DeadLast game, int scoreValue, Sprite sprite, float bRadius, Vector2 initialPos,
 			int healthStat, int speedStat, int strengthStat, int detectionStat) {
@@ -153,12 +151,6 @@ public class Enemy extends Mob {
 		} else {
 			attackCooldown -= delta;
 		}
-	}
-	
-	@Override
-	public void delete() {
-		super.delete();
-		coneLight.dispose();
 	}
 	
 	/**

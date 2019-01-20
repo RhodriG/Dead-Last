@@ -63,8 +63,6 @@ public class Player extends Mob {
 	 */
 	private Set<Enemy> enemiesInRange;
 	
-	private ConeLight coneLight;
-	
 	/**
 	 * Default constructor
 	 * @param game			a reference to the DeadLast game instance
@@ -201,12 +199,6 @@ public class Player extends Mob {
 			}
 			
 		}
-	}
-	
-	@Override
-	public void delete() {
-		super.delete();
-		coneLight.dispose();
 	}
 	
 	public static class Builder {

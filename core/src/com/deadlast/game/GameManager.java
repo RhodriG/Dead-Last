@@ -21,6 +21,7 @@ import com.deadlast.controllers.KeyboardController;
 import com.deadlast.entities.Enemy;
 import com.deadlast.entities.EnemyFactory;
 import com.deadlast.entities.Entity;
+import com.deadlast.entities.Mob;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PlayerType;
 import com.deadlast.entities.PowerUp;
@@ -113,11 +114,19 @@ public class GameManager implements Disposable {
 	 */
 	public void loadLevel() {
 		System.out.println("Loading level...");
+		if (world != null) {
+			world.dispose();
+		}
 		world = new World(Vector2.Zero, true);
+		System.out.println("Reloaded world");
 		world.setContactListener(new WorldContactListener());
+		System.out.println("ContactListener updated");
 		debugRenderer = new Box2DDebugRenderer();
+		System.out.println("DebugRenderer updated");
 		rayHandler = new RayHandler(world);
+		System.out.println("RayHandler updated");
 		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.1f);
+		System.out.println("Reinitialised box2d variables");
 		
 		hud = new Hud(game);
 		
@@ -195,6 +204,10 @@ public class GameManager implements Disposable {
 		return playerType;
 	}
 	
+	/**
+	 * Sets the player's spawn location in the level
+	 * @param playerSpawn
+	 */
 	public void setPlayerSpawn(Vector2 playerSpawn) {
 		this.playerSpawn = playerSpawn;
 	}
@@ -211,16 +224,6 @@ public class GameManager implements Disposable {
 	}
 	
 	/**
-	 * Adds an enemy or multiple enemies to the list of enemies and entities.
-	 * @param enemies	the enemies to add
-	 */
-//	public void addEnemies(Enemy... enemies) {
-//		for (Enemy enemy : enemies) {
-//			addEnemy(enemy);
-//		}
-//	}
-	
-	/**
 	 * Removes an enemy from the list of entities and the list of enemies.
 	 * @param enemy	the enemy to remove
 	 */
@@ -234,10 +237,6 @@ public class GameManager implements Disposable {
 	 * @param powerUp the power-up to add
 	 */
 	public void addPowerUp(PowerUp.Type type, Vector2 initialPos) {
-//		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/regen_powerup.png"))), 0.25f, initialPos, type);
-//		powerUp.defineBody();
-//		this.powerUps.add(powerUp);
-//		this.entities.add(powerUp);
 		PowerUp powerUp = powerUpFactory.get(type).setInitialPosition(initialPos).build();
 		powerUp.defineBody();
 		this.powerUps.add(powerUp);
@@ -306,7 +305,11 @@ public class GameManager implements Disposable {
 	}
 	
 	public void update(float delta) {
-		if(!levelLoaded || !gameRunning) return;
+		if(!gameRunning) return;
+		if(!levelLoaded) {
+			transferLevel();
+			return;
+		}
 		if(gameCamera == null || batch == null) return;
 		if (player.getHealth() <= 0) {
 			gameRunning  = false;
@@ -324,7 +327,13 @@ public class GameManager implements Disposable {
 		entities.forEach(entity -> entity.update(delta));
 		// Fetch and delete dead entities
 		List<Entity> deadEntities = entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).collect(Collectors.toList());
-		deadEntities.forEach(e -> e.delete());
+		deadEntities.forEach(e -> {
+			if (e instanceof Mob) {
+				((Mob)e).delete();
+			} else {
+				e.delete();
+			}
+		});
 		deadEntities.forEach(e -> this.score += (e.getScoreValue() * getScoreMultiplier()));
 		deadEntities.forEach(e -> entities.remove(e));
 		
@@ -395,6 +404,9 @@ public class GameManager implements Disposable {
 		totalScore += score;
 		// clearLevel();
 		levelNum += 1;
+	}
+	
+	public void transferLevel() {
 		if (levelNum < levels.length) {
 			loadLevel();
 		} else {
