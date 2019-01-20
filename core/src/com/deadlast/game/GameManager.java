@@ -69,8 +69,9 @@ public class GameManager implements Disposable {
 	
 	private int totalScore;
 	
-	private String[] levels = {"test"};
+	private String[] levels = {"level1", "level2", "level3"};
 	private Level level;
+	private int levelNum = 0;
 	
 	private int score;
 	private float time;
@@ -127,9 +128,9 @@ public class GameManager implements Disposable {
 		score = 0;
 		time = 0;
 		
-		level = new Level(game,levels[0]);
+		level = new Level(game,levels[levelNum]);
 		
-		this.hud.setLevelName(levels[0]);
+		this.hud.setLevelName(levels[levelNum]);
 		
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(level.load(), 1/32f);
 		tiledMapRenderer.setView(gameCamera);
@@ -390,9 +391,17 @@ public class GameManager implements Disposable {
 	}
 	
 	public void levelComplete() {
-		gameRunning  = false;
-		winLevel = 1;
-		game.changeScreen(DeadLast.END);
+		levelLoaded = false;
+		totalScore += score;
+		// clearLevel();
+		levelNum += 1;
+		if (levelNum < levels.length) {
+			loadLevel();
+		} else {
+			gameRunning  = false;
+			winLevel = 1;
+			game.changeScreen(DeadLast.END);
+		}
 	}
 	
 	/**
