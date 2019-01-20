@@ -7,6 +7,7 @@ public enum FixtureType {
 	POWERUP,
 	HEARING_SENSOR,
 	VISUAL_SENSOR,
-	MELEE_SENSOR
+	MELEE_SENSOR,
+	END_ZONE
 
 }

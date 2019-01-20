@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -16,6 +18,8 @@ import com.deadlast.game.GameManager;
 import com.deadlast.world.BodyFactory;
 import com.deadlast.world.FixtureType;
 import com.deadlast.world.WorldContactListener;
+
+import box2dLight.ConeLight;
 
 /**
  * This class represents the player character.
@@ -59,6 +63,8 @@ public class Player extends Mob {
 	 */
 	private Set<Enemy> enemiesInRange;
 	
+	private ConeLight coneLight;
+	
 	/**
 	 * Default constructor
 	 * @param game			a reference to the DeadLast game instance
@@ -77,7 +83,7 @@ public class Player extends Mob {
 		super(game, 0, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
-		this.activePowerUps = new HashMap<>();
+		this.activePowerUps = new ConcurrentHashMap<>();
 		this.enemiesInRange = new HashSet<>();
 	}
 	
@@ -113,13 +119,16 @@ public class Player extends Mob {
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = shape;
 		fDef.filter.categoryBits = Entity.PLAYER;
-		fDef.filter.maskBits = Entity.BOUNDARY | Entity.ENEMY | Entity.POWERUP | Entity.ENEMY_HEARING | Entity.ENEMY_VISION;
+		fDef.filter.maskBits = Entity.BOUNDARY | Entity.ENEMY | Entity.POWERUP | Entity.ENEMY_HEARING | Entity.ENEMY_VISION | Entity.END_ZONE;
 		
 		b2body = world.createBody(bDef);
 		b2body.createFixture(fDef).setUserData(FixtureType.PLAYER);
 		
 		BodyFactory bFactory = BodyFactory.getInstance(world);
 		bFactory.makeMeleeSensor(b2body, 7, 50, 1f);
+		
+		coneLight = new ConeLight(gameManager.getRayHandler(), 7, Color.BLUE, 2, b2body.getPosition().x, b2body.getPosition().y, b2body.getAngle() + 90, 35);
+		coneLight.attachToBody(b2body, 0, 0, 90);
 		
 		b2body.setUserData(this);
 		b2body.setSleepingAllowed(false);
@@ -161,6 +170,10 @@ public class Player extends Mob {
 		return activePowerUps.containsKey(type);
 	}
 	
+	public void onEndZoneReached() {
+		gameManager.levelComplete();
+	}
+	
 	@Override
 	public void update(float delta) {
 		if (isPowerUpActive(PowerUp.Type.REGEN)) {
@@ -175,6 +188,8 @@ public class Player extends Mob {
 			if (entry.getValue() - delta >= 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
 			} else {
+				// Java likes throwing ConcurrentModificationException's here, so can't use remove
+				// until I find a fix
 				activePowerUps.remove(entry.getKey());
 				System.out.println(entry.getKey() + " expired.");
 			}

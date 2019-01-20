@@ -57,6 +57,8 @@ public class GameScreen extends DefaultScreen {
 		gameManager.setGameCamera(camera);
 		gameManager.setSpriteBatch(batch);
 		
+		gameManager.setGameRunning(true);
+		
 		gameManager.loadLevel();
 		
 	}

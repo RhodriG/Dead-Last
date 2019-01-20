@@ -37,6 +37,7 @@ public class PowerUpFactory {
 			break;
 		case SPEED:
 			builder.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/speed_powerup.png"))));
+			break;
 		default:
 			builder.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/blank_powerup.png"))));
 			break;

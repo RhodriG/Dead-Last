@@ -81,6 +81,10 @@ public class Hud implements Disposable {
 		healthValLabel.setText(Integer.toString(health));
 	}
 	
+	public void setLevelName(String name) {
+		levelLabel.setText(name);
+	}
+	
 	@Override
 	public void dispose() {
 		stage.dispose();

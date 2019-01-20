@@ -46,6 +46,8 @@ public class WorldContactListener implements ContactListener {
 		case MELEE_SENSOR:
 			meleeSensorContactBegun(fA, fTypeB, fB);
 			break;
+		case END_ZONE:
+			endZoneContactBegun(fA, fTypeB, fB);
 		default:
 			break;
 		}
@@ -77,6 +79,8 @@ public class WorldContactListener implements ContactListener {
 			((Player)fA.getBody().getUserData()).onPickup((PowerUp)fB.getBody().getUserData());
 			((PowerUp)fB.getBody().getUserData()).setAlive(false);
 			break;
+		case END_ZONE:
+			((Player)fA.getBody().getUserData()).onEndZoneReached();
 		default:
 			break;
 		}
@@ -107,6 +111,16 @@ public class WorldContactListener implements ContactListener {
 		switch(fTypeB) {
 		case ENEMY:
 			((Player)fA.getBody().getUserData()).onMeleeRangeEntered((Enemy)fB.getBody().getUserData());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void endZoneContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Player)fB.getBody().getUserData()).onEndZoneReached();
 			break;
 		default:
 			break;
