@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.deadlast.entities.Enemy;
-import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PowerUp;
 

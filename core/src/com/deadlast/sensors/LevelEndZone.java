@@ -16,6 +16,7 @@ import box2dLight.PointLight;
 
 public class LevelEndZone {
 	
+	@SuppressWarnings("unused")
 	private DeadLast game;
 	private World world;
 	private Body b2body;

@@ -1,6 +1,5 @@
 package com.deadlast.entities;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +33,7 @@ public class Player extends Mob {
 	 * Represents whether the zombies on the map are aware of the player by default.
 	 * Currently unimplemented.
 	 */
+	@SuppressWarnings("unused")
 	private boolean isHidden;
 	
 	/**
