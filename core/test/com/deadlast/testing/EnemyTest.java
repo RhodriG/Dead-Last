@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector2;
 import com.deadlast.entities.Enemy;
-import com.deadlast.entities.Player;
 
 public class EnemyTest {
 	
