@@ -80,7 +80,6 @@ public class GameManager implements Disposable {
 	private int winLevel = 0;
 	
 	private GameManager(DeadLast game) {
-		System.out.println("Created GameManager instance!");
 		this.game = game;
 		
 		controller = new KeyboardController();
@@ -113,20 +112,16 @@ public class GameManager implements Disposable {
 	 * Creates/refreshes parameters required when a new level is loaded.
 	 */
 	public void loadLevel() {
-		System.out.println("Loading level...");
 		if (world != null) {
 			world.dispose();
 		}
 		world = new World(Vector2.Zero, true);
-		System.out.println("Reloaded world");
 		world.setContactListener(new WorldContactListener());
-		System.out.println("ContactListener updated");
+
 		debugRenderer = new Box2DDebugRenderer();
-		System.out.println("DebugRenderer updated");
+
 		rayHandler = new RayHandler(world);
-		System.out.println("RayHandler updated");
 		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.1f);
-		System.out.println("Reinitialised box2d variables");
 		
 		hud = new Hud(game);
 		

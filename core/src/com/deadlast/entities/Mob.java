@@ -142,7 +142,6 @@ public abstract class Mob extends Entity {
 	@Override
 	public void delete() {
 		super.delete();
-		System.out.println("Removing coneLight");
 		coneLight.remove(true);
 	}
 	

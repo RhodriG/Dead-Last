@@ -29,7 +29,6 @@ public class GameScreen extends DefaultScreen {
 
 	public GameScreen(DeadLast game) {
 		super(game);
-		System.out.println("Loaded GameScreen");
 		
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / DeadLast.PPM, Gdx.graphics.getHeight() / DeadLast.PPM);
 		gamePort = new ExtendViewport(DeadLast.V_WIDTH / DeadLast.PPM, DeadLast.V_HEIGHT / DeadLast.PPM, camera);

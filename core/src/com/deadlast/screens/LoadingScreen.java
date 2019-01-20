@@ -11,7 +11,6 @@ public class LoadingScreen extends DefaultScreen {
 
 	public LoadingScreen(DeadLast game) {
 		super(game);
-		System.out.println("Loaded LoadingScreen");
 		game.resources.loadImages();
 		game.resources.manager.finishLoading();
 	}

@@ -76,7 +76,6 @@ public class ScoreboardScreen extends DefaultScreen {
 		} catch(Exception e) {
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
-			System.out.println(sw.toString());
 			scoreTable.add(new Label("Unable to load scores from file", skin)).colspan(3);
 		}
 		

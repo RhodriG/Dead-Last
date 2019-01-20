@@ -28,7 +28,6 @@ public class MenuScreen extends DefaultScreen {
 
 	public MenuScreen(DeadLast game) {
 		super(game);
-		System.out.println("Loaded MenuScreen");
 		// Create a new stage, and set it as the input processor
 		stage = new Stage(new ScreenViewport());
 		background = new Texture("ui/background.png");

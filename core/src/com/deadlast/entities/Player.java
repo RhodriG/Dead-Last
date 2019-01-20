@@ -55,7 +55,7 @@ public class Player extends Mob {
 	/**
 	 * The time until the player can next use the attack ability.
 	 */
-	private float attackCooldown = 2f;
+	private float attackCooldown = 0f;
 	
 	/**
 	 * Contains the enemies currently in range and in front of the player that will be
@@ -139,7 +139,6 @@ public class Player extends Mob {
 	 * @param powerUp the power-up the user obtained
 	 */
 	public void onPickup(PowerUp powerUp) {
-		System.out.println("Picked up power-up: " + powerUp.getType());
 		activePowerUps.put(powerUp.getType(), 15f);
 	}
 	
@@ -175,19 +174,17 @@ public class Player extends Mob {
 	@Override
 	public void update(float delta) {
 		if (isPowerUpActive(PowerUp.Type.REGEN)) {
+			healCooldown -= delta;
 			if (healCooldown <= 0 && this.getHealth() < this.getMaxHealth()) {
 				this.setHealth(this.getHealth() + 1);
 				healCooldown = 1f;
-			} else {
-				healCooldown -= delta;
-			}
+			} 
 		}
 		for(Map.Entry<PowerUp.Type, Float> entry : activePowerUps.entrySet()) {
 			if (entry.getValue() - delta >= 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
 			} else {
 				activePowerUps.remove(entry.getKey());
-				System.out.println(entry.getKey() + " expired.");
 			}
 		}
 		if (isAttacking) {
