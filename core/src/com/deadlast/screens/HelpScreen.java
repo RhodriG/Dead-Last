@@ -50,6 +50,8 @@ public class HelpScreen extends DefaultScreen {
 				"Mouse to look around and aim",
 				"Space to attack",
 				"\n",
+				"Enemies have vision cones - if you enter it, they will see you.",
+				"Zombies can also hear you if you come too close to them",
 				"More text here."
 		};
 		

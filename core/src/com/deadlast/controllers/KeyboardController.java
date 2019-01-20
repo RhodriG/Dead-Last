@@ -28,6 +28,10 @@ public class KeyboardController implements InputProcessor {
 	 */
 	public boolean isShiftDown;
 	/**
+	 * Boolean representing whether or not space is held down
+	 */
+	public boolean isSpaceDown;
+	/**
 	 * {@link Vector2} representing the mouse pointer's current location on the screen
 	 */
 	public Vector2 mouseLocation = new Vector2();
@@ -59,6 +63,10 @@ public class KeyboardController implements InputProcessor {
 			break;
 		case Keys.SHIFT_LEFT:
 			isShiftDown = true;
+			keyProcessed = true;
+			break;
+		case Keys.SPACE:
+			isSpaceDown = true;
 			keyProcessed = true;
 			break;
 		}
@@ -94,6 +102,9 @@ public class KeyboardController implements InputProcessor {
 			isShiftDown = false;
 			keyProcessed = true;
 			break;
+		case Keys.SPACE:
+			isSpaceDown = false;
+			keyProcessed = true;
 		}
 		return keyProcessed;
 	}

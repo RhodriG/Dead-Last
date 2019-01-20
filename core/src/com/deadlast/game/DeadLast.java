@@ -19,6 +19,7 @@ public class DeadLast extends Game {
 	private GameScreen gameScreen;
 	private HelpScreen helpScreen;
 	private CharacterScreen charScreen;
+	private EndScreen endScreen;
 	
 	/**
 	 * The number of pixels that represents one metre in the game
@@ -38,6 +39,7 @@ public class DeadLast extends Game {
 	public static final int HELP = 2;
 	public static final int GAME = 3;
 	public static final int CHARACTER = 4;
+	public static final int END = 5;
 	
 	@Override
 	public void create() {
@@ -71,6 +73,10 @@ public class DeadLast extends Game {
 			if (charScreen == null) charScreen = new CharacterScreen(this);
 			this.setScreen(charScreen);
 			break;
+		case END:
+			if (endScreen == null) endScreen = new EndScreen(this);
+			this.setScreen(endScreen);
+			break;
 		}
 	}
 	
@@ -96,6 +102,9 @@ public class DeadLast extends Game {
 		}
 		if (helpScreen != null) {
 			helpScreen.dispose();
+		}
+		if (endScreen != null) {
+			endScreen.dispose();
 		}
 	}
 	

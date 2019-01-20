@@ -19,73 +19,187 @@ public class WorldContactListener implements ContactListener {
 	
 	@Override
 	public void beginContact(Contact contact) {
-		System.out.println("Contact begun!");
 		Fixture fA = contact.getFixtureA();
 		Fixture fB = contact.getFixtureB();
 		
-		if (fA.getUserData() != null && fA.getBody().getUserData() instanceof Entity) {
-			// Alert entity to contact
-		}
-		if (fB.getUserData() != null && fB.getBody().getUserData() instanceof Entity) {
-			// Alert entity to contact
-		}
-
+		if (fA.getUserData() == null || fB.getUserData() == null) return;
 		
-		// Contact between player and enemy
-		if (fA.getBody().getUserData() instanceof Enemy && fB.getBody().getUserData() instanceof Player) {
-			if (!fA.isSensor() && !fB.isSensor()) {
-				((Enemy)fA.getBody().getUserData()).beginContact(fB.getBody());
-			}
-		}
-		if (fB.getBody().getUserData() instanceof Enemy && fA.getBody().getUserData() instanceof Player) {
-			if (!fA.isSensor() && !fB.isSensor()) {
-				((Enemy)fB.getBody().getUserData()).beginContact(fA.getBody());
-			}
-		}
+		FixtureType fTypeA = (FixtureType) fA.getUserData();
+		FixtureType fTypeB = (FixtureType) fB.getUserData();
 		
-		// Player entered enemy sensor
-		if (fA.isSensor() && fB.getBody().getUserData() instanceof Player) {
-			((Enemy)fA.getBody().getUserData()).beginDetection(fB.getBody());
+		System.out.println("Contact begun between fixtures of type " + fTypeA + " and " + fTypeB);
+		
+		switch(fTypeA) {
+		case ENEMY:
+			enemyContactBegun(fA, fTypeB, fB);
+			break;
+		case PLAYER:
+			playerContactBegun(fA, fTypeB, fB);
+			break;
+		case HEARING_SENSOR:
+		case VISUAL_SENSOR:
+			enemySensorContactBegun(fA, fTypeB, fB);
+			break;
+		case POWERUP:
+			powerUpContactBegun(fA, fTypeB, fB);
+			break;
+		case MELEE_SENSOR:
+			meleeSensorContactBegun(fA, fTypeB, fB);
+			break;
+		case END_ZONE:
+			endZoneContactBegun(fA, fTypeB, fB);
+		default:
+			break;
 		}
-		if (fB.isSensor() && fA.getBody().getUserData() instanceof Player) {
+	}
+	
+	public void enemyContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Enemy)fA.getBody().getUserData()).beginContact(fB.getBody());
+			break;
+		case MELEE_SENSOR:
+			((Player)fB.getBody().getUserData()).onMeleeRangeEntered((Enemy)fA.getBody().getUserData());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void playerContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case ENEMY:
+			((Enemy)fB.getBody().getUserData()).beginContact(fA.getBody());
+			break;
+		case HEARING_SENSOR:
+		case VISUAL_SENSOR:
 			((Enemy)fB.getBody().getUserData()).beginDetection(fA.getBody());
-		}
-		
-		// Player picks up powerup
-		if (fA.getBody().getUserData() instanceof Player && fB.getBody().getUserData() instanceof PowerUp) {
+			break;
+		case POWERUP:
 			((Player)fA.getBody().getUserData()).onPickup((PowerUp)fB.getBody().getUserData());
 			((PowerUp)fB.getBody().getUserData()).setAlive(false);
+			break;
+		case END_ZONE:
+			((Player)fA.getBody().getUserData()).onEndZoneReached();
+		default:
+			break;
 		}
-		if (fB.getBody().getUserData() instanceof Player && fA.getBody().getUserData() instanceof PowerUp) {
+	}
+	
+	public void enemySensorContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Enemy)fA.getBody().getUserData()).beginDetection(fB.getBody());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void powerUpContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
 			((Player)fB.getBody().getUserData()).onPickup((PowerUp)fA.getBody().getUserData());
 			((PowerUp)fA.getBody().getUserData()).setAlive(false);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void meleeSensorContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case ENEMY:
+			((Player)fA.getBody().getUserData()).onMeleeRangeEntered((Enemy)fB.getBody().getUserData());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void endZoneContactBegun(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Player)fB.getBody().getUserData()).onEndZoneReached();
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		System.out.println("Contact ended!");
 		Fixture fA = contact.getFixtureA();
 		Fixture fB = contact.getFixtureB();
 		
-		// Contact between player and enemy
-		if (fA.getBody().getUserData() instanceof Enemy && fB.getBody().getUserData() instanceof Player) {
-			if (!fA.isSensor() && !fB.isSensor()) {
-				((Enemy)fA.getBody().getUserData()).endContact(fB.getBody());
-			}
+		if (fA.getUserData() == null || fB.getUserData() == null) return;
+		
+		FixtureType fTypeA = (FixtureType) fA.getUserData();
+		FixtureType fTypeB = (FixtureType) fB.getUserData();
+		
+		System.out.println("Contact lost between fixtures of type " + fTypeA + " and " + fTypeB);
+		
+		switch(fTypeA) {
+		case ENEMY:
+			enemyContactEnded(fA, fTypeB, fB);
+			break;
+		case PLAYER:
+			playerContactEnded(fA, fTypeB, fB);
+			break;
+		case VISUAL_SENSOR:
+			enemySensorContactEnded(fA, fTypeB, fB);
+			break;
+		case MELEE_SENSOR:
+			meleeSensorContactEnded(fA, fTypeB, fB);
+			break;
+		default:
+			break;
 		}
-		if (fB.getBody().getUserData() instanceof Enemy && fA.getBody().getUserData() instanceof Player) {
-			if (!fA.isSensor() && !fB.isSensor()) {
-				((Enemy)fB.getBody().getUserData()).endContact(fA.getBody());
-			}
+	}
+	
+	public void enemyContactEnded(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Enemy)fA.getBody().getUserData()).endContact(fB.getBody());
+			break;
+		case MELEE_SENSOR:
+			((Player)fB.getBody().getUserData()).onMeleeRangeLeft((Enemy)fA.getBody().getUserData());
+			break;
+		default:
+			break;
 		}
-				
-		// Player left enemy sensor
-		if (fA.isSensor() && fB.getBody().getUserData() instanceof Player) {
-			((Enemy)fA.getBody().getUserData()).endDetection(fB.getBody());
-		}
-		if (fB.isSensor() && fA.getBody().getUserData() instanceof Player) {
+	}
+	
+	public void playerContactEnded(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case ENEMY:
+			((Enemy)fB.getBody().getUserData()).endContact(fA.getBody());
+			break;
+		case VISUAL_SENSOR:
 			((Enemy)fB.getBody().getUserData()).endDetection(fA.getBody());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void enemySensorContactEnded(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case PLAYER:
+			((Enemy)fA.getBody().getUserData()).endDetection(fB.getBody());
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void meleeSensorContactEnded(Fixture fA, FixtureType fTypeB, Fixture fB) {
+		switch(fTypeB) {
+		case ENEMY:
+			((Player)fA.getBody().getUserData()).onMeleeRangeLeft((Enemy)fB.getBody().getUserData());
+			break;
+		default:
+			break;
 		}
 	}
 

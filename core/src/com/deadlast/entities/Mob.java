@@ -12,7 +12,7 @@ import com.deadlast.game.DeadLast;
  * @author Xzytl
  *
  */
-public class Mob extends Entity {
+public abstract class Mob extends Entity {
 
 	/**
 	 * Normal maximum health of this mob.
@@ -59,7 +59,7 @@ public class Mob extends Entity {
 	 * Sets the health of the mob.
 	 * @param currentHealth		the health to which the mob should be set
 	 */
-	public void setCurrentHealth(int currentHealth) {
+	public void setHealth(int currentHealth) {
 		this.currentHealth = currentHealth;
 	}
 	
@@ -67,7 +67,7 @@ public class Mob extends Entity {
 	 * Set the speed of the mob.
 	 * @param currentSpeed		the speed to which the mob should be set
 	 */
-	public void setCurrentSpeed(int currentSpeed) {
+	public void setSpeed(int currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 	
@@ -75,7 +75,7 @@ public class Mob extends Entity {
 	 * Set the strength of the mob.
 	 * @param currentStrength	the strength to which the mob should be set
 	 */
-	public void setCurrentStrength(int currentStrength) {
+	public void setStrength(int currentStrength) {
 		this.currentStrength = currentStrength;
 	}
 	
@@ -83,12 +83,24 @@ public class Mob extends Entity {
 		return currentHealth;
 	}
 	
+	public int getMaxHealth() {
+		return healthStat;
+	}
+	
 	public int getSpeed() {
 		return currentSpeed;
 	}
 	
+	public int getMaxSpeed() {
+		return speedStat;
+	}
+	
 	public int getStrength() {
 		return currentStrength;
+	}
+	
+	public int getMaxStrength() {
+		return strengthStat;
 	}
 	
 	/**
@@ -101,23 +113,22 @@ public class Mob extends Entity {
 	}
 
 	@Override
-	public void defineBody() {
-		BodyDef bDef = new BodyDef();
-		bDef.type = BodyDef.BodyType.DynamicBody;
-		bDef.position.set(initialPos);
-		
-		CircleShape shape = new CircleShape();
-		shape.setRadius(this.bRadius);
-		
-		FixtureDef fDef = new FixtureDef();
-		fDef.shape = shape;
-		
-		b2body = world.createBody(bDef);
-		b2body.createFixture(fDef);
-		b2body.setUserData(this);
-
-		shape.dispose();
-	}
+	public abstract void defineBody();
+//		BodyDef bDef = new BodyDef();
+//		bDef.type = BodyDef.BodyType.DynamicBody;
+//		bDef.position.set(initialPos);
+//		
+//		CircleShape shape = new CircleShape();
+//		shape.setRadius(this.bRadius);
+//		
+//		FixtureDef fDef = new FixtureDef();
+//		fDef.shape = shape;
+//		
+//		b2body = world.createBody(bDef);
+//		b2body.createFixture(fDef);
+//		b2body.setUserData(this);
+//
+//		shape.dispose();
 	
 	@Override
 	public void update(float delta) {

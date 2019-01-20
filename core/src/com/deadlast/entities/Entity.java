@@ -52,6 +52,16 @@ public abstract class Entity {
 	 */
 	protected boolean alive = true;
 	
+	public static final int BOUNDARY = 0x0001;
+	public static final int PLAYER = 0x0002;
+	public static final int PLAYER_MELEE = 0x0004;
+	public static final int ENEMY = 0x0008;
+	public static final int ENEMY_VISION = 0x0010;
+	public static final int ENEMY_HEARING = 0x0020;
+	public static final int POWERUP = 0x0040;
+	public static final int END_ZONE = 0x0080;
+	
+	
 	/**
 	 * Creates an entity with a score value and a specific sprite.
 	 * @param game			the instance of the game the entity belongs to

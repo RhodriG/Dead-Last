@@ -7,7 +7,11 @@ import java.util.stream.Collectors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -20,10 +24,19 @@ import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PlayerType;
 import com.deadlast.entities.PowerUp;
+import com.deadlast.entities.PowerUpFactory;
 import com.deadlast.screens.GameScreen;
 import com.deadlast.stages.Hud;
+import com.deadlast.world.Level;
 import com.deadlast.world.WorldContactListener;
 
+import box2dLight.RayHandler;
+
+/**
+ * 
+ * @author Xzytl
+ *
+ */
 public class GameManager implements Disposable {
 	
 	private static GameManager instance;
@@ -32,6 +45,8 @@ public class GameManager implements Disposable {
 	private boolean gameRunning = false;
 	
 	private World world;
+	private TiledMapRenderer tiledMapRenderer;
+	private boolean levelLoaded = false;
 	private Box2DDebugRenderer debugRenderer;
 	private boolean showDebugRenderer = false;
 	
@@ -39,20 +54,28 @@ public class GameManager implements Disposable {
 	
 	private PlayerType playerType;
 	private Player player;
+	private Vector2 playerSpawn;
 	private ArrayList<Entity> entities;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Entity> powerUps;
 	private EnemyFactory enemyFactory;
+	private PowerUpFactory powerUpFactory;
 	
 	private OrthographicCamera gameCamera;
 	private SpriteBatch batch;
 	
 	private Hud hud;
+	private RayHandler rayHandler;
 	
 	private int totalScore;
 	
+	private String[] levels = {"test"};
+	private Level level;
+	
 	private int score;
 	private float time;
+	
+	private int winLevel = 0;
 	
 	private GameManager(DeadLast game) {
 		System.out.println("Created GameManager instance!");
@@ -60,6 +83,7 @@ public class GameManager implements Disposable {
 		
 		controller = new KeyboardController();
 		enemyFactory = EnemyFactory.getInstance(game);
+		powerUpFactory = PowerUpFactory.getInstance(game);
 	}
 	
 	/**
@@ -91,6 +115,8 @@ public class GameManager implements Disposable {
 		world = new World(Vector2.Zero, true);
 		world.setContactListener(new WorldContactListener());
 		debugRenderer = new Box2DDebugRenderer();
+		rayHandler = new RayHandler(world);
+		rayHandler.setAmbientLight(0.2f, 0.2f, 0.2f, 0.1f);
 		
 		hud = new Hud(game);
 		
@@ -101,12 +127,35 @@ public class GameManager implements Disposable {
 		score = 0;
 		time = 0;
 		
+		level = new Level(game,levels[0]);
+		
+		this.hud.setLevelName(levels[0]);
+		
+		tiledMapRenderer = new OrthogonalTiledMapRenderer(level.load(), 1/32f);
+		tiledMapRenderer.setView(gameCamera);
+		
+		player = new Player.Builder()
+				.setGame(game)
+				.setSprite(new Sprite(new Texture(Gdx.files.internal("entities/player.png"))))
+				.setBodyRadius(playerType.getBodyRadius())
+				.setInitialPosition(playerSpawn)
+				.setHealthStat(playerType.getHealth())
+				.setSpeedStat(playerType.getSpeed())
+				.setStealthStat(playerType.getStealth())
+				.setStrengthStat(playerType.getStrength())
+				.build();
+		player.defineBody();
+		entities.add(player);
+		levelLoaded = true;
 	}
 	
 	public void clearLevel() {
+		levelLoaded = false;
 		world.dispose();
 		hud.dispose();
 		debugRenderer.dispose();
+		rayHandler.dispose();
+		level.dispose();
 		totalScore += score;
 	}
 	
@@ -145,11 +194,17 @@ public class GameManager implements Disposable {
 		return playerType;
 	}
 	
+	public void setPlayerSpawn(Vector2 playerSpawn) {
+		this.playerSpawn = playerSpawn;
+	}
+	
 	/**
 	 * Adds an enemy to the list of enemies and entities.
 	 * @param enemy	the enemy to add
 	 */
-	public void addEnemy(Enemy enemy) {
+	public void addEnemy(Enemy.Type type, Vector2 initialPos) {
+		Enemy enemy = enemyFactory.get(type).setInitialPosition(initialPos).build();
+		enemy.defineBody();
 		this.enemies.add(enemy);
 		this.entities.add(enemy);
 	}
@@ -158,11 +213,11 @@ public class GameManager implements Disposable {
 	 * Adds an enemy or multiple enemies to the list of enemies and entities.
 	 * @param enemies	the enemies to add
 	 */
-	public void addEnemies(Enemy... enemies) {
-		for (Enemy enemy : enemies) {
-			addEnemy(enemy);
-		}
-	}
+//	public void addEnemies(Enemy... enemies) {
+//		for (Enemy enemy : enemies) {
+//			addEnemy(enemy);
+//		}
+//	}
 	
 	/**
 	 * Removes an enemy from the list of entities and the list of enemies.
@@ -177,7 +232,13 @@ public class GameManager implements Disposable {
 	 * Adds a power-up to the list of power-up's and entities
 	 * @param powerUp the power-up to add
 	 */
-	public void addPowerUp(PowerUp powerUp) {
+	public void addPowerUp(PowerUp.Type type, Vector2 initialPos) {
+//		PowerUp powerUp = new PowerUp(game, 10, new Sprite(new Texture(Gdx.files.internal("entities/regen_powerup.png"))), 0.25f, initialPos, type);
+//		powerUp.defineBody();
+//		this.powerUps.add(powerUp);
+//		this.entities.add(powerUp);
+		PowerUp powerUp = powerUpFactory.get(type).setInitialPosition(initialPos).build();
+		powerUp.defineBody();
 		this.powerUps.add(powerUp);
 		this.entities.add(powerUp);
 	}
@@ -197,6 +258,18 @@ public class GameManager implements Disposable {
 	
 	public KeyboardController getController() {
 		return controller;
+	}
+	
+	public RayHandler getRayHandler() {
+		return rayHandler;
+	}
+	
+	public int getTotalScore() {
+		return totalScore;
+	}
+	
+	public int getWinLevel() {
+		return winLevel;
 	}
 	
 	/**
@@ -224,8 +297,21 @@ public class GameManager implements Disposable {
 		return 1;
 	}
 	
+	public float getSpeedMultiplier() {
+		if (player != null && player.isPowerUpActive(PowerUp.Type.SPEED)) {
+			return 1.5f;
+		}
+		return 1f;
+	}
+	
 	public void update(float delta) {
+		if(!levelLoaded || !gameRunning) return;
 		if(gameCamera == null || batch == null) return;
+		if (player.getHealth() <= 0) {
+			gameRunning  = false;
+			winLevel = -1;
+			game.changeScreen(DeadLast.END);
+		}
 		handleInput();
 		// Step through the physics world simulation
 		world.step(1/60f, 6, 2);
@@ -233,6 +319,7 @@ public class GameManager implements Disposable {
 		gameCamera.position.x = player.getBody().getPosition().x;
 		gameCamera.position.y = player.getBody().getPosition().y;
 		gameCamera.update();
+		tiledMapRenderer.setView(gameCamera);
 		entities.forEach(entity -> entity.update(delta));
 		// Fetch and delete dead entities
 		List<Entity> deadEntities = entities.stream().filter(e -> (!e.isAlive() && !(e instanceof Player))).collect(Collectors.toList());
@@ -258,13 +345,19 @@ public class GameManager implements Disposable {
 			showDebugRenderer = !showDebugRenderer;
 		}
 		
+		if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+			System.out.println("Player loc: " + player.getPos().x + "," + player.getPos().y);
+		}
+		
 		float speed;
 		
 		if (controller.isShiftDown) {
-			speed = player.getSpeed() * 2.5f;
+			speed = player.getSpeed() * 0.5f;
 		} else {
 			speed = player.getSpeed();
 		}
+		
+		speed *= getSpeedMultiplier();
 		
 		if (controller.left) {
 			//player.applyForceToCenter(-10, 0, true);
@@ -282,6 +375,11 @@ public class GameManager implements Disposable {
 			//player.applyForceToCenter(0, -10, true);
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, -1 * speed);
 		}
+		if (controller.isSpaceDown) {
+			player.isAttacking(true);
+		} else {
+			player.isAttacking(false);
+		}
 		
 		if ((!controller.up && !controller.down) || (controller.up && controller.down)) {
 			player.getBody().setLinearVelocity(player.getBody().getLinearVelocity().x, 0);
@@ -291,15 +389,26 @@ public class GameManager implements Disposable {
 		}
 	}
 	
+	public void levelComplete() {
+		gameRunning  = false;
+		winLevel = 1;
+		game.changeScreen(DeadLast.END);
+	}
+	
 	/**
 	 * Renders entities held by this game manager.
 	 */
 	public void render() {
+		if (!levelLoaded || !gameRunning) return;
 		if (batch == null) return;
+		tiledMapRenderer.render(level.getBackgroundLayers());
 		batch.setProjectionMatrix(gameCamera.combined);
 		batch.begin();
 		entities.forEach(entity -> entity.render(batch));
 		batch.end();
+		rayHandler.setCombinedMatrix(gameCamera);
+		rayHandler.updateAndRender();
+		tiledMapRenderer.render(level.getForegroundLayers());
 		hud.stage.draw();
 	}
 
@@ -307,6 +416,7 @@ public class GameManager implements Disposable {
 	public void dispose() {
 		world.dispose();
 		debugRenderer.dispose();
+		rayHandler.dispose();
 	}
 
 }

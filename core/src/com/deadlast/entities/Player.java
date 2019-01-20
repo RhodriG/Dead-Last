@@ -1,9 +1,12 @@
 package com.deadlast.entities;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,9 +15,14 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
+import com.deadlast.world.BodyFactory;
+import com.deadlast.world.FixtureType;
+import com.deadlast.world.WorldContactListener;
+
+import box2dLight.ConeLight;
 
 /**
- * Represents the player character.
+ * This class represents the player character.
  * @author Xzytl
  *
  */
@@ -22,12 +30,52 @@ public class Player extends Mob {
 	
 	private int stealthStat;
 	
+	/**
+	 * Represents whether the zombies on the map are aware of the player by default.
+	 * Currently unimplemented.
+	 */
 	private boolean isHidden;
 	
+	/**
+	 * Whether the player is attempting to use their attack ability.
+	 */
+	private boolean isAttacking;
+	
+	/**
+	 * Contains the power-ups currently active on the player.
+	 * Float is the number of seconds remaining until the effect expires.
+	 */
 	private Map<PowerUp.Type, Float> activePowerUps;
 	
-	//private Sprite sprite = new Sprite(new Texture(Gdx.files.internal("entities/player.png")));
+	/**
+	 * The time until the player can next be healed by a regen power-up.
+	 */
+	private float healCooldown = 1f;
 	
+	/**
+	 * The time until the player can next use the attack ability.
+	 */
+	private float attackCooldown = 2f;
+	
+	/**
+	 * Contains the enemies currently in range and in front of the player that will be
+	 * damaged when the attack ability is used.
+	 */
+	private Set<Enemy> enemiesInRange;
+	
+	private ConeLight coneLight;
+	
+	/**
+	 * Default constructor
+	 * @param game			a reference to the DeadLast game instance
+	 * @param sprite		the graphical sprite to use
+	 * @param bRadius		the radius of the player's hitbox circle
+	 * @param initialPos	the initial position to place the player
+	 * @param healthStat	the player's normal health
+	 * @param speedStat		the player's normal speed
+	 * @param strengthStat	the player's normal strength
+	 * @param stealthStat	the player's normal stealth level
+	 */
 	public Player(
 			DeadLast game, Sprite sprite, float bRadius,
 			Vector2 initialPos, int healthStat, int speedStat, int strengthStat, int stealthStat
@@ -35,11 +83,20 @@ public class Player extends Mob {
 		super(game, 0, sprite, bRadius, initialPos, healthStat, speedStat, strengthStat);
 		this.stealthStat = stealthStat;
 		this.isHidden = true;
-		this.activePowerUps = new HashMap<>();
+		this.activePowerUps = new ConcurrentHashMap<>();
+		this.enemiesInRange = new HashSet<>();
 	}
 	
 	public int getStealthStat() {
 		return this.stealthStat;
+	}
+	
+	public boolean isAttacking() {
+		return isAttacking;
+	}
+	
+	public void isAttacking(boolean bool) {
+		this.isAttacking = bool;
 	}
 	
 	@Override
@@ -61,32 +118,90 @@ public class Player extends Mob {
 		
 		FixtureDef fDef = new FixtureDef();
 		fDef.shape = shape;
+		fDef.filter.categoryBits = Entity.PLAYER;
+		fDef.filter.maskBits = Entity.BOUNDARY | Entity.ENEMY | Entity.POWERUP | Entity.ENEMY_HEARING | Entity.ENEMY_VISION | Entity.END_ZONE;
 		
 		b2body = world.createBody(bDef);
-		b2body.createFixture(fDef);
+		b2body.createFixture(fDef).setUserData(FixtureType.PLAYER);
+		
+		BodyFactory bFactory = BodyFactory.getInstance(world);
+		bFactory.makeMeleeSensor(b2body, 7, 50, 1f);
+		
+		coneLight = new ConeLight(gameManager.getRayHandler(), 7, Color.BLUE, 2, b2body.getPosition().x, b2body.getPosition().y, b2body.getAngle() + 90, 35);
+		coneLight.attachToBody(b2body, 0, 0, 90);
+		
 		b2body.setUserData(this);
+		b2body.setSleepingAllowed(false);
 
 		shape.dispose();
 	}
 	
+	/**
+	 * Called by {@link WorldContactListener} when the player makes contact with a power-up.
+	 * @param powerUp the power-up the user obtained
+	 */
 	public void onPickup(PowerUp powerUp) {
 		System.out.println("Picked up power-up: " + powerUp.getType());
 		activePowerUps.put(powerUp.getType(), 15f);
 	}
 	
+	/**
+	 * Called by {@link WorldContactListener} when an enemy enters the player's effective melee zone.
+	 * @param enemy
+	 */
+	public void onMeleeRangeEntered(Enemy enemy) {
+		this.enemiesInRange.add(enemy);
+	}
+	
+	/**
+	 * Called by {@link WorldContactListener} when an enemy leaves the player's effective melee zone.
+	 * @param enemy
+	 */
+	public void onMeleeRangeLeft(Enemy enemy) {
+		this.enemiesInRange.remove(enemy);
+	}
+	
+	/**
+	 * Convenience method to check whether a player has a particular active power-up
+	 * @param type
+	 * @return
+	 */
 	public boolean isPowerUpActive(PowerUp.Type type) {
 		return activePowerUps.containsKey(type);
 	}
 	
+	public void onEndZoneReached() {
+		gameManager.levelComplete();
+	}
+	
 	@Override
 	public void update(float delta) {
+		if (isPowerUpActive(PowerUp.Type.REGEN)) {
+			if (healCooldown <= 0 && this.getHealth() < this.getMaxHealth()) {
+				this.setHealth(this.getHealth() + 1);
+				healCooldown = 1f;
+			} else {
+				healCooldown -= delta;
+			}
+		}
 		for(Map.Entry<PowerUp.Type, Float> entry : activePowerUps.entrySet()) {
-			if (entry.getValue() - delta > 0) {
+			if (entry.getValue() - delta >= 0) {
 				activePowerUps.put(entry.getKey(), entry.getValue() - delta);
 			} else {
+				// Java likes throwing ConcurrentModificationException's here, so can't use remove
+				// until I find a fix
 				activePowerUps.remove(entry.getKey());
 				System.out.println(entry.getKey() + " expired.");
 			}
+		}
+		if (isAttacking) {
+			if (attackCooldown - delta <= 0) {
+				enemiesInRange.forEach(e -> e.applyDamage(this.getStrength()));
+				attackCooldown = 2f;
+			} else {
+				attackCooldown -= delta;
+			}
+			
 		}
 	}
 	
