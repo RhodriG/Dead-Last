@@ -3,20 +3,10 @@ package com.deadlast.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.deadlast.entities.Enemy;
-import com.deadlast.entities.EnemyFactory;
-import com.deadlast.entities.Player;
-import com.deadlast.entities.PlayerType;
-import com.deadlast.entities.PowerUp;
 import com.deadlast.game.DeadLast;
 import com.deadlast.game.GameManager;
-import com.deadlast.world.BodyFactory;
 
 /**
  * The screen responsible for displaying the game world and relevant elements
@@ -34,18 +24,11 @@ public class GameScreen extends DefaultScreen {
 	 * The SpriteBatch which renders game sprites
 	 */
 	private SpriteBatch batch;
-	/**
-	 * The controllable player character
-	 */
-	private Player player;
-	
-	private EnemyFactory enemyFactory;
 	
 	private GameManager gameManager = GameManager.getInstance(this.game);
 
 	public GameScreen(DeadLast game) {
 		super(game);
-		System.out.println("Loaded GameScreen");
 		
 		camera = new OrthographicCamera(Gdx.graphics.getWidth() / DeadLast.PPM, Gdx.graphics.getHeight() / DeadLast.PPM);
 		gamePort = new ExtendViewport(DeadLast.V_WIDTH / DeadLast.PPM, DeadLast.V_HEIGHT / DeadLast.PPM, camera);

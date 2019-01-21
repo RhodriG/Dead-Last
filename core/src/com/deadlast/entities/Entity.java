@@ -77,9 +77,14 @@ public abstract class Entity {
 		this.scoreValue = scoreValue;
 		this.sprite = sprite;
 		this.bRadius = bRadius;
+		if (initialPos == null) {
+			throw new IllegalArgumentException("Must provide an initialPosition argument.");
+		}
 		this.initialPos = initialPos;
-		sprite.setSize(bRadius * 2, bRadius * 2);
-		sprite.setOrigin(bRadius, bRadius);
+		if (sprite != null) {
+			sprite.setSize(bRadius * 2, bRadius * 2);
+			sprite.setOrigin(bRadius, bRadius);
+		}
 	}
 	
 	/**

@@ -61,15 +61,13 @@ public class Scoreboard {
 		public Entry(String line) throws IllegalArgumentException {
 			String[] vars = line.split(",");
 			if (vars.length != 3) {
-				System.out.println("Bad argument length");
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Bad argument length");
 			}
 			this.name = vars[0];
 			try {
 				this.score = Integer.parseInt(vars[1]);
 			} catch (NumberFormatException e) {
-				System.out.println("Unacceptable score parameter");
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException("Bad score parameter");
 			}
 			this.dateTime = vars[2];
 		}

@@ -2,10 +2,9 @@ package com.deadlast.entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.deadlast.game.DeadLast;
+
+import box2dLight.ConeLight;
 
 /**
  * Represents a moving, 'living' entity
@@ -43,6 +42,8 @@ public abstract class Mob extends Entity {
 	 * The time until the mob can use it's attack ability again
 	 */
 	protected float attackCooldown = 0;
+	
+	protected ConeLight coneLight;
 	
 	public Mob(
 			DeadLast game, int scoreValue, Sprite sprite, float bRadius,
@@ -137,6 +138,12 @@ public abstract class Mob extends Entity {
 			return;
 		}
 	};
+	
+	@Override
+	public void delete() {
+		super.delete();
+		coneLight.remove(true);
+	}
 	
 	/**
 	 * Convenience method for applying damage

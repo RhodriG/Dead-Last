@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.deadlast.entities.Enemy;
-import com.deadlast.entities.Entity;
 import com.deadlast.entities.Player;
 import com.deadlast.entities.PowerUp;
 
@@ -27,7 +26,7 @@ public class WorldContactListener implements ContactListener {
 		FixtureType fTypeA = (FixtureType) fA.getUserData();
 		FixtureType fTypeB = (FixtureType) fB.getUserData();
 		
-		System.out.println("Contact begun between fixtures of type " + fTypeA + " and " + fTypeB);
+		// System.out.println("Contact begun between fixtures of type " + fTypeA + " and " + fTypeB);
 		
 		switch(fTypeA) {
 		case ENEMY:
@@ -137,7 +136,7 @@ public class WorldContactListener implements ContactListener {
 		FixtureType fTypeA = (FixtureType) fA.getUserData();
 		FixtureType fTypeB = (FixtureType) fB.getUserData();
 		
-		System.out.println("Contact lost between fixtures of type " + fTypeA + " and " + fTypeB);
+		// System.out.println("Contact lost between fixtures of type " + fTypeA + " and " + fTypeB);
 		
 		switch(fTypeA) {
 		case ENEMY:
